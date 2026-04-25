@@ -1,0 +1,15 @@
+{
+  "name": "@wristkit/registry",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "echo placeholder",
+    "dev": "echo placeholder",
+    "lint": "echo placeholder",
+    "typecheck": "tsc --noEmit",
+    "test": "echo no tests yet"
+  },
+  "devDependencies": {
+    "typescript": "5.9.2"
+  }
+}
