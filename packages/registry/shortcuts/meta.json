@@ -1,0 +1,16 @@
+{
+  "name": "wristkit-sync",
+  "type": "shortcut",
+  "version": "0.0.0",
+  "description": "iOS Shortcut that reads Apple Health and posts to /api/healthkit.",
+  "files": [
+    {
+      "path": "public/wristkit-sync.shortcut",
+      "source": "./wristkit-sync.shortcut",
+      "overwrite": false
+    }
+  ],
+  "postInstall": {
+    "message": "Open the shortcut on iPhone, set URL + x-api-key, and schedule it daily."
+  }
+}

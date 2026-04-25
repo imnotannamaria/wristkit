@@ -1,0 +1,17 @@
+{
+  "name": "healthkit-schema",
+  "type": "schema",
+  "version": "0.0.0",
+  "description": "Postgres schema for wristkit Apple Health samples.",
+  "files": [
+    {
+      "path": "lib/wristkit/schema.sql",
+      "source": "./0001_initial.sql",
+      "overwrite": false
+    }
+  ],
+  "postInstall": {
+    "message": "Run the SQL migration in Supabase to create wristkit_samples.",
+    "sql": ["0001_initial.sql"]
+  }
+}

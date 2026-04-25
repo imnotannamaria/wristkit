@@ -1,0 +1,34 @@
+{
+  "name": "healthkit-handler",
+  "type": "handler",
+  "version": "0.0.0",
+  "description": "Next.js route handler that ingests Apple Health samples into Postgres.",
+  "dependencies": {
+    "npm": ["drizzle-orm", "postgres", "zod"]
+  },
+  "files": [
+    {
+      "path": "app/api/healthkit/route.ts",
+      "source": "./route.ts",
+      "overwrite": false
+    },
+    {
+      "path": "lib/wristkit/db.ts",
+      "source": "../../lib/db.ts",
+      "overwrite": false
+    },
+    {
+      "path": "lib/wristkit/schema.ts",
+      "source": "../../lib/schema.ts",
+      "overwrite": false
+    },
+    {
+      "path": "lib/wristkit/validation.ts",
+      "source": "../../lib/validation.ts",
+      "overwrite": false
+    }
+  ],
+  "postInstall": {
+    "message": "Set WRISTKIT_DATABASE_URL and WRISTKIT_API_KEY in .env.local, then run the iOS Shortcut to POST samples."
+  }
+}

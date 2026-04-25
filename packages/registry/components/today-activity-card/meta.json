@@ -1,0 +1,28 @@
+{
+  "name": "today-activity-card",
+  "type": "component",
+  "version": "0.0.0",
+  "description": "A production-ready Apple Health 'today activity' card with a five-state contract.",
+  "dependencies": {
+    "npm": ["react", "react-dom"],
+    "registry": ["healthkit-handler", "healthkit-schema"]
+  },
+  "metrics": ["kcal", "exercise_minutes", "steps"],
+  "files": [
+    {
+      "path": "components/wristkit/today-activity-card.tsx",
+      "source": "./index.tsx",
+      "overwrite": false
+    },
+    {
+      "path": "components/wristkit/today-activity-card.states.tsx",
+      "source": "./states.tsx",
+      "overwrite": false
+    },
+    {
+      "path": "lib/wristkit/today-activity-card.load.ts",
+      "source": "./load.ts",
+      "overwrite": false
+    }
+  ]
+}

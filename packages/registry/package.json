@@ -4,12 +4,26 @@
   "private": true,
   "scripts": {
     "build": "echo placeholder",
+    "build:registry": "tsx build.ts",
     "dev": "echo placeholder",
     "lint": "echo placeholder",
     "typecheck": "tsc --noEmit",
     "test": "echo no tests yet"
   },
   "devDependencies": {
+    "@types/node": "^22.0.0",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "drizzle-kit": "^0.31.10",
+    "tsx": "^4.21.0",
     "typescript": "5.9.2"
+  },
+  "dependencies": {
+    "drizzle-orm": "^0.45.2",
+    "next": "^16.2.4",
+    "postgres": "^3.4.9",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "zod": "^4.3.6"
   }
 }
