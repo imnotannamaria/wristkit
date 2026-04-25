@@ -8,6 +8,7 @@ apps/web/public/r
 apps/sandbox
 .env.local
 .env.*.local
+.npmrc
 pnpm-debug.log*
 npm-debug.log*
 yarn-debug.log*
