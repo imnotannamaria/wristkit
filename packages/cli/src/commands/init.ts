@@ -63,10 +63,10 @@ export async function initCommand() {
   );
 
   await writeComponentsJson(cwd, {
-    $schema: "https://wristkit.vercel.app/schema.json",
+    $schema: "https://wristkit-web.vercel.app/schema.json",
     wristkit: {
       version: 1,
-      registry: "https://wristkit.vercel.app/r",
+      registry: "https://wristkit-web.vercel.app/r",
       theme: response.theme as string,
       paths: {
         components: response.componentsDir as string,
@@ -112,7 +112,7 @@ export async function initCommand() {
       "",
       "Next steps:",
       "- Run the SQL migration in Supabase (see packages/registry/schemas/0001_initial.sql)",
-      "- Download the iOS Shortcut: https://wristkit.vercel.app/shortcut",
+      "- Download the iOS Shortcut: https://wristkit-web.vercel.app/shortcut",
       "- Add the component: npx wristkit add today-activity-card",
     ].join("\n"),
   );

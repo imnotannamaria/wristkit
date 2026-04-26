@@ -5,9 +5,9 @@ description: How the wristkit registry works — what it serves and how the CLI 
 
 ## What is the registry?
 
-The registry is a set of JSON files served from `wristkit.vercel.app/r/:name`. Each file describes one installable item: a component, a handler, a schema, or a shortcut.
+The registry is a set of JSON files served from `wristkit-web.vercel.app/r/:name`. Each file describes one installable item: a component, a handler, a schema, or a shortcut.
 
-When you run `npx wristkit add today-activity-card`, the CLI fetches `https://wristkit.vercel.app/r/today-activity-card.json`, resolves dependencies, and copies the files into your project.
+When you run `npx wristkit add today-activity-card`, the CLI fetches `https://wristkit-web.vercel.app/r/today-activity-card.json`, resolves dependencies, and copies the files into your project.
 
 ## Item shape
 

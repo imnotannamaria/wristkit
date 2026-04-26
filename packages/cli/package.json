@@ -13,7 +13,7 @@
     "cli",
     "shadcn"
   ],
-  "homepage": "https://wristkit.vercel.app",
+  "homepage": "https://wristkit-web.vercel.app",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/imnotannamaria/wristkit.git",

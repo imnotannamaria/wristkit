@@ -396,7 +396,7 @@ export function HomeInstallBlock() {
           }}
         >
           <a
-            href="https://github.com/annamaria/wristkit"
+            href="https://github.com/imnotannamaria/wristkit"
             target="_blank"
             rel="noreferrer"
             className="wk-nav-link"

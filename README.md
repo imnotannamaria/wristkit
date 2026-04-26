@@ -48,12 +48,12 @@ npx wristkit shortcut
 
 ## Documentation
 
-Full docs at **[wristkit.vercel.app/docs](https://wristkit.vercel.app/docs)**
+Full docs at **[wristkit-web.vercel.app/docs](https://wristkit-web.vercel.app/docs)**
 
-- [Installation](https://wristkit.vercel.app/docs/installation)
-- [iOS Shortcut setup](https://wristkit.vercel.app/docs/shortcut-setup)
-- [TodayActivityCard](https://wristkit.vercel.app/docs/components/today-activity-card)
-- [Component states](https://wristkit.vercel.app/docs/concepts/component-states)
+- [Installation](https://wristkit-web.vercel.app/docs/installation)
+- [iOS Shortcut setup](https://wristkit-web.vercel.app/docs/shortcut-setup)
+- [TodayActivityCard](https://wristkit-web.vercel.app/docs/components/today-activity-card)
+- [Component states](https://wristkit-web.vercel.app/docs/concepts/component-states)
 
 ## Privacy
 

@@ -13,7 +13,7 @@ npx wristkit add today-activity-card
 
 ## Docs
 
-- https://wristkit.vercel.app/docs
+- https://wristkit-web.vercel.app/docs
 
 ## License
 
