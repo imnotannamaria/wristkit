@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test": "playwright test",
+    "pretest": "pnpm -C ../../packages/registry build:registry",
+    "test": "sh -c 'if [ \"${CI:-}\" = \"true\" ]; then pnpm exec playwright install --with-deps chromium; fi; playwright test'",
     "test:e2e": "playwright test"
   },
   "dependencies": {
