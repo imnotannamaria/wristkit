@@ -3,6 +3,7 @@ node_modules
 dist
 .next
 .turbo
+.velite
 public/r
 apps/web/public/r
 apps/sandbox
