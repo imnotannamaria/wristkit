@@ -12,6 +12,6 @@
     "rules": { "recommended": true }
   },
   "files": {
-    "ignore": ["node_modules", "dist", ".next", ".turbo", "public/r/**", "agents/**"]
+    "ignore": ["node_modules", "dist", ".next", ".turbo", ".velite", "public/r/**", "agents/**"]
   }
 }

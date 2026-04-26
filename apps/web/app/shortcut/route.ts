@@ -1,6 +1,6 @@
 import { readFile } from "node:fs/promises";
-import { NextResponse } from "next/server";
 import path from "node:path";
+import { NextResponse } from "next/server";
 
 export async function GET() {
   try {

@@ -4,6 +4,7 @@ dist
 .next
 .turbo
 .velite
+*.tsbuildinfo
 public/r
 apps/web/public/r
 apps/sandbox

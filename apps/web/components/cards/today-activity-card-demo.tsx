@@ -34,7 +34,15 @@ function RingLayer({
   const off = circ * (1 - Math.min(Math.max(v / max, 0), 1));
   return (
     <g>
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke={color} strokeWidth={9} strokeOpacity={0.18} />
+      <circle
+        cx={cx}
+        cy={cy}
+        r={r}
+        fill="none"
+        stroke={color}
+        strokeWidth={9}
+        strokeOpacity={0.18}
+      />
       <circle
         cx={cx}
         cy={cy}
@@ -121,8 +129,8 @@ export function TodayActivityCardDemo({
   updatedAt?: string;
   synced?: boolean;
 }) {
-  const cx = 72,
-    cy = 72;
+  const cx = 72;
+  const cy = 72;
   const exerciseOver = exerciseMin > exerciseGoal;
   return (
     <Panel>
@@ -140,9 +148,16 @@ export function TodayActivityCardDemo({
         }}
       >
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <svg width={144} height={144} viewBox="0 0 144 144" aria-hidden>
+          <svg width={144} height={144} viewBox="0 0 144 144" aria-hidden="true">
             <RingLayer v={moveKcal} max={moveGoal} color={C.move} r={52} cx={cx} cy={cy} />
-            <RingLayer v={exerciseMin} max={exerciseGoal} color={C.exercise} r={38} cx={cx} cy={cy} />
+            <RingLayer
+              v={exerciseMin}
+              max={exerciseGoal}
+              color={C.exercise}
+              r={38}
+              cx={cx}
+              cy={cy}
+            />
             <RingLayer v={steps} max={stepsGoal} color={C.steps} r={24} cx={cx} cy={cy} />
           </svg>
         </div>
@@ -167,8 +182,8 @@ export function TodayActivityCardDemo({
 
 // ─── Empty state ─────────────────────────────────────────────
 export function TodayActivityCardEmpty() {
-  const cx = 72,
-    cy = 72;
+  const cx = 72;
+  const cy = 72;
   return (
     <Panel>
       <PanelHeader eyebrow="Today / Activity" status="not connected" statusColor={C.muted} />
@@ -181,7 +196,7 @@ export function TodayActivityCardEmpty() {
         }}
       >
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <svg width={144} height={144} viewBox="0 0 144 144" aria-hidden>
+          <svg width={144} height={144} viewBox="0 0 144 144" aria-hidden="true">
             {[52, 38, 24].map((r) => (
               <circle
                 key={r}
@@ -240,7 +255,14 @@ export function TodayActivityCardEmpty() {
                   >
                     —
                   </span>
-                  <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: C.mutedSoft, marginLeft: 6 }}>
+                  <span
+                    style={{
+                      fontFamily: "var(--font-mono)",
+                      fontSize: 11,
+                      color: C.mutedSoft,
+                      marginLeft: 6,
+                    }}
+                  >
                     {m.suffix}
                   </span>
                 </span>
@@ -327,7 +349,9 @@ export function EnvCard() {
       <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
         {items.map((it) => (
           <div key={it.k} style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <span style={{ color: it.ok ? C.exercise : C.hrv, fontSize: 10 }}>{it.ok ? "●" : "○"}</span>
+            <span style={{ color: it.ok ? C.exercise : C.hrv, fontSize: 10 }}>
+              {it.ok ? "●" : "○"}
+            </span>
             <span
               style={{
                 fontFamily: "var(--font-mono)",

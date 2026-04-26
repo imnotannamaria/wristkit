@@ -263,15 +263,23 @@ export function Ring({
   size?: number;
   stroke?: number;
 }) {
-  const cx = size / 2,
-    cy = size / 2,
-    r = (size - stroke) / 2;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = (size - stroke) / 2;
   const circ = 2 * Math.PI * r;
   const ratio = Math.min(Math.max(max > 0 ? value / max : 0, 0), 1);
   const offset = circ * (1 - ratio);
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden>
-      <circle cx={cx} cy={cy} r={r} fill="none" stroke={color} strokeWidth={stroke} strokeOpacity={0.18} />
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true">
+      <circle
+        cx={cx}
+        cy={cy}
+        r={r}
+        fill="none"
+        stroke={color}
+        strokeWidth={stroke}
+        strokeOpacity={0.18}
+      />
       <circle
         cx={cx}
         cy={cy}

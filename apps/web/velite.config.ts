@@ -1,6 +1,6 @@
-import { defineConfig, s } from "velite";
-import rehypeSlug from "rehype-slug";
 import rehypePrettyCode from "rehype-pretty-code";
+import rehypeSlug from "rehype-slug";
+import { defineConfig, s } from "velite";
 
 export default defineConfig({
   root: "content",
@@ -24,9 +24,6 @@ export default defineConfig({
     },
   },
   mdx: {
-    rehypePlugins: [
-      rehypeSlug,
-      [rehypePrettyCode, { theme: "vesper" }],
-    ],
+    rehypePlugins: [rehypeSlug, [rehypePrettyCode, { theme: "vesper" }]],
   },
 });

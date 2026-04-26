@@ -1,5 +1,3 @@
-import Link from "next/link";
-import { EnvCard, InstallCard, TodayActivityCardDemo } from "@/components/cards/today-activity-card-demo";
 import {
   HistoryCard,
   HrvCard,
@@ -9,6 +7,12 @@ import {
   StandCard,
   StreakCard,
 } from "@/components/cards/preview-cards";
+import {
+  EnvCard,
+  InstallCard,
+  TodayActivityCardDemo,
+} from "@/components/cards/today-activity-card-demo";
+import Link from "next/link";
 
 const C = {
   move: "#9d80ff",
@@ -117,7 +121,7 @@ export default function HomePage() {
               marginBottom: 18,
             }}
           >
-            <span style={{ color: C.mutedSoft }}>//</span> apple health → web, in minutes
+            <span style={{ color: C.mutedSoft }}>{/* // */}</span> apple health → web, in minutes
           </div>
           <h1
             style={{
@@ -132,8 +136,7 @@ export default function HomePage() {
           >
             Your Health data.
             <br />
-            <span style={{ color: C.muted }}>On</span>{" "}
-            <span style={{ color: C.move }}>your</span>{" "}
+            <span style={{ color: C.muted }}>On</span> <span style={{ color: C.move }}>your</span>{" "}
             <span style={{ color: C.muted }}>site.</span>
           </h1>
           <p
@@ -146,9 +149,8 @@ export default function HomePage() {
               maxWidth: 440,
             }}
           >
-            A CLI that drops production-ready React components for visualizing
-            Apple Health data into any Next.js project. You bring your own
-            Supabase. Zero telemetry. MIT.
+            A CLI that drops production-ready React components for visualizing Apple Health data
+            into any Next.js project. You bring your own Supabase. Zero telemetry. MIT.
           </p>
           <div style={{ display: "flex", gap: 12, marginTop: 26 }}>
             <code
@@ -211,7 +213,7 @@ export default function HomePage() {
           { k: "license", v: "MIT", suf: "" },
         ].map((s, i) => (
           <div
-            key={i}
+            key={s.k}
             style={{
               paddingLeft: i === 0 ? 0 : 24,
               borderLeft: i === 0 ? "none" : `1px dashed ${C.border}`,
@@ -288,12 +290,11 @@ export default function HomePage() {
               letterSpacing: "-0.02em",
             }}
           >
-            Drop in a card.{" "}
-            <span style={{ color: C.muted }}>We render the data.</span>
+            Drop in a card. <span style={{ color: C.muted }}>We render the data.</span>
           </h2>
         </div>
         <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: C.muted }}>
-          // 1 of 7 shipped
+          {/* 1 of 7 shipped */}
         </span>
       </div>
 
@@ -355,7 +356,7 @@ export default function HomePage() {
             marginBottom: 12,
           }}
         >
-          // zero telemetry
+          {/* zero telemetry */}
         </div>
         <h2
           style={{
@@ -366,8 +367,7 @@ export default function HomePage() {
             letterSpacing: "-0.02em",
           }}
         >
-          Your data never leaves{" "}
-          <span style={{ color: C.move }}>your infrastructure.</span>
+          Your data never leaves <span style={{ color: C.move }}>your infrastructure.</span>
         </h2>
         <p
           style={{
@@ -379,9 +379,9 @@ export default function HomePage() {
             margin: 0,
           }}
         >
-          wristkit is a CLI tool and component library. We ship code to your project — we never
-          see your data, your Supabase credentials, or your users. The iOS Shortcut posts directly
-          to your own endpoint. We have zero access to anything.
+          wristkit is a CLI tool and component library. We ship code to your project — we never see
+          your data, your Supabase credentials, or your users. The iOS Shortcut posts directly to
+          your own endpoint. We have zero access to anything.
         </p>
         <div
           style={{
@@ -398,7 +398,10 @@ export default function HomePage() {
             { icon: "●", color: C.exercise, text: "No third-party cloud" },
             { icon: "●", color: C.exercise, text: "BYO Supabase" },
           ].map((item) => (
-            <span key={item.text} style={{ display: "flex", alignItems: "center", gap: 8, color: C.muted }}>
+            <span
+              key={item.text}
+              style={{ display: "flex", alignItems: "center", gap: 8, color: C.muted }}
+            >
               <span style={{ color: item.color, fontSize: 8 }}>{item.icon}</span>
               {item.text}
             </span>
@@ -430,8 +433,7 @@ export default function HomePage() {
             letterSpacing: "-0.02em",
           }}
         >
-          Three commands.{" "}
-          <span style={{ color: C.muted }}>One evening.</span>
+          Three commands. <span style={{ color: C.muted }}>One evening.</span>
         </h2>
       </div>
       <div
@@ -598,7 +600,7 @@ export default function HomePage() {
           color: C.muted,
         }}
       >
-        <span>// wristkit · open-source · MIT</span>
+        <span>{/* wristkit · open-source · MIT */}</span>
         <span>v0.1.0 · zero telemetry ✓</span>
       </div>
     </div>

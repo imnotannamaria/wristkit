@@ -129,9 +129,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
       </aside>
 
       {/* Content */}
-      <main style={{ padding: "48px 64px 80px", maxWidth: 800 }}>
-        {children}
-      </main>
+      <main style={{ padding: "48px 64px 80px", maxWidth: 800 }}>{children}</main>
     </div>
   );
 }

@@ -15,8 +15,8 @@ const C = {
 
 // ─── SleepCard ───────────────────────────────────────────────
 export function SleepCard() {
-  const hours = 7.2,
-    goal = 8;
+  const hours = 7.2;
+  const goal = 8;
   const stages = [
     { kind: "awake", w: 3 },
     { kind: "light", w: 28 },
@@ -41,10 +41,18 @@ export function SleepCard() {
         />
         <span style={{ marginLeft: "auto", color: C.muted, fontSize: 11 }}>23:42 → 07:04</span>
       </div>
-      <div style={{ display: "flex", height: 44, borderRadius: 3, overflow: "hidden", marginBottom: 10 }}>
+      <div
+        style={{
+          display: "flex",
+          height: 44,
+          borderRadius: 3,
+          overflow: "hidden",
+          marginBottom: 10,
+        }}
+      >
         {stages.map((s, i) => (
           <div
-            key={i}
+            key={`${s.kind}-${i}`}
             style={{
               width: `${s.w}%`,
               background: stageColor[s.kind],
@@ -67,7 +75,14 @@ export function SleepCard() {
             <Label dot={col} size={9}>
               {lbl}
             </Label>
-            <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: C.text, paddingLeft: 14 }}>
+            <span
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 12,
+                color: C.text,
+                paddingLeft: 14,
+              }}
+            >
               {val}
             </span>
           </div>
@@ -80,14 +95,14 @@ export function SleepCard() {
 
 // ─── HrvCard ──────────────────────────────────────────────────
 export function HrvCard() {
-  const current = 62,
-    avg = 54;
+  const current = 62;
+  const avg = 54;
   const series = [48, 52, 49, 55, 53, 58, 51, 56, 60, 57, 63, 58, 61, 62];
-  const max = Math.max(...series),
-    min = Math.min(...series);
-  const pad = 4,
-    W = 320,
-    H = 60;
+  const max = Math.max(...series);
+  const min = Math.min(...series);
+  const pad = 4;
+  const W = 320;
+  const H = 60;
   const path = series
     .map((v, i) => {
       const x = pad + (i / (series.length - 1)) * (W - pad * 2);
@@ -101,7 +116,13 @@ export function HrvCard() {
       <PanelHeader icon="♡" eyebrow="HRV / 14d" status="synced" />
       <div style={{ display: "flex", alignItems: "baseline", gap: 12, marginBottom: 10 }}>
         <BigNumber value={current} size={44} suffix="ms" suffixColor={C.muted} />
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: delta >= 0 ? C.exercise : C.hrv }}>
+        <span
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 11,
+            color: delta >= 0 ? C.exercise : C.hrv,
+          }}
+        >
           {delta >= 0 ? "↑" : "↓"} {Math.abs(delta)}ms vs avg
         </span>
       </div>
@@ -111,6 +132,7 @@ export function HrvCard() {
         viewBox={`0 0 ${W} ${H}`}
         preserveAspectRatio="none"
         style={{ display: "block" }}
+        aria-hidden="true"
       >
         <line
           x1={pad}
@@ -121,12 +143,27 @@ export function HrvCard() {
           strokeWidth="1"
           strokeDasharray="3 4"
         />
-        <path d={path} fill="none" stroke={C.hrv} strokeWidth="1.6" strokeLinejoin="round" strokeLinecap="round" />
+        <path
+          d={path}
+          fill="none"
+          stroke={C.hrv}
+          strokeWidth="1.6"
+          strokeLinejoin="round"
+          strokeLinecap="round"
+        />
         {series.map((v, i) => {
           const x = pad + (i / (series.length - 1)) * (W - pad * 2);
           const y = H - pad - ((v - min) / (max - min || 1)) * (H - pad * 2);
           const isLast = i === series.length - 1;
-          return <circle key={i} cx={x} cy={y} r={isLast ? 2.5 : 0} fill={C.hrv} />;
+          return (
+            <circle
+              key={`${v}-${i}-${isLast ? "last" : "mid"}`}
+              cx={x}
+              cy={y}
+              r={isLast ? 2.5 : 0}
+              fill={C.hrv}
+            />
+          );
         })}
       </svg>
       <div
@@ -178,7 +215,15 @@ export function HistoryCard({ metric = "move" }: { metric?: "move" | "exercise" 
           {m.unit === "k" ? "" : ` ${m.unit}`}
         </Label>
       </div>
-      <div style={{ display: "flex", alignItems: "flex-end", gap: 10, height: 88, position: "relative" }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "flex-end",
+          gap: 10,
+          height: 88,
+          position: "relative",
+        }}
+      >
         <div
           style={{
             position: "absolute",
@@ -189,11 +234,20 @@ export function HistoryCard({ metric = "move" }: { metric?: "move" | "exercise" 
             opacity: 0.9,
           }}
         />
-        {days.map((day, i) => {
+        {days.map((day) => {
           const h = (day.v / peak) * 88;
           const hit = day.v >= m.goal;
           return (
-            <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
+            <div
+              key={day.d}
+              style={{
+                flex: 1,
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: 6,
+              }}
+            >
               <div
                 style={{
                   width: "100%",
@@ -208,9 +262,9 @@ export function HistoryCard({ metric = "move" }: { metric?: "move" | "exercise" 
         })}
       </div>
       <div style={{ display: "flex", gap: 10, marginTop: 8 }}>
-        {days.map((d, i) => (
+        {days.map((d) => (
           <div
-            key={i}
+            key={d.d}
             style={{
               flex: 1,
               textAlign: "center",
@@ -224,7 +278,10 @@ export function HistoryCard({ metric = "move" }: { metric?: "move" | "exercise" 
           </div>
         ))}
       </div>
-      <PanelFooter note={`// peak ${Math.max(...days.map((d) => d.v))} ${m.unit === "k" ? "" : m.unit}`} right="window 7d" />
+      <PanelFooter
+        note={`// peak ${Math.max(...days.map((d) => d.v))} ${m.unit === "k" ? "" : m.unit}`}
+        right="window 7d"
+      />
     </Panel>
   );
 }
@@ -243,7 +300,7 @@ export function StreakCard({ days = 23, best = 41 }: { days?: number; best?: num
           const hit = i < 26 && i !== 8 && i !== 15;
           return (
             <div
-              key={i}
+              key={String(i)}
               style={{
                 width: 10,
                 height: 10,
@@ -262,8 +319,8 @@ export function StreakCard({ days = 23, best = 41 }: { days?: number; best?: num
 
 // ─── StandCard ────────────────────────────────────────────────
 export function StandCard() {
-  const hours = 10,
-    goal = 12;
+  const hours = 10;
+  const goal = 12;
   const pattern = "011111111011110111001000";
   return (
     <Panel>
@@ -277,7 +334,7 @@ export function StandCard() {
       <div style={{ display: "grid", gridTemplateColumns: "repeat(24, 1fr)", gap: 3 }}>
         {pattern.split("").map((c, i) => (
           <div
-            key={i}
+            key={String(i)}
             style={{
               aspectRatio: "1 / 1",
               background: c === "1" ? C.steps : C.mutedSoft,
@@ -324,12 +381,14 @@ export function ShortcutStatus() {
       <PanelHeader icon="◐" eyebrow="iOS Shortcut" status="armed" statusColor={C.exercise} />
       <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 14 }}>
         <BigNumber value="23:00" size={34} color={C.text} />
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: C.muted }}>next run</span>
+        <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: C.muted }}>
+          next run
+        </span>
       </div>
       <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
-        {steps.map((s, i) => (
+        {steps.map((s) => (
           <div
-            key={i}
+            key={s.k}
             style={{
               flex: 1,
               height: 6,
@@ -351,8 +410,8 @@ export function ShortcutStatus() {
           textTransform: "uppercase",
         }}
       >
-        {steps.map((s, i) => (
-          <div key={i} style={{ flex: 1, textAlign: "center" }}>
+        {steps.map((s) => (
+          <div key={s.k} style={{ flex: 1, textAlign: "center" }}>
             {s.k}
           </div>
         ))}
@@ -399,10 +458,12 @@ export function SnapshotLog() {
             {h}
           </div>
         ))}
-        {entries.map((e, i) => (
-          <div key={i} style={{ display: "contents" }}>
+        {entries.map((e) => (
+          <div key={`${e.t}-${e.status}`} style={{ display: "contents" }}>
             <div style={{ color: C.muted }}>{e.t}</div>
-            <div style={{ color: e.status === 200 ? C.exercise : "#f06c9b", fontWeight: 600 }}>{e.status}</div>
+            <div style={{ color: e.status === 200 ? C.exercise : "#f06c9b", fontWeight: 600 }}>
+              {e.status}
+            </div>
             <div
               style={{
                 color: C.text,

@@ -1,7 +1,7 @@
 "use client";
 
-import * as runtime from "react/jsx-runtime";
 import { useMemo } from "react";
+import * as runtime from "react/jsx-runtime";
 
 const customComponents = {
   h1: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
@@ -183,9 +183,14 @@ const customComponents = {
 export function MdxContent({ code }: { code: string }) {
   const Component = useMemo(() => {
     const fn = new Function(code);
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    return fn({ ...runtime }).default as React.ComponentType<any>;
+    return fn({ ...runtime }).default as React.ComponentType<{
+      components?: Record<string, React.ComponentType<unknown>>;
+    }>;
   }, [code]);
 
-  return <Component components={customComponents} />;
+  return (
+    <Component
+      components={customComponents as unknown as Record<string, React.ComponentType<unknown>>}
+    />
+  );
 }

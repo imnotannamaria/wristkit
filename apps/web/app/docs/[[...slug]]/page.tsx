@@ -1,7 +1,7 @@
-import { notFound } from "next/navigation";
 import { docs } from "@/.velite";
 import { MdxContent } from "@/components/mdx-content";
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 
 interface Props {
   params: Promise<{ slug?: string[] }>;
