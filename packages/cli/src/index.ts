@@ -1,3 +1,6 @@
+import { readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
 import { Command } from "commander";
 import { addCommand } from "./commands/add.js";
 import { initCommand } from "./commands/init.js";
@@ -6,7 +9,17 @@ import { updateCommand } from "./commands/update.js";
 
 const program = new Command();
 
-program.name("wristkit").description("Apple Health on the web").version("0.0.1");
+const pkgJsonPath = join(dirname(fileURLToPath(import.meta.url)), "../package.json");
+const pkg = JSON.parse(readFileSync(pkgJsonPath, "utf8")) as {
+  name?: string;
+  version?: string;
+  description?: string;
+};
+
+program
+  .name(pkg.name ?? "wristkit")
+  .description(pkg.description ?? "Apple Health on the web")
+  .version(pkg.version ?? "0.0.0");
 
 program.command("init").description("Set up wristkit in this project").action(initCommand);
 

@@ -1,9 +1,32 @@
 {
   "name": "wristkit",
   "version": "0.0.1",
+  "description": "Apple Health on the web — a CLI that installs React components for visualizing Apple Health data into any Next.js project.",
+  "keywords": [
+    "apple-health",
+    "healthkit",
+    "nextjs",
+    "react",
+    "supabase",
+    "registry",
+    "components",
+    "cli",
+    "shadcn"
+  ],
+  "homepage": "https://wristkit.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/imnotannamaria/wristkit.git",
+    "directory": "packages/cli"
+  },
+  "bugs": { "url": "https://github.com/imnotannamaria/wristkit/issues" },
+  "license": "MIT",
+  "author": "imnotannamaria",
+  "publishConfig": { "access": "public" },
+  "engines": { "node": ">=20" },
   "type": "module",
   "bin": { "wristkit": "./dist/index.js" },
-  "files": ["dist"],
+  "files": ["dist", "README.md", "LICENSE"],
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
