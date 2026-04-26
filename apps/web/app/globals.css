@@ -52,17 +52,185 @@ body {
   }
 }
 
-/* Code blocks from rehype-pretty-code */
+/* ─── Home page interactions ─────────────────────────────────── */
+
+/* Nav links — underline slides in, text brightens */
+.wk-nav-link {
+  position: relative;
+  transition: color 0.18s ease;
+}
+.wk-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wk-nav-link:hover {
+  color: #f5f5f5 !important;
+}
+.wk-nav-link:hover::after {
+  width: 100%;
+}
+
+/* Logo area — subtle opacity on hover */
+.wk-logo-area {
+  transition: opacity 0.18s ease;
+  cursor: pointer;
+}
+.wk-logo-area:hover {
+  opacity: 0.75;
+}
+
+/* Command code blocks — scale + purple glow */
+.wk-cmd {
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s ease;
+}
+.wk-cmd:hover {
+  transform: scale(1.025) translateY(-1px);
+  box-shadow: 0 0 0 1px #9d80ff55,
+              0 8px 28px #9d80ff22,
+              0 2px 8px rgba(0,0,0,0.4);
+}
+
+/* Ghost CTA button — border/text brighten, nudge right */
+.wk-btn-ghost {
+  transition: color 0.18s ease,
+              border-color 0.18s ease,
+              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wk-btn-ghost:hover {
+  color: #f5f5f5 !important;
+  border-color: #f5f5f5 !important;
+  transform: translateX(3px);
+}
+
+/* Inline text link — color brightens + nudge */
+.wk-text-link {
+  transition: color 0.15s ease, transform 0.15s ease;
+  display: inline-block;
+}
+.wk-text-link:hover {
+  color: #f5f5f5 !important;
+}
+
+/* Card lift — float up on hover */
+.wk-card-lift {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.wk-card-lift:hover {
+  transform: translateY(-5px);
+}
+.wk-card-lift > div {
+  transition: border-color 0.22s ease, box-shadow 0.22s ease;
+}
+.wk-card-lift:hover > div {
+  border-color: #2c2c2c;
+  box-shadow: 0 20px 48px rgba(0,0,0,0.55), 0 4px 12px rgba(0,0,0,0.3);
+}
+
+/* Stats strip item */
+.wk-stat {
+  transition: background 0.15s ease;
+}
+.wk-stat:hover {
+  background: #0f0f0f;
+}
+.wk-stat:hover .wk-stat-value {
+  color: #f5f5f5 !important;
+}
+
+/* How-it-works step */
+.wk-step {
+  transition: background 0.18s ease;
+}
+.wk-step:hover {
+  background: #0f0f0f !important;
+}
+.wk-step:hover .wk-step-num {
+  color: #555 !important;
+}
+.wk-step:hover .wk-step-title {
+  color: #f5f5f5 !important;
+}
+
+/* CTA "or read the docs" link */
+.wk-cta-link {
+  transition: color 0.15s ease, letter-spacing 0.2s ease;
+}
+.wk-cta-link:hover {
+  color: #f5f5f5 !important;
+  letter-spacing: 0.09em !important;
+}
+
+/* ─── Docs sidebar ───────────────────────────────────────────── */
+
+.docs-logo {
+  transition: opacity 0.15s ease;
+}
+.docs-logo:hover {
+  opacity: 0.7;
+}
+
+.docs-nav-link {
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.docs-nav-link:hover {
+  color: #f5f5f5 !important;
+  background: rgba(255, 255, 255, 0.04);
+}
+.docs-nav-link--active {
+  background: rgba(255, 255, 255, 0.05);
+}
+.docs-nav-link--active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 5px;
+  bottom: 5px;
+  width: 2px;
+  background: #9d80ff;
+  border-radius: 2px;
+}
+
+/* ─── Docs prose ─────────────────────────────────────────────── */
+
+.docs-prose-link {
+  transition: color 0.15s ease, opacity 0.15s ease;
+}
+.docs-prose-link:hover {
+  color: #c4aaff !important;
+}
+
+/* ─── Code blocks from rehype-pretty-code */
 [data-rehype-pretty-code-figure] pre {
-  background: #070707 !important;
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  padding: 16px;
-  overflow-x: auto;
+  background: transparent !important;
+  border: none !important;
+  border-radius: 0 !important;
+  margin: 0 !important;
   font-family: var(--font-mono);
   font-size: 13px;
-  line-height: 1.7;
+  line-height: 1.8;
 }
 [data-rehype-pretty-code-figure] code {
   font-family: var(--font-mono);
+  font-size: 13px;
+}
+[data-rehype-pretty-code-figure] pre ::selection {
+  background: #9d80ff33;
+}
+/* strip all decoration injected by shiki/vesper theme */
+[data-rehype-pretty-code-figure] pre *,
+[data-rehype-pretty-code-figure] pre span,
+[data-rehype-pretty-code-figure] pre code,
+[data-rehype-pretty-code-figure] pre code span {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  outline: none !important;
+  text-decoration: none !important;
 }

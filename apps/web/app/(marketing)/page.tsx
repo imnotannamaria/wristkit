@@ -1,16 +1,14 @@
-import {
-  HistoryCard,
-  HrvCard,
-  ShortcutStatus,
-  SleepCard,
-  SnapshotLog,
-  StandCard,
-  StreakCard,
-} from "@/components/cards/preview-cards";
+import { HomeInstallBlock } from "@/components/home-install-block";
+import { WristKitMark } from "@/components/mark";
 import {
   EnvCard,
   InstallCard,
   TodayActivityCardDemo,
+  TodayActivityCardEmpty,
+  TodayActivityCardError,
+  TodayActivityCardLoading,
+  TodayActivityCardPartial,
+  TodayActivityCardStale,
 } from "@/components/cards/today-activity-card-demo";
 import Link from "next/link";
 
@@ -48,17 +46,10 @@ export default function HomePage() {
           marginBottom: 48,
         }}
       >
-        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <div
-            style={{
-              width: 22,
-              height: 22,
-              borderRadius: 5,
-              background: `linear-gradient(135deg, ${C.move}, ${C.exercise})`,
-            }}
-          />
+        <div className="wk-logo-area" style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <WristKitMark size={22} />
           <span style={{ fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: "0.04em" }}>
-            <span style={{ color: C.muted }}>@wristkit</span>
+            <span style={{ color: C.muted }}>wristkit</span>
             <span style={{ color: C.mutedSoft }}> / </span>
             <span>home</span>
           </span>
@@ -75,16 +66,17 @@ export default function HomePage() {
             alignItems: "center",
           }}
         >
-          <Link href="/" style={{ color: C.text, textDecoration: "none" }}>
+          <Link href="/" className="wk-nav-link" style={{ color: C.text, textDecoration: "none" }}>
             home
           </Link>
-          <Link href="/docs" style={{ color: C.muted, textDecoration: "none" }}>
+          <Link href="/docs" className="wk-nav-link" style={{ color: C.muted, textDecoration: "none" }}>
             docs
           </Link>
           <a
             href="https://github.com/annamaria/wristkit"
             target="_blank"
             rel="noreferrer"
+            className="wk-nav-link"
             style={{ color: C.muted, textDecoration: "none" }}
           >
             github ↗
@@ -93,6 +85,7 @@ export default function HomePage() {
             href="https://www.npmjs.com/package/wristkit"
             target="_blank"
             rel="noreferrer"
+            className="wk-nav-link"
             style={{ color: C.muted, textDecoration: "none" }}
           >
             npm ↗
@@ -154,6 +147,7 @@ export default function HomePage() {
           </p>
           <div style={{ display: "flex", gap: 12, marginTop: 26 }}>
             <code
+              className="wk-cmd"
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: 12,
@@ -169,6 +163,7 @@ export default function HomePage() {
             </code>
             <Link
               href="/docs"
+              className="wk-btn-ghost"
               style={{
                 fontFamily: "var(--font-mono)",
                 fontSize: 12,
@@ -193,70 +188,16 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* ─── Stats strip ─── */}
-      <div
-        style={{
-          border: `1px solid ${C.border}`,
-          borderRadius: 14,
-          padding: "22px 26px",
-          display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: 0,
-          marginBottom: 56,
-          background: "#0b0b0b",
-        }}
-      >
-        {[
-          { k: "packages", v: "1", suf: "npm" },
-          { k: "deps", v: "2", suf: "peer" },
-          { k: "p95 ingest", v: "<50", suf: "ms" },
-          { k: "license", v: "MIT", suf: "" },
-        ].map((s, i) => (
-          <div
-            key={s.k}
-            style={{
-              paddingLeft: i === 0 ? 0 : 24,
-              borderLeft: i === 0 ? "none" : `1px dashed ${C.border}`,
-            }}
-          >
-            <span
-              style={{
-                color: C.muted,
-                fontSize: 10,
-                letterSpacing: "0.12em",
-                textTransform: "uppercase",
-              }}
-            >
-              {s.k}
-            </span>
-            <div style={{ marginTop: 6 }}>
-              <span
-                style={{
-                  fontFamily: "var(--font-serif)",
-                  fontSize: 32,
-                  fontWeight: 500,
-                  color: C.text,
-                  letterSpacing: "-0.02em",
-                }}
-              >
-                {s.v}
-              </span>
-              {s.suf && (
-                <span
-                  style={{
-                    fontFamily: "var(--font-mono)",
-                    fontSize: 11,
-                    color: C.muted,
-                    marginLeft: 6,
-                  }}
-                >
-                  {s.suf}
-                </span>
-              )}
-            </div>
-          </div>
-        ))}
+      {/* ─── Quick start ─── */}
+      <div style={{ marginBottom: 8 }}>
+        <span style={{ display: "inline-flex", alignItems: "center", gap: 8, color: C.move, fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+          ⎯⎯ quick start
+        </span>
+        <h2 style={{ fontFamily: "var(--font-serif)", fontSize: 28, fontWeight: 500, margin: "6px 0 20px", letterSpacing: "-0.02em" }}>
+          Ship in an evening. <span style={{ color: C.muted }}>Three commands.</span>
+        </h2>
       </div>
+      <HomeInstallBlock />
 
       {/* ─── Components section ─── */}
       <div
@@ -279,7 +220,7 @@ export default function HomePage() {
               textTransform: "uppercase",
             }}
           >
-            ⎯⎯ components
+            ⎯⎯ today · activity
           </span>
           <h2
             style={{
@@ -290,51 +231,46 @@ export default function HomePage() {
               letterSpacing: "-0.02em",
             }}
           >
-            Drop in a card. <span style={{ color: C.muted }}>We render the data.</span>
+            One card. <span style={{ color: C.muted }}>Six states, every edge handled.</span>
           </h2>
         </div>
         <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: C.muted }}>
-          {/* 1 of 7 shipped */}
+          {/* 6 states · 1 card */}
         </span>
       </div>
 
-      {/* 2-col card grids */}
+      {/* Today states — 2-col grid */}
       <div
         style={{
           display: "grid",
           gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-          gap: 22,
-          marginBottom: 22,
-        }}
-      >
-        <SleepCard />
-        <HrvCard />
-      </div>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-          gap: 22,
-          marginBottom: 22,
-        }}
-      >
-        <HistoryCard metric="move" />
-        <StandCard />
-      </div>
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1.1fr) minmax(0, 1fr)",
           gap: 22,
           marginBottom: 56,
         }}
       >
-        <SnapshotLog />
-        <div style={{ display: "flex", flexDirection: "column", gap: 22 }}>
-          <StreakCard />
-          <ShortcutStatus />
-        </div>
-      </div>
+        {[
+          { label: "default · synced", card: <TodayActivityCardDemo /> },
+          { label: "B · loading", card: <TodayActivityCardLoading /> },
+          { label: "A · empty", card: <TodayActivityCardEmpty /> },
+          { label: "C · partial", card: <TodayActivityCardPartial /> },
+          { label: "D · stale", card: <TodayActivityCardStale /> },
+          { label: "E · error", card: <TodayActivityCardError /> },
+        ].map(({ label, card }) => (
+          <div key={label} style={{ display: "flex", flexDirection: "column" }}>
+            <div
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 10,
+                color: C.muted,
+                letterSpacing: "0.08em",
+                marginBottom: 8,
+              }}
+            >
+              {label}
+            </div>
+            <div className="wk-card-lift" style={{ flex: 1 }}>{card}</div>
+          </div>
+        ))}</div>
 
       {/* ─── Zero telemetry block ─── */}
       <div
@@ -496,6 +432,7 @@ export default function HomePage() {
           ].map((step, i) => (
             <div
               key={step.n}
+              className="wk-step"
               style={{
                 padding: "28px 24px",
                 borderLeft: i === 0 ? "none" : `1px dashed ${C.border}`,
@@ -503,6 +440,7 @@ export default function HomePage() {
               }}
             >
               <div
+                className="wk-step-num"
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontSize: 11,
@@ -513,11 +451,13 @@ export default function HomePage() {
                 {step.n}
               </div>
               <div
+                className="wk-step-title"
                 style={{
                   fontFamily: "var(--font-mono)",
                   fontSize: 12,
                   color: C.exercise,
                   marginBottom: 10,
+                  transition: "color 0.18s ease",
                 }}
               >
                 {step.title}
@@ -560,6 +500,7 @@ export default function HomePage() {
           <span style={{ color: C.muted, fontStyle: "italic" }}>today.</span>
         </h2>
         <code
+          className="wk-cmd"
           style={{
             display: "inline-block",
             fontFamily: "var(--font-mono)",
@@ -577,6 +518,7 @@ export default function HomePage() {
         <div style={{ marginTop: 16 }}>
           <Link
             href="/docs"
+            className="wk-cta-link"
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: 12,
@@ -600,7 +542,10 @@ export default function HomePage() {
           color: C.muted,
         }}
       >
-        <span>{/* wristkit · open-source · MIT */}</span>
+        <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <WristKitMark size={14} />
+          wristkit · open-source · MIT
+        </span>
         <span>v0.1.0 · zero telemetry ✓</span>
       </div>
     </div>

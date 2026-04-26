@@ -38,15 +38,28 @@ export default async function DocPage({ params }: Props) {
 
   return (
     <article>
-      <header style={{ marginBottom: 40 }}>
+      <header style={{ marginBottom: 48 }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
+            color: "#3a3a3a",
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+            marginBottom: 14,
+          }}
+        >
+          ⎯⎯ docs
+        </div>
         <h1
           style={{
             fontFamily: "var(--font-serif)",
             fontSize: 48,
             fontWeight: 500,
-            letterSpacing: "-0.02em",
-            margin: "0 0 12px",
+            letterSpacing: "-0.03em",
+            margin: "0 0 14px",
             color: "#f5f5f5",
+            lineHeight: 1.05,
           }}
         >
           {doc.title}
@@ -56,9 +69,10 @@ export default async function DocPage({ params }: Props) {
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: 13,
-              color: "#555",
-              lineHeight: 1.6,
+              color: "#777",
+              lineHeight: 1.7,
               margin: 0,
+              maxWidth: 560,
             }}
           >
             {doc.description}
@@ -66,7 +80,7 @@ export default async function DocPage({ params }: Props) {
         )}
         <div
           style={{
-            marginTop: 24,
+            marginTop: 28,
             height: 1,
             backgroundImage: "linear-gradient(to right, #1f1f1f 50%, transparent 50%)",
             backgroundSize: "6px 1px",

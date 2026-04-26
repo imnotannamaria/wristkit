@@ -21,6 +21,9 @@ export function Panel({
         color: "var(--text)",
         fontFamily: "var(--font-mono)",
         boxSizing: "border-box",
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
         ...style,
       }}
     >

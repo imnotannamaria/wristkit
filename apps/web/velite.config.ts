@@ -24,6 +24,9 @@ export default defineConfig({
     },
   },
   mdx: {
-    rehypePlugins: [rehypeSlug, [rehypePrettyCode, { theme: "vesper" }]],
+    rehypePlugins: [
+      rehypeSlug,
+      [rehypePrettyCode, { theme: "vesper", keepBackground: false, defaultLang: "plaintext" }],
+    ],
   },
 });
