@@ -1,0 +1,92 @@
+---
+title: Installation
+description: Get wristkit running in your Next.js project in under 10 minutes.
+---
+
+## Prerequisites
+
+- Next.js 15 with App Router
+- A [Supabase](https://supabase.com) project (free tier is fine)
+- Node.js ≥ 20
+
+## 1. Run init
+
+Inside your Next.js project:
+
+```bash
+npx wristkit init
+```
+
+This will:
+
+- Detect your framework and check for App Router
+- Prompt for a theme (`default`, `neutral`, or `violet`)
+- Write `components.json` to your project root
+- Write `.env.local.example` with the required variables
+- Print the SQL migration to run in Supabase
+- Install peer dependencies: `drizzle-orm`, `postgres`, `zod`, `framer-motion`
+
+## 2. Set your environment variables
+
+Copy `.env.local.example` to `.env.local` and fill in your values:
+
+```bash
+cp .env.local.example .env.local
+```
+
+```
+WRISTKIT_DATABASE_URL=postgresql://postgres:password@db.xxx.supabase.co:5432/postgres
+WRISTKIT_API_KEY=your-secret-key-here
+```
+
+`WRISTKIT_DATABASE_URL` — your Supabase connection string (find it in Project Settings → Database → Connection string → URI)
+
+`WRISTKIT_API_KEY` — a secret you invent. The iOS Shortcut will send this in the `x-api-key` header on every POST.
+
+## 3. Run the SQL migration
+
+In your Supabase dashboard, go to **SQL Editor** and run:
+
+```sql
+create table if not exists wristkit_samples (
+  id           bigserial primary key,
+  user_id      uuid,
+  metric       text not null,
+  value        numeric not null,
+  unit         text not null,
+  recorded_at  timestamptz not null,
+  source       text,
+  ingested_at  timestamptz not null default now()
+);
+
+create index if not exists idx_metric_recorded
+  on wristkit_samples (metric, recorded_at desc);
+
+create index if not exists idx_user_metric_recorded
+  on wristkit_samples (user_id, metric, recorded_at desc);
+```
+
+## 4. Add a component
+
+```bash
+npx wristkit add today-activity-card
+```
+
+This fetches the component from the registry, installs its npm dependencies, and copies the files to your project.
+
+## 5. Use the component
+
+In any Server Component:
+
+```tsx
+import { TodayActivityCard, loadTodayActivity } from "@/components/wristkit/today-activity-card";
+
+export default async function Page() {
+  const state = await loadTodayActivity();
+  return <TodayActivityCard state={state} />;
+}
+```
+
+## 6. Set up the iOS Shortcut
+
+See [iOS Shortcut setup](/docs/shortcut-setup) for the full walkthrough.

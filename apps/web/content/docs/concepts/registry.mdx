@@ -1,0 +1,56 @@
+---
+title: Registry
+description: How the wristkit registry works — what it serves and how the CLI fetches from it.
+---
+
+## What is the registry?
+
+The registry is a set of JSON files served from `wristkit.vercel.app/r/:name`. Each file describes one installable item: a component, a handler, a schema, or a shortcut.
+
+When you run `npx wristkit add today-activity-card`, the CLI fetches `https://wristkit.vercel.app/r/today-activity-card.json`, resolves dependencies, and copies the files into your project.
+
+## Item shape
+
+```ts
+type RegistryItem = {
+  name: string;
+  type: "component" | "handler" | "schema" | "shortcut" | "lib";
+  version: string;
+  description: string;
+  dependencies?: {
+    npm?: string[];
+    registry?: string[];
+  };
+  files: {
+    path: string;
+    content: string;
+    overwrite?: boolean;
+  }[];
+  metrics?: string[];
+  postInstall?: {
+    message?: string;
+    sql?: string[];
+  };
+};
+```
+
+## Available items
+
+| Name | Type | Description |
+|---|---|---|
+| `today-activity-card` | component | Move, Exercise, Steps rings |
+| `healthkit-handler` | handler | POST /api/healthkit route |
+| `healthkit-schema` | schema | SQL migration |
+| `wristkit-sync` | shortcut | iOS Shortcut file |
+
+## How items are built
+
+`packages/registry/build.ts` walks the registry source, reads each `meta.json`, and emits one JSON file per item into `apps/web/public/r/`. This runs at build time, not request time — static, fast, and free.
+
+The registry endpoint at `app/r/[name]/route.ts` reads these pre-built JSON files and returns them with a 5-minute cache header.
+
+## Versioning
+
+Registry items are versioned independently via the `version` field in `meta.json`. When you run `npx wristkit update`, the CLI compares the local version against the registry and shows a diff before overwriting.
+
+Breaking changes increment the minor version. In v2 we'll introduce versioned paths (`/r/v2/...`) when the first schema-breaking change forces it.

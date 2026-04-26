@@ -1,0 +1,44 @@
+---
+title: FAQ
+description: Common questions about wristkit.
+---
+
+## Do you see my health data?
+
+No. wristkit is a CLI tool that copies code into your project. We never see your data, your Supabase credentials, or your users. The iOS Shortcut posts directly to your own endpoint — it never touches our servers.
+
+## What if I'm on Vercel free tier?
+
+That's exactly what wristkit is designed for. The ingest endpoint is a serverless function — it runs in under 50ms per request. The free tier handles daily syncs comfortably.
+
+## Can I use a different database than Supabase?
+
+In v1, no — the components ship with Drizzle + postgres.js configured for Supabase. If you have a compatible Postgres connection string (including Neon, Railway, or a self-hosted instance), it will work. True multi-database support is a v2 item.
+
+## What about multi-user?
+
+Out of scope for v1. The `user_id` column exists in the schema but is nullable and unused. Multi-user (per-user API keys, RLS in Supabase) is the first item on the v2 backlog.
+
+## Can I use this with Vite or Create React App?
+
+No. wristkit v1 requires Next.js 15 with App Router. The `loadTodayActivity()` function is a Server Component helper and depends on Next.js primitives. Vite support is on the v2 backlog.
+
+## How do I add goals?
+
+Goals are hard-coded in v1 (600 kcal / 30 min / 8000 steps). Customizable goals are planned for v2. For now, edit `lib/wristkit/queries.ts` in your project directly.
+
+## The Shortcut posted but I see no data
+
+Check the `wristkit_samples` table in your Supabase dashboard. If rows exist, the issue is in the query — make sure `WRISTKIT_DATABASE_URL` is set correctly and points to the right database. If no rows exist, check your API route logs for a 401 or 400 response.
+
+## How do I update a component?
+
+```bash
+npx wristkit update today-activity-card
+```
+
+This shows a diff of what changed and asks before overwriting.
+
+## Is this production-ready?
+
+v0.1.0 is an early release. The core (ingest handler + TodayActivityCard + CLI) is solid. Don't use it for anything health-critical. Data is for personal tracking and visualization only — not medical decision making.

@@ -1,0 +1,86 @@
+---
+title: TodayActivityCard
+description: Displays today's Move, Exercise, and Steps rings with five graceful states.
+---
+
+## Overview
+
+`TodayActivityCard` renders three activity rings (Move in kcal, Exercise in minutes, Steps) with real data from your Supabase database. It handles all five states the component can be in, from loading to fully synced.
+
+## Installation
+
+```bash
+npx wristkit add today-activity-card
+```
+
+This installs:
+- `components/wristkit/today-activity-card/index.tsx`
+- `components/wristkit/today-activity-card/states.tsx`
+- `lib/wristkit/db.ts`
+- `lib/wristkit/schema.ts`
+- `lib/wristkit/queries.ts`
+- `app/api/healthkit/route.ts`
+
+## Usage
+
+```tsx
+import { TodayActivityCard, loadTodayActivity } from "@/components/wristkit/today-activity-card";
+
+export default async function Page() {
+  const state = await loadTodayActivity();
+  return <TodayActivityCard state={state} />;
+}
+```
+
+`loadTodayActivity()` is a server-side function that queries your Supabase database and returns the correct state. Pass it directly to the component — you never need to handle the state machine yourself.
+
+## Props
+
+```ts
+type Props = {
+  state: TodayState;
+  className?: string;
+};
+```
+
+## States
+
+The component implements the full five-state contract. See [Component states](/docs/concepts/component-states) for the design rationale.
+
+### `loading`
+
+First fetch in flight. Rings sweep with a pulse animation. Metric values shimmer as skeletons. Footer shows the request in progress.
+
+### `empty`
+
+No data has ever been synced. Ring tracks are dotted. Values are `—`. Footer prompts to install the Shortcut.
+
+### `partial`
+
+Some metrics are missing (e.g. a Health permission was revoked). Available rings render normally. The missing ring is dotted. An inline hint identifies which metric and why.
+
+### `stale`
+
+Data exists but is older than 24 hours. Numbers are desaturated. Status pill shows `stale · Nh`. Footer offers a retry link.
+
+### `error`
+
+A sync error occurred. The ring area becomes a diagnostic block with error code, endpoint, and timestamp. An italic explanation translates the technical detail.
+
+### `ok`
+
+All three metrics present for today. Full rings, live numbers, `synced` status.
+
+## Customization
+
+The component reads theme tokens from CSS variables. Override them in your `globals.css`:
+
+```css
+:root {
+  --wristkit-move: #9d80ff;
+  --wristkit-exercise: #67e8c0;
+  --wristkit-steps: #f5a623;
+}
+```
+
+Goals (600 kcal / 30 min / 8000 steps) are hard-coded in v1 and will be configurable in v2.

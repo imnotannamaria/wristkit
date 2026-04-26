@@ -1,0 +1,67 @@
+---
+title: iOS Shortcut setup
+description: Install the wristkit Shortcut on your iPhone to sync Apple Health data.
+---
+
+## Download the Shortcut
+
+Open this link **on your iPhone**:
+
+```
+https://wristkit.vercel.app/shortcut
+```
+
+Tap **Add Shortcut** when prompted.
+
+## Configure the Shortcut
+
+After adding it, open the Shortcut and edit two values:
+
+**URL** — your Next.js app's healthkit endpoint:
+```
+https://your-site.com/api/healthkit
+```
+
+**API Key** — the value you set as `WRISTKIT_API_KEY` in your `.env.local`.
+
+## Test it
+
+Run the Shortcut manually once. It will:
+
+1. Read Active Energy, Exercise Minutes, and Step Count from Apple Health for today
+2. POST a JSON payload to your `/api/healthkit` endpoint
+3. Show a success/failure notification
+
+If it succeeds, you should see data in your Supabase `wristkit_samples` table within seconds.
+
+## Set up automation
+
+For automatic daily syncs, create an iOS Automation:
+
+1. Open **Shortcuts** app → **Automation** tab
+2. Tap **+** → **Time of Day**
+3. Set time to **23:59** daily
+4. Add action: **Run Shortcut** → select **wristkit Sync**
+5. Toggle off "Ask Before Running"
+
+## Payload format
+
+The Shortcut sends:
+
+```json
+{
+  "samples": [
+    { "metric": "kcal", "value": 544, "unit": "kcal", "recorded_at": "2026-04-25T23:59:00-03:00", "source": "apple_watch" },
+    { "metric": "exercise_minutes", "value": 80, "unit": "min", "recorded_at": "2026-04-25T23:59:00-03:00", "source": "apple_watch" },
+    { "metric": "steps", "value": 12340, "unit": "count", "recorded_at": "2026-04-25T23:59:00-03:00", "source": "apple_watch" }
+  ]
+}
+```
+
+## Troubleshooting
+
+**401 Unauthorized** — your API key doesn't match `WRISTKIT_API_KEY`. Double-check both values.
+
+**Network error** — make sure your site is publicly accessible, not just on localhost.
+
+**No data in components** — check the Supabase table has rows. The `TodayActivityCard` queries for today's data (midnight to now in your server's timezone).

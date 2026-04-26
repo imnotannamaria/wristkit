@@ -3,13 +3,30 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "echo placeholder",
-    "dev": "echo placeholder",
-    "lint": "echo placeholder",
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
     "typecheck": "tsc --noEmit",
     "test": "echo no tests yet"
   },
+  "dependencies": {
+    "@mdx-js/react": "^3.1.0",
+    "framer-motion": "^12.0.0",
+    "next": "15.5.9",
+    "react": "^19.2.5",
+    "react-dom": "^19.2.5",
+    "rehype-pretty-code": "^0.14.0",
+    "rehype-slug": "^6.0.0",
+    "shiki": "^3.0.0",
+    "velite": "^0.2.4"
+  },
   "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.0",
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "tailwindcss": "^4.1.0",
     "typescript": "5.9.2"
   }
 }

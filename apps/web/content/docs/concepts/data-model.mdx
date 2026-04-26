@@ -1,0 +1,66 @@
+---
+title: Data model
+description: The wristkit_samples table — why time-series, what metrics ship in v1.
+---
+
+## Why time-series
+
+We use a time-series table rather than daily snapshots. The Shortcut runs once a day in v1, but a day's payload contains many metrics each with their own timestamp (workouts at 08:00, sleep at 23:42). A snapshot table forces lossy flattening and makes future components harder to build.
+
+## Schema
+
+```sql
+create table if not exists wristkit_samples (
+  id           bigserial primary key,
+  user_id      uuid,
+  metric       text not null,
+  value        numeric not null,
+  unit         text not null,
+  recorded_at  timestamptz not null,
+  source       text,
+  ingested_at  timestamptz not null default now()
+);
+```
+
+`user_id` is nullable in v1 so we can add multi-user support later without a schema migration.
+
+`recorded_at` is the Apple Health timestamp — the moment the data was recorded on the device, not when it was synced.
+
+`source` is a freeform string. The Shortcut sends `apple_watch` or `iphone`.
+
+## Indexes
+
+```sql
+create index if not exists idx_metric_recorded
+  on wristkit_samples (metric, recorded_at desc);
+
+create index if not exists idx_user_metric_recorded
+  on wristkit_samples (user_id, metric, recorded_at desc);
+```
+
+Both indexes support the most common query pattern: `WHERE metric = $1 AND recorded_at >= $2 ORDER BY recorded_at DESC LIMIT 1`.
+
+## Metrics in v1
+
+| Metric | Unit | Source |
+|---|---|---|
+| `kcal` | `kcal` | Active energy |
+| `exercise_minutes` | `min` | Exercise minutes |
+| `steps` | `count` | Step count |
+
+These are the three metrics `TodayActivityCard` needs. New components in v2 will add more metric types — the schema doesn't change.
+
+## Query helpers
+
+`lib/wristkit/queries.ts` exports typed helpers:
+
+```ts
+export async function getTodayActivity(url: string): Promise<{
+  kcal: number | null;
+  exerciseMinutes: number | null;
+  steps: number | null;
+  lastSync: Date | null;
+}>;
+```
+
+Components call `loadTodayActivity()` (which calls `getTodayActivity()` internally) and never query the database directly.
