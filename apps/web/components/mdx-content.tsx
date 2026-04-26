@@ -1,8 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import * as runtime from "react/jsx-runtime";
 import type React from "react";
+import * as runtime from "react/jsx-runtime";
 
 function extractText(node: React.ReactNode): string {
   if (typeof node === "string") return node;
@@ -53,7 +53,7 @@ function CopyButton({ text }: { text: string }) {
       >
         {copied ? (
           <>
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
               <path
                 className="wk-check"
                 d="M2 6l3 3 5-5"
@@ -67,9 +67,22 @@ function CopyButton({ text }: { text: string }) {
           </>
         ) : (
           <>
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-              <rect x="4" y="4" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
-              <path d="M8 4V2.5A1.5 1.5 0 006.5 1H2.5A1.5 1.5 0 001 2.5v4A1.5 1.5 0 002.5 8H4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+              <rect
+                x="4"
+                y="4"
+                width="7"
+                height="7"
+                rx="1.5"
+                stroke="currentColor"
+                strokeWidth="1.2"
+              />
+              <path
+                d="M8 4V2.5A1.5 1.5 0 006.5 1H2.5A1.5 1.5 0 001 2.5v4A1.5 1.5 0 002.5 8H4"
+                stroke="currentColor"
+                strokeWidth="1.2"
+                strokeLinecap="round"
+              />
             </svg>
             copy
           </>
@@ -199,7 +212,11 @@ const customComponents = {
   ),
 
   a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
-    <a {...props} className="docs-prose-link" style={{ color: "#9d80ff", textDecoration: "none" }} />
+    <a
+      {...props}
+      className="docs-prose-link"
+      style={{ color: "#9d80ff", textDecoration: "none" }}
+    />
   ),
 
   strong: (props: React.HTMLAttributes<HTMLElement>) => (
@@ -292,7 +309,14 @@ const customComponents = {
   ),
 
   table: (props: React.HTMLAttributes<HTMLTableElement>) => (
-    <div style={{ overflowX: "auto" as const, marginBottom: 28, borderRadius: 8, border: "1px solid #1a1a1a" }}>
+    <div
+      style={{
+        overflowX: "auto" as const,
+        marginBottom: 28,
+        borderRadius: 8,
+        border: "1px solid #1a1a1a",
+      }}
+    >
       <table
         {...props}
         style={{

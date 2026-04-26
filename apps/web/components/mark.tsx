@@ -28,9 +28,26 @@ export function WristKitMark({
         </mask>
       </defs>
       {/* outer ring */}
-      <circle cx="32" cy="32" r="22" fill="none" stroke={color} strokeWidth="4" mask={`url(#${maskId})`} />
+      <circle
+        cx="32"
+        cy="32"
+        r="22"
+        fill="none"
+        stroke={color}
+        strokeWidth="4"
+        mask={`url(#${maskId})`}
+      />
       {/* inner ring */}
-      <circle cx="32" cy="32" r="13" fill="none" stroke={color} strokeWidth="4" strokeOpacity="0.55" mask={`url(#${maskId})`} />
+      <circle
+        cx="32"
+        cy="32"
+        r="13"
+        fill="none"
+        stroke={color}
+        strokeWidth="4"
+        strokeOpacity="0.55"
+        mask={`url(#${maskId})`}
+      />
       {/* accent slash */}
       <path d="M 46 12 L 22 52" stroke={accent} strokeWidth="5" strokeLinecap="round" />
     </svg>

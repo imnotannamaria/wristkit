@@ -1,5 +1,3 @@
-import { HomeInstallBlock } from "@/components/home-install-block";
-import { WristKitMark } from "@/components/mark";
 import {
   EnvCard,
   InstallCard,
@@ -10,6 +8,8 @@ import {
   TodayActivityCardPartial,
   TodayActivityCardStale,
 } from "@/components/cards/today-activity-card-demo";
+import { HomeInstallBlock } from "@/components/home-install-block";
+import { WristKitMark } from "@/components/mark";
 import Link from "next/link";
 
 const C = {
@@ -69,7 +69,11 @@ export default function HomePage() {
           <Link href="/" className="wk-nav-link" style={{ color: C.text, textDecoration: "none" }}>
             home
           </Link>
-          <Link href="/docs" className="wk-nav-link" style={{ color: C.muted, textDecoration: "none" }}>
+          <Link
+            href="/docs"
+            className="wk-nav-link"
+            style={{ color: C.muted, textDecoration: "none" }}
+          >
             docs
           </Link>
           <a
@@ -190,10 +194,28 @@ export default function HomePage() {
 
       {/* ─── Quick start ─── */}
       <div style={{ marginBottom: 8 }}>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 8, color: C.move, fontSize: 10, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+        <span
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 8,
+            color: C.move,
+            fontSize: 10,
+            letterSpacing: "0.12em",
+            textTransform: "uppercase",
+          }}
+        >
           ⎯⎯ quick start
         </span>
-        <h2 style={{ fontFamily: "var(--font-serif)", fontSize: 28, fontWeight: 500, margin: "6px 0 20px", letterSpacing: "-0.02em" }}>
+        <h2
+          style={{
+            fontFamily: "var(--font-serif)",
+            fontSize: 28,
+            fontWeight: 500,
+            margin: "6px 0 20px",
+            letterSpacing: "-0.02em",
+          }}
+        >
           Ship in an evening. <span style={{ color: C.muted }}>Three commands.</span>
         </h2>
       </div>
@@ -268,9 +290,12 @@ export default function HomePage() {
             >
               {label}
             </div>
-            <div className="wk-card-lift" style={{ flex: 1 }}>{card}</div>
+            <div className="wk-card-lift" style={{ flex: 1 }}>
+              {card}
+            </div>
           </div>
-        ))}</div>
+        ))}
+      </div>
 
       {/* ─── Zero telemetry block ─── */}
       <div

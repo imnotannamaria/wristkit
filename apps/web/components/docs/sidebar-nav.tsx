@@ -1,8 +1,8 @@
 "use client";
 
+import { WristKitMark } from "@/components/mark";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { WristKitMark } from "@/components/mark";
 
 const nav = [
   {
@@ -36,9 +36,26 @@ export function SidebarNav() {
 
   return (
     <>
-      <Link href="/" className="docs-logo" style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 36, textDecoration: "none" }}>
+      <Link
+        href="/"
+        className="docs-logo"
+        style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 10,
+          marginBottom: 36,
+          textDecoration: "none",
+        }}
+      >
         <WristKitMark size={20} />
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: "#f5f5f5", letterSpacing: "0.04em" }}>
+        <span
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 12,
+            color: "#f5f5f5",
+            letterSpacing: "0.04em",
+          }}
+        >
           wristkit
         </span>
       </Link>
@@ -85,7 +102,14 @@ export function SidebarNav() {
       ))}
 
       <div style={{ marginTop: "auto", paddingTop: 32, borderTop: "1px dashed #1a1a1a" }}>
-        <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: "#3a3a3a", letterSpacing: "0.04em" }}>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 10,
+            color: "#3a3a3a",
+            letterSpacing: "0.04em",
+          }}
+        >
           v0.1.0 · MIT
         </div>
       </div>

@@ -21,7 +21,22 @@ const tabs: { id: string; label: string; lang: string; lines: Line[] }[] = [
     label: "$ init",
     lang: "bash",
     lines: [
-      [<span key="p" style={{ color: C.mutedSoft }}>$</span>, " ", <span key="c" style={{ color: C.muted }}>npx </span>, <span key="w" style={{ color: C.move }}>wristkit</span>, <span key="i" style={{ color: C.text }}> init</span>],
+      [
+        <span key="p" style={{ color: C.mutedSoft }}>
+          $
+        </span>,
+        " ",
+        <span key="c" style={{ color: C.muted }}>
+          npx{" "}
+        </span>,
+        <span key="w" style={{ color: C.move }}>
+          wristkit
+        </span>,
+        <span key="i" style={{ color: C.text }}>
+          {" "}
+          init
+        </span>,
+      ],
     ],
   },
   {
@@ -29,7 +44,18 @@ const tabs: { id: string; label: string; lang: string; lines: Line[] }[] = [
     label: "$ add",
     lang: "bash",
     lines: [
-      [<span key="p" style={{ color: C.mutedSoft }}>$</span>, " ", <span key="c" style={{ color: C.muted }}>npx wristkit </span>, <span key="a" style={{ color: C.exercise }}>add today-activity-card</span>],
+      [
+        <span key="p" style={{ color: C.mutedSoft }}>
+          $
+        </span>,
+        " ",
+        <span key="c" style={{ color: C.muted }}>
+          npx wristkit{" "}
+        </span>,
+        <span key="a" style={{ color: C.exercise }}>
+          add today-activity-card
+        </span>,
+      ],
     ],
   },
   {
@@ -37,12 +63,105 @@ const tabs: { id: string; label: string; lang: string; lines: Line[] }[] = [
     label: "import",
     lang: "tsx",
     lines: [
-      [<span key="k" style={{ color: C.move }}>import </span>, <span key="b" style={{ color: C.text }}>{"{ "}</span>, <span key="n" style={{ color: C.exercise }}>TodayActivityCard</span>, <span key="b2" style={{ color: C.text }}>{" }"}</span>, <span key="f" style={{ color: C.move }}> from </span>, <span key="s" style={{ color: C.steps }}>"@/components/today-activity-card"</span>, <span key="sc" style={{ color: C.text }}>;</span>],
+      [
+        <span key="k" style={{ color: C.move }}>
+          import{" "}
+        </span>,
+        <span key="b" style={{ color: C.text }}>
+          {"{ "}
+        </span>,
+        <span key="n" style={{ color: C.exercise }}>
+          TodayActivityCard
+        </span>,
+        <span key="b2" style={{ color: C.text }}>
+          {" }"}
+        </span>,
+        <span key="f" style={{ color: C.move }}>
+          {" "}
+          from{" "}
+        </span>,
+        <span key="s" style={{ color: C.steps }}>
+          "@/components/today-activity-card"
+        </span>,
+        <span key="sc" style={{ color: C.text }}>
+          ;
+        </span>,
+      ],
       [],
-      [<span key="k" style={{ color: C.move }}>export default async function </span>, <span key="n" style={{ color: C.exercise }}>Dashboard</span>, <span key="p" style={{ color: C.text }}>{"() {"}</span>],
-      [<span key="sp" style={{ color: C.text }}>{"  "}</span>, <span key="k" style={{ color: C.move }}>const </span>, <span key="n" style={{ color: C.text }}>state </span>, <span key="e" style={{ color: C.muted }}>= </span>, <span key="a" style={{ color: C.move }}>await </span>, <span key="fn" style={{ color: C.exercise }}>loadTodayActivity</span>, <span key="c" style={{ color: C.text }}>();</span>],
-      [<span key="sp" style={{ color: C.text }}>{"  "}</span>, <span key="r" style={{ color: C.move }}>return </span>, <span key="lt" style={{ color: C.muted }}>&lt;</span>, <span key="comp" style={{ color: C.exercise }}>TodayActivityCard </span>, <span key="pr" style={{ color: C.steps }}>state</span>, <span key="eq" style={{ color: C.muted }}>=</span>, <span key="br" style={{ color: C.text }}>{"{"}</span>, <span key="st" style={{ color: C.steps }}>state</span>, <span key="br2" style={{ color: C.text }}>{"}"}</span>, <span key="sl" style={{ color: C.muted }}>/&gt;</span>, <span key="sc" style={{ color: C.text }}>;</span>],
-      [<span key="cb" style={{ color: C.text }}>{"}"}</span>],
+      [
+        <span key="k" style={{ color: C.move }}>
+          export default async function{" "}
+        </span>,
+        <span key="n" style={{ color: C.exercise }}>
+          Dashboard
+        </span>,
+        <span key="p" style={{ color: C.text }}>
+          {"() {"}
+        </span>,
+      ],
+      [
+        <span key="sp" style={{ color: C.text }}>
+          {"  "}
+        </span>,
+        <span key="k" style={{ color: C.move }}>
+          const{" "}
+        </span>,
+        <span key="n" style={{ color: C.text }}>
+          state{" "}
+        </span>,
+        <span key="e" style={{ color: C.muted }}>
+          ={" "}
+        </span>,
+        <span key="a" style={{ color: C.move }}>
+          await{" "}
+        </span>,
+        <span key="fn" style={{ color: C.exercise }}>
+          loadTodayActivity
+        </span>,
+        <span key="c" style={{ color: C.text }}>
+          ();
+        </span>,
+      ],
+      [
+        <span key="sp" style={{ color: C.text }}>
+          {"  "}
+        </span>,
+        <span key="r" style={{ color: C.move }}>
+          return{" "}
+        </span>,
+        <span key="lt" style={{ color: C.muted }}>
+          &lt;
+        </span>,
+        <span key="comp" style={{ color: C.exercise }}>
+          TodayActivityCard{" "}
+        </span>,
+        <span key="pr" style={{ color: C.steps }}>
+          state
+        </span>,
+        <span key="eq" style={{ color: C.muted }}>
+          =
+        </span>,
+        <span key="br" style={{ color: C.text }}>
+          {"{"}
+        </span>,
+        <span key="st" style={{ color: C.steps }}>
+          state
+        </span>,
+        <span key="br2" style={{ color: C.text }}>
+          {"}"}
+        </span>,
+        <span key="sl" style={{ color: C.muted }}>
+          /&gt;
+        </span>,
+        <span key="sc" style={{ color: C.text }}>
+          ;
+        </span>,
+      ],
+      [
+        <span key="cb" style={{ color: C.text }}>
+          {"}"}
+        </span>,
+      ],
     ],
   },
   {
@@ -50,17 +169,36 @@ const tabs: { id: string; label: string; lang: string; lines: Line[] }[] = [
     label: "shortcut",
     lang: "bash",
     lines: [
-      [<span key="c" style={{ color: C.muted }}># install the iOS Shortcut on your iPhone</span>],
+      [
+        <span key="c" style={{ color: C.muted }}>
+          # install the iOS Shortcut on your iPhone
+        </span>,
+      ],
       [],
-      [<span key="p" style={{ color: C.mutedSoft }}>$</span>, " ", <span key="c" style={{ color: C.muted }}>npx wristkit </span>, <span key="a" style={{ color: C.steps }}>shortcut</span>],
+      [
+        <span key="p" style={{ color: C.mutedSoft }}>
+          $
+        </span>,
+        " ",
+        <span key="c" style={{ color: C.muted }}>
+          npx wristkit{" "}
+        </span>,
+        <span key="a" style={{ color: C.steps }}>
+          shortcut
+        </span>,
+      ],
       [],
-      [<span key="c" style={{ color: C.muted }}># opens the shortcut link — edit URL + API key, done</span>],
+      [
+        <span key="c" style={{ color: C.muted }}>
+          # opens the shortcut link — edit URL + API key, done
+        </span>,
+      ],
     ],
   },
 ];
 
 export function HomeInstallBlock() {
-  const [active, setActive] = useState(tabs[0]!.id);
+  const [active, setActive] = useState(tabs[0]?.id ?? "init");
   const [copied, setCopied] = useState(false);
 
   // biome-ignore lint/style/noNonNullAssertion: tabs is static, active always matches
@@ -78,7 +216,7 @@ export function HomeInstallBlock() {
             }
             return "";
           })
-          .join("")
+          .join(""),
       )
       .join("\n");
     navigator.clipboard.writeText(text).then(() => {
@@ -131,7 +269,7 @@ export function HomeInstallBlock() {
                   onClick={() => setActive(t.id)}
                   style={{
                     background: isActive ? "rgba(255,255,255,0.07)" : "none",
-                    border: isActive ? `1px solid #2a2a2a` : "1px solid transparent",
+                    border: isActive ? "1px solid #2a2a2a" : "1px solid transparent",
                     borderRadius: 6,
                     cursor: "pointer",
                     padding: "5px 10px",
@@ -154,7 +292,7 @@ export function HomeInstallBlock() {
             onClick={handleCopy}
             style={{
               background: "none",
-              border: `1px solid #2a2a2a`,
+              border: "1px solid #2a2a2a",
               borderRadius: 6,
               cursor: "pointer",
               padding: "5px 10px",
@@ -169,16 +307,35 @@ export function HomeInstallBlock() {
           >
             {copied ? (
               <>
-                <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-                  <path d="M2 6l3 3 5-5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path
+                    d="M2 6l3 3 5-5"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
                 </svg>
                 copied
               </>
             ) : (
               <>
-                <svg width="11" height="11" viewBox="0 0 12 12" fill="none">
-                  <rect x="4" y="4" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.2"/>
-                  <path d="M8 4V2.5A1.5 1.5 0 006.5 1H2.5A1.5 1.5 0 001 2.5v4A1.5 1.5 0 002.5 8H4" stroke="currentColor" strokeWidth="1.2" strokeLinecap="round"/>
+                <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <rect
+                    x="4"
+                    y="4"
+                    width="7"
+                    height="7"
+                    rx="1.5"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                  />
+                  <path
+                    d="M8 4V2.5A1.5 1.5 0 006.5 1H2.5A1.5 1.5 0 001 2.5v4A1.5 1.5 0 002.5 8H4"
+                    stroke="currentColor"
+                    strokeWidth="1.2"
+                    strokeLinecap="round"
+                  />
                 </svg>
                 copy
               </>
@@ -188,10 +345,19 @@ export function HomeInstallBlock() {
 
         {/* Code area */}
         <div style={{ padding: "24px 28px", minHeight: 140 }}>
-          <table style={{ borderCollapse: "collapse", width: "100%", fontFamily: "var(--font-mono)", fontSize: 13, lineHeight: 1.85 }}>
+          <table
+            style={{
+              borderCollapse: "collapse",
+              width: "100%",
+              fontFamily: "var(--font-mono)",
+              fontSize: 13,
+              lineHeight: 1.85,
+            }}
+          >
             <tbody>
               {tab.lines.map((line, i) => (
                 <tr
+                  // biome-ignore lint/suspicious/noArrayIndexKey: lines are static per tab, index is stable
                   key={`${active}-${i}`}
                   className="wk-code-line"
                   style={{ animationDelay: `${i * 0.03}s` }}
@@ -209,9 +375,7 @@ export function HomeInstallBlock() {
                   >
                     {i + 1}
                   </td>
-                  <td style={{ color: C.text }}>
-                    {line.length > 0 ? line : <span>&nbsp;</span>}
-                  </td>
+                  <td style={{ color: C.text }}>{line.length > 0 ? line : <span>&nbsp;</span>}</td>
                 </tr>
               ))}
             </tbody>
@@ -236,10 +400,16 @@ export function HomeInstallBlock() {
             target="_blank"
             rel="noreferrer"
             className="wk-nav-link"
-            style={{ color: C.muted, textDecoration: "none", display: "flex", alignItems: "center", gap: 6 }}
+            style={{
+              color: C.muted,
+              textDecoration: "none",
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+            }}
           >
-            <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor">
-              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+            <svg width="13" height="13" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+              <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
             </svg>
             View on GitHub
           </a>

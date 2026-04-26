@@ -15,15 +15,32 @@ export default function Icon() {
         justifyContent: "center",
       }}
     >
-      <svg width="28" height="28" viewBox="0 0 64 64">
+      <svg width="28" height="28" viewBox="0 0 64 64" aria-hidden="true">
         <defs>
           <mask id="m">
             <rect width="64" height="64" fill="white" />
             <path d="M 46 12 L 22 52" stroke="black" strokeWidth="8" strokeLinecap="butt" />
           </mask>
         </defs>
-        <circle cx="32" cy="32" r="22" fill="none" stroke="#f5f5f5" strokeWidth="4" mask="url(#m)" />
-        <circle cx="32" cy="32" r="13" fill="none" stroke="#f5f5f5" strokeWidth="4" strokeOpacity="0.55" mask="url(#m)" />
+        <circle
+          cx="32"
+          cy="32"
+          r="22"
+          fill="none"
+          stroke="#f5f5f5"
+          strokeWidth="4"
+          mask="url(#m)"
+        />
+        <circle
+          cx="32"
+          cy="32"
+          r="13"
+          fill="none"
+          stroke="#f5f5f5"
+          strokeWidth="4"
+          strokeOpacity="0.55"
+          mask="url(#m)"
+        />
         <path d="M 46 12 L 22 52" stroke="#9d80ff" strokeWidth="5" strokeLinecap="round" />
       </svg>
     </div>,

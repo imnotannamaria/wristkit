@@ -306,21 +306,46 @@ export function TodayActivityCardLoading() {
     const circ = 2 * Math.PI * r;
     return (
       <>
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke={color} strokeWidth={9} strokeOpacity={0.18} />
         <circle
-          cx={cx} cy={cy} r={r} fill="none" stroke={color} strokeWidth={9} strokeLinecap="round"
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill="none"
+          stroke={color}
+          strokeWidth={9}
+          strokeOpacity={0.18}
+        />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill="none"
+          stroke={color}
+          strokeWidth={9}
+          strokeLinecap="round"
           strokeDasharray={`${circ * 0.18} ${circ * 0.82}`}
-          style={{ transform: "rotate(-90deg)", transformOrigin: `${cx}px ${cy}px`, animation: "tac-spin 1.6s linear infinite" }}
+          style={{
+            transform: "rotate(-90deg)",
+            transformOrigin: `${cx}px ${cy}px`,
+            animation: "tac-spin 1.6s linear infinite",
+          }}
         />
       </>
     );
   };
   const Skel = ({ w }: { w: number }) => (
-    <span style={{
-      display: "inline-block", width: w, height: 14, borderRadius: 3,
-      background: `linear-gradient(90deg, ${C.borderSoft} 0%, ${C.border} 50%, ${C.borderSoft} 100%)`,
-      backgroundSize: "200% 100%", animation: "tac-shimmer 1.4s ease-in-out infinite", verticalAlign: "middle",
-    }} />
+    <span
+      style={{
+        display: "inline-block",
+        width: w,
+        height: 14,
+        borderRadius: 3,
+        background: `linear-gradient(90deg, ${C.borderSoft} 0%, ${C.border} 50%, ${C.borderSoft} 100%)`,
+        backgroundSize: "200% 100%",
+        animation: "tac-shimmer 1.4s ease-in-out infinite",
+        verticalAlign: "middle",
+      }}
+    />
   );
   return (
     <Panel>
@@ -331,10 +356,21 @@ export function TodayActivityCardLoading() {
       `}</style>
       <PanelHeader
         eyebrow="Today / Activity"
-        status={<span style={{ animation: "tac-blink 1.2s ease-in-out infinite" }}>syncing…</span> as unknown as string}
+        status={
+          (
+            <span style={{ animation: "tac-blink 1.2s ease-in-out infinite" }}>syncing…</span>
+          ) as unknown as string
+        }
         statusColor={C.text}
       />
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)", gap: 20, alignItems: "center" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)",
+          gap: 20,
+          alignItems: "center",
+        }}
+      >
         <div style={{ display: "flex", justifyContent: "center" }}>
           <svg width={144} height={144} viewBox="0 0 144 144" aria-hidden="true">
             <RingPulse r={52} color={C.move} />
@@ -344,21 +380,87 @@ export function TodayActivityCardLoading() {
         </div>
         <div style={{ opacity: 0.75 }}>
           <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-            <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: C.move, flexShrink: 0, marginTop: 4 }} />
-            <span style={{ color: C.muted, fontSize: 10, letterSpacing: "0.12em", minWidth: 72, textTransform: "uppercase" as const }}>Move</span>
-            <span style={{ flex: 1, textAlign: "right" }}><Skel w={72} /></span>
+            <span
+              aria-hidden
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
+                backgroundColor: C.move,
+                flexShrink: 0,
+                marginTop: 4,
+              }}
+            />
+            <span
+              style={{
+                color: C.muted,
+                fontSize: 10,
+                letterSpacing: "0.12em",
+                minWidth: 72,
+                textTransform: "uppercase" as const,
+              }}
+            >
+              Move
+            </span>
+            <span style={{ flex: 1, textAlign: "right" }}>
+              <Skel w={72} />
+            </span>
           </div>
           <DottedRule style={{ margin: "10px 0" }} />
           <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-            <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: C.exercise, flexShrink: 0, marginTop: 4 }} />
-            <span style={{ color: C.muted, fontSize: 10, letterSpacing: "0.12em", minWidth: 72, textTransform: "uppercase" as const }}>Exercise</span>
-            <span style={{ flex: 1, textAlign: "right" }}><Skel w={56} /></span>
+            <span
+              aria-hidden
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
+                backgroundColor: C.exercise,
+                flexShrink: 0,
+                marginTop: 4,
+              }}
+            />
+            <span
+              style={{
+                color: C.muted,
+                fontSize: 10,
+                letterSpacing: "0.12em",
+                minWidth: 72,
+                textTransform: "uppercase" as const,
+              }}
+            >
+              Exercise
+            </span>
+            <span style={{ flex: 1, textAlign: "right" }}>
+              <Skel w={56} />
+            </span>
           </div>
           <DottedRule style={{ margin: "10px 0" }} />
           <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-            <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: C.steps, flexShrink: 0, marginTop: 4 }} />
-            <span style={{ color: C.muted, fontSize: 10, letterSpacing: "0.12em", minWidth: 72, textTransform: "uppercase" as const }}>Steps</span>
-            <span style={{ flex: 1, textAlign: "right" }}><Skel w={84} /></span>
+            <span
+              aria-hidden
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
+                backgroundColor: C.steps,
+                flexShrink: 0,
+                marginTop: 4,
+              }}
+            />
+            <span
+              style={{
+                color: C.muted,
+                fontSize: 10,
+                letterSpacing: "0.12em",
+                minWidth: 72,
+                textTransform: "uppercase" as const,
+              }}
+            >
+              Steps
+            </span>
+            <span style={{ flex: 1, textAlign: "right" }}>
+              <Skel w={84} />
+            </span>
           </div>
         </div>
       </div>
@@ -369,32 +471,110 @@ export function TodayActivityCardLoading() {
 
 // ─── Partial state ────────────────────────────────────────────
 export function TodayActivityCardPartial({
-  moveKcal = 544, exerciseMin = 80, moveGoal = 600, exerciseGoal = 30, stepsGoal = 8000,
-}: { moveKcal?: number; exerciseMin?: number; moveGoal?: number; exerciseGoal?: number; stepsGoal?: number }) {
+  moveKcal = 544,
+  exerciseMin = 80,
+  moveGoal = 600,
+  exerciseGoal = 30,
+  stepsGoal = 8000,
+}: {
+  moveKcal?: number;
+  exerciseMin?: number;
+  moveGoal?: number;
+  exerciseGoal?: number;
+  stepsGoal?: number;
+}) {
   const cx = 72;
   const cy = 72;
   return (
     <Panel>
       <PanelHeader eyebrow="Today / Activity" status="partial" statusColor={C.steps} />
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)", gap: 20, alignItems: "center" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)",
+          gap: 20,
+          alignItems: "center",
+        }}
+      >
         <div style={{ display: "flex", justifyContent: "center" }}>
           <svg width={144} height={144} viewBox="0 0 144 144" aria-hidden="true">
             <RingLayer v={moveKcal} max={moveGoal} color={C.move} r={52} cx={cx} cy={cy} />
-            <RingLayer v={exerciseMin} max={exerciseGoal} color={C.exercise} r={38} cx={cx} cy={cy} />
-            <circle cx={cx} cy={cy} r={24} fill="none" stroke={C.steps} strokeWidth={9} strokeOpacity={0.22} strokeDasharray="2 4" />
+            <RingLayer
+              v={exerciseMin}
+              max={exerciseGoal}
+              color={C.exercise}
+              r={38}
+              cx={cx}
+              cy={cy}
+            />
+            <circle
+              cx={cx}
+              cy={cy}
+              r={24}
+              fill="none"
+              stroke={C.steps}
+              strokeWidth={9}
+              strokeOpacity={0.22}
+              strokeDasharray="2 4"
+            />
           </svg>
         </div>
         <div>
           <MetricRow dot={C.move} label="Move" value={moveKcal} suffix={`/ ${moveGoal} kcal`} />
           <DottedRule style={{ margin: "10px 0" }} />
-          <MetricRow dot={C.exercise} label="Exercise" value={exerciseMin} suffix={`/ ${exerciseGoal} min`} />
+          <MetricRow
+            dot={C.exercise}
+            label="Exercise"
+            value={exerciseMin}
+            suffix={`/ ${exerciseGoal} min`}
+          />
           <DottedRule style={{ margin: "10px 0" }} />
           <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-            <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: C.steps, flexShrink: 0, marginTop: 4, opacity: 0.4 }} />
-            <span style={{ color: C.muted, fontSize: 10, letterSpacing: "0.12em", minWidth: 72, textTransform: "uppercase" as const }}>Steps</span>
+            <span
+              aria-hidden
+              style={{
+                width: 6,
+                height: 6,
+                borderRadius: "50%",
+                backgroundColor: C.steps,
+                flexShrink: 0,
+                marginTop: 4,
+                opacity: 0.4,
+              }}
+            />
+            <span
+              style={{
+                color: C.muted,
+                fontSize: 10,
+                letterSpacing: "0.12em",
+                minWidth: 72,
+                textTransform: "uppercase" as const,
+              }}
+            >
+              Steps
+            </span>
             <span style={{ flex: 1, textAlign: "right" }}>
-              <span style={{ fontFamily: "var(--font-serif)", fontSize: 26, fontWeight: 500, color: C.mutedSoft }}>—</span>
-              <span style={{ fontFamily: "var(--font-mono)", fontSize: 10, color: C.hrv, marginLeft: 8, letterSpacing: "0.04em" }}>permission denied</span>
+              <span
+                style={{
+                  fontFamily: "var(--font-serif)",
+                  fontSize: 26,
+                  fontWeight: 500,
+                  color: C.mutedSoft,
+                }}
+              >
+                —
+              </span>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 10,
+                  color: C.hrv,
+                  marginLeft: 8,
+                  letterSpacing: "0.04em",
+                }}
+              >
+                permission denied
+              </span>
             </span>
           </div>
         </div>
@@ -406,26 +586,73 @@ export function TodayActivityCardPartial({
 
 // ─── Stale state ──────────────────────────────────────────────
 export function TodayActivityCardStale({
-  moveKcal = 412, exerciseMin = 18, steps = 4280, moveGoal = 600, exerciseGoal = 30, stepsGoal = 8000, hoursAgo = 6,
-}: { moveKcal?: number; exerciseMin?: number; steps?: number; moveGoal?: number; exerciseGoal?: number; stepsGoal?: number; hoursAgo?: number }) {
+  moveKcal = 412,
+  exerciseMin = 18,
+  steps = 4280,
+  moveGoal = 600,
+  exerciseGoal = 30,
+  stepsGoal = 8000,
+  hoursAgo = 6,
+}: {
+  moveKcal?: number;
+  exerciseMin?: number;
+  steps?: number;
+  moveGoal?: number;
+  exerciseGoal?: number;
+  stepsGoal?: number;
+  hoursAgo?: number;
+}) {
   const cx = 72;
   const cy = 72;
-  const StaleRing = ({ v, max, color, r }: { v: number; max: number; color: string; r: number }) => {
+  const StaleRing = ({
+    v,
+    max,
+    color,
+    r,
+  }: { v: number; max: number; color: string; r: number }) => {
     const circ = 2 * Math.PI * r;
     const off = circ * (1 - Math.min(Math.max(v / max, 0), 1));
     return (
       <g style={{ opacity: 0.55 }}>
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke={color} strokeWidth={9} strokeOpacity={0.18} />
-        <circle cx={cx} cy={cy} r={r} fill="none" stroke={color} strokeWidth={9} strokeLinecap="round"
-          strokeDasharray={circ} strokeDashoffset={off}
-          style={{ transform: "rotate(-90deg)", transformOrigin: `${cx}px ${cy}px` }} />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill="none"
+          stroke={color}
+          strokeWidth={9}
+          strokeOpacity={0.18}
+        />
+        <circle
+          cx={cx}
+          cy={cy}
+          r={r}
+          fill="none"
+          stroke={color}
+          strokeWidth={9}
+          strokeLinecap="round"
+          strokeDasharray={circ}
+          strokeDashoffset={off}
+          style={{ transform: "rotate(-90deg)", transformOrigin: `${cx}px ${cy}px` }}
+        />
       </g>
     );
   };
   return (
     <Panel>
-      <PanelHeader eyebrow="Today / Activity" status={`stale · ${hoursAgo}h`} statusColor={C.steps} />
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)", gap: 20, alignItems: "center" }}>
+      <PanelHeader
+        eyebrow="Today / Activity"
+        status={`stale · ${hoursAgo}h`}
+        statusColor={C.steps}
+      />
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)",
+          gap: 20,
+          alignItems: "center",
+        }}
+      >
         <div style={{ display: "flex", justifyContent: "center" }}>
           <svg width={144} height={144} viewBox="0 0 144 144" aria-hidden="true">
             <StaleRing v={moveKcal} max={moveGoal} color={C.move} r={52} />
@@ -436,29 +663,73 @@ export function TodayActivityCardStale({
         <div style={{ opacity: 0.7 }}>
           <MetricRow dot={C.move} label="Move" value={moveKcal} suffix={`/ ${moveGoal} kcal`} />
           <DottedRule style={{ margin: "10px 0" }} />
-          <MetricRow dot={C.exercise} label="Exercise" value={exerciseMin} suffix={`/ ${exerciseGoal} min`} />
+          <MetricRow
+            dot={C.exercise}
+            label="Exercise"
+            value={exerciseMin}
+            suffix={`/ ${exerciseGoal} min`}
+          />
           <DottedRule style={{ margin: "10px 0" }} />
           <MetricRow dot={C.steps} label="Steps" value={steps} suffix={`/ ${stepsGoal / 1000}k`} />
         </div>
       </div>
-      <PanelFooter note={`// last sync ${hoursAgo}h ago — automation may be paused`} right="retry →" />
+      <PanelFooter
+        note={`// last sync ${hoursAgo}h ago — automation may be paused`}
+        right="retry →"
+      />
     </Panel>
   );
 }
 
 // ─── Error state ──────────────────────────────────────────────
 export function TodayActivityCardError({
-  code = "401", detail = "auth expired", occurredAt = "21:14",
+  code = "401",
+  detail = "auth expired",
+  occurredAt = "21:14",
 }: { code?: string; detail?: string; occurredAt?: string }) {
   return (
     <Panel>
       <PanelHeader eyebrow="Today / Activity" status="error" statusColor={C.hrv} />
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)", gap: 20, alignItems: "center" }}>
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)",
+          gap: 20,
+          alignItems: "center",
+        }}
+      >
         <div style={{ display: "flex", justifyContent: "center" }}>
           <svg width={144} height={144} viewBox="0 0 144 144" aria-hidden="true">
-            <circle cx={72} cy={72} r={52} fill="none" stroke={C.hrv} strokeWidth={9} strokeOpacity={0.18} strokeDasharray="3 5" />
-            <circle cx={72} cy={72} r={38} fill="none" stroke={C.hrv} strokeWidth={9} strokeOpacity={0.14} strokeDasharray="3 5" />
-            <circle cx={72} cy={72} r={24} fill="none" stroke={C.hrv} strokeWidth={9} strokeOpacity={0.10} strokeDasharray="3 5" />
+            <circle
+              cx={72}
+              cy={72}
+              r={52}
+              fill="none"
+              stroke={C.hrv}
+              strokeWidth={9}
+              strokeOpacity={0.18}
+              strokeDasharray="3 5"
+            />
+            <circle
+              cx={72}
+              cy={72}
+              r={38}
+              fill="none"
+              stroke={C.hrv}
+              strokeWidth={9}
+              strokeOpacity={0.14}
+              strokeDasharray="3 5"
+            />
+            <circle
+              cx={72}
+              cy={72}
+              r={24}
+              fill="none"
+              stroke={C.hrv}
+              strokeWidth={9}
+              strokeOpacity={0.1}
+              strokeDasharray="3 5"
+            />
             <g stroke={C.hrv} strokeWidth={2.4} strokeLinecap="round" opacity={0.85}>
               <line x1={66} y1={66} x2={78} y2={78} />
               <line x1={78} y1={66} x2={66} y2={78} />
@@ -479,12 +750,23 @@ export function TodayActivityCardError({
             <span>America/Sao_Paulo · {occurredAt}</span>
           </div>
           <DottedRule style={{ margin: "10px 0" }} />
-          <div style={{ color: C.muted, fontFamily: "var(--font-serif)", fontStyle: "italic", fontSize: 13, lineHeight: 1.45 }}>
+          <div
+            style={{
+              color: C.muted,
+              fontFamily: "var(--font-serif)",
+              fontStyle: "italic",
+              fontSize: 13,
+              lineHeight: 1.45,
+            }}
+          >
             Your token expired in the background. Sign in once on iPhone to refresh.
           </div>
         </div>
       </div>
-      <PanelFooter note="// last good sync 4h ago — showing nothing rather than guessing" right="retry →" />
+      <PanelFooter
+        note="// last good sync 4h ago — showing nothing rather than guessing"
+        right="retry →"
+      />
     </Panel>
   );
 }
@@ -537,7 +819,15 @@ export function EnvCard() {
   return (
     <Panel>
       <PanelHeader icon="⚙" eyebrow="Environment" status="2 / 2 set" />
-      <div style={{ display: "flex", flexDirection: "column", gap: 10, flex: 1, justifyContent: "center" }}>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          gap: 10,
+          flex: 1,
+          justifyContent: "center",
+        }}
+      >
         {items.map((it) => (
           <div key={it.k} style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <span style={{ color: it.ok ? C.exercise : C.hrv, fontSize: 10 }}>

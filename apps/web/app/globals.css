@@ -60,7 +60,7 @@ body {
   transition: color 0.18s ease;
 }
 .wk-nav-link::after {
-  content: '';
+  content: "";
   position: absolute;
   bottom: -3px;
   left: 0;
@@ -87,21 +87,17 @@ body {
 
 /* Command code blocks — scale + purple glow */
 .wk-cmd {
-  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.2s ease;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.2s ease;
 }
 .wk-cmd:hover {
   transform: scale(1.025) translateY(-1px);
-  box-shadow: 0 0 0 1px #9d80ff55,
-              0 8px 28px #9d80ff22,
-              0 2px 8px rgba(0,0,0,0.4);
+  box-shadow: 0 0 0 1px #9d80ff55, 0 8px 28px #9d80ff22, 0 2px 8px rgba(0, 0, 0, 0.4);
 }
 
 /* Ghost CTA button — border/text brighten, nudge right */
 .wk-btn-ghost {
-  transition: color 0.18s ease,
-              border-color 0.18s ease,
-              transform 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: color 0.18s ease, border-color 0.18s ease, transform 0.2s
+    cubic-bezier(0.16, 1, 0.3, 1);
 }
 .wk-btn-ghost:hover {
   color: #f5f5f5 !important;
@@ -130,7 +126,7 @@ body {
 }
 .wk-card-lift:hover > div {
   border-color: #2c2c2c;
-  box-shadow: 0 20px 48px rgba(0,0,0,0.55), 0 4px 12px rgba(0,0,0,0.3);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.55), 0 4px 12px rgba(0, 0, 0, 0.3);
 }
 
 /* Stats strip item */
@@ -187,7 +183,7 @@ body {
   background: rgba(255, 255, 255, 0.05);
 }
 .docs-nav-link--active::before {
-  content: '';
+  content: "";
   position: absolute;
   left: 0;
   top: 5px;
