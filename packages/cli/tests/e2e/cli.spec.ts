@@ -23,6 +23,7 @@ vi.mock("../../src/utils/exec", () => {
 
 import { addCommand } from "../../src/commands/add";
 import { initCommand } from "../../src/commands/init";
+import { updateCommand } from "../../src/commands/update";
 
 type Server = {
   url: string;
@@ -138,6 +139,23 @@ describe("wristkit CLI (phase 2)", () => {
       await writeJson(componentsJsonPath, cfg);
 
       await addCommand("today-activity-card");
+
+      const installed = await readFile(
+        path.join(dir, "components", "wristkit", "today-activity-card.tsx"),
+        "utf8",
+      );
+      expect(installed).toContain("export const X = 1;");
+    } finally {
+      process.chdir(prev);
+    }
+  });
+
+  it("update re-installs registry item (same as add in v1)", async () => {
+    const prev = process.cwd();
+    process.chdir(dir);
+    try {
+      // Registry already points at local server from previous test
+      await updateCommand("today-activity-card");
 
       const installed = await readFile(
         path.join(dir, "components", "wristkit", "today-activity-card.tsx"),

@@ -7,6 +7,8 @@ dist
 *.tsbuildinfo
 public/r
 apps/web/public/r
+apps/web/test-results
+apps/web/playwright-report
 apps/sandbox
 .env.local
 .env.*.local
@@ -17,3 +19,5 @@ yarn-debug.log*
 yarn-error.log*
 
 agents
+
+.claude

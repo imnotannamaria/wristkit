@@ -9,7 +9,8 @@
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "test": "echo no tests yet"
+    "test": "playwright test",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@mdx-js/react": "^3.1.0",
@@ -23,6 +24,7 @@
     "velite": "^0.2.4"
   },
   "devDependencies": {
+    "@playwright/test": "^1",
     "@tailwindcss/postcss": "^4.1.0",
     "@types/node": "^22",
     "@types/react": "^19",

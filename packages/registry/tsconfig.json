@@ -3,7 +3,7 @@
   "compilerOptions": {
     "noEmit": true,
     "jsx": "react-jsx",
-    "types": ["node"]
+    "types": ["node", "vitest/globals", "@testing-library/jest-dom"]
   },
   "include": [
     "src/**/*.ts",
@@ -13,6 +13,9 @@
     "handlers/**/*.ts",
     "handlers/**/*.tsx",
     "components/**/*.ts",
-    "components/**/*.tsx"
+    "components/**/*.tsx",
+    "tests/**/*.ts",
+    "tests/**/*.tsx",
+    "vitest.config.ts"
   ]
 }
