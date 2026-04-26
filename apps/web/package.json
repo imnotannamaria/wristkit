@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
+    "pretypecheck": "velite build --clean",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",

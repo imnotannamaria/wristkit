@@ -5,7 +5,8 @@
     "jsx": "preserve",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "velite-data": ["./.velite/index.js"]
     },
     "plugins": [
       {
@@ -15,6 +16,13 @@
     "allowJs": true,
     "incremental": true
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", ".velite/**/*.ts"],
+  "include": [
+    "next-env.d.ts",
+    "velite-data.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".velite/**/*.ts"
+  ],
   "exclude": ["node_modules"]
 }

@@ -1,7 +1,8 @@
-import { docs } from "@/.velite";
 import { MdxContent } from "@/components/mdx-content";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import type { Doc } from "velite-data";
+import { docs } from "velite-data";
 
 interface Props {
   params: Promise<{ slug?: string[] }>;
@@ -10,7 +11,7 @@ interface Props {
 function getDoc(slug: string[] | undefined) {
   const path = slug && slug.length > 0 ? slug.join("/") : "";
   const target = path ? `docs/${path}` : "docs";
-  return docs.find((doc) => doc.slug === target);
+  return (docs as Doc[]).find((doc) => doc.slug === target);
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -24,7 +25,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export function generateStaticParams() {
-  return docs.map((doc) => {
+  return (docs as Doc[]).map((doc) => {
     const path = doc.slug.replace(/^docs\/?/, "");
     return { slug: path ? path.split("/") : [] };
   });
