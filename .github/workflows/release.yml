@@ -30,6 +30,8 @@ jobs:
         uses: changesets/action@v1
         with:
           # No npm publish when NPM_TOKEN isn't configured.
+          commit: "chore: version packages"
+          title: "chore: version packages"
           publish: ""
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -37,6 +39,8 @@ jobs:
         if: ${{ env.NPM_TOKEN != '' }}
         uses: changesets/action@v1
         with:
+          commit: "chore: version packages"
+          title: "chore: version packages"
           publish: pnpm changeset publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
