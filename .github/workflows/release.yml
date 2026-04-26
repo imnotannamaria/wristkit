@@ -8,6 +8,9 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
@@ -17,18 +20,23 @@ jobs:
           cache: pnpm
           registry-url: "https://registry.npmjs.org"
       - name: Configure npm auth
-        if: ${{ secrets.NPM_TOKEN != '' }}
+        if: ${{ env.NPM_TOKEN != '' }}
         run: |
           echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
       - run: pnpm install --frozen-lockfile
       - run: pnpm build
-      - uses: changesets/action@v1
+      - name: Changesets (version PR only)
+        if: ${{ env.NPM_TOKEN == '' }}
+        uses: changesets/action@v1
         with:
-          # If NPM_TOKEN isn't configured, skip publishing (still allows versioning PRs).
-          publish: ${{ secrets.NPM_TOKEN != '' && 'pnpm changeset publish' || '' }}
+          # No npm publish when NPM_TOKEN isn't configured.
+          publish: ""
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Changesets (publish)
+        if: ${{ env.NPM_TOKEN != '' }}
+        uses: changesets/action@v1
+        with:
+          publish: pnpm changeset publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

@@ -7,6 +7,8 @@ dist
 *.tsbuildinfo
 public/r
 apps/web/public/r
+apps/web/public/static
+apps/web/public/wristkit-sync.shortcut
 apps/web/test-results
 apps/web/playwright-report
 apps/sandbox

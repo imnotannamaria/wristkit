@@ -5,6 +5,7 @@
   "scripts": {
     "pretypecheck": "velite build --clean",
     "dev": "next dev",
+    "prebuild": "velite build --clean && pnpm -C ../../packages/registry build:registry && mkdir -p public && cp ../../packages/registry/shortcuts/wristkit-sync.shortcut public/wristkit-sync.shortcut",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
