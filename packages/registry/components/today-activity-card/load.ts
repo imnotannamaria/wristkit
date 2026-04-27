@@ -1,5 +1,5 @@
-import { getTodayActivity } from "../../lib/queries";
-import type { Metric } from "../../lib/validation";
+import { getTodayActivity } from "./queries";
+import type { Metric } from "./validation";
 
 export type TodayData = {
   kcal: number;
