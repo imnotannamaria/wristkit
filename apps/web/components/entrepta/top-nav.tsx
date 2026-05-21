@@ -1,6 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
+import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
 interface TopNavProps extends React.HTMLAttributes<HTMLElement> {
@@ -122,31 +123,44 @@ TopNavMenu.displayName = "TopNavMenu";
 interface TopNavLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   active?: boolean;
   external?: boolean;
+  /** Render as the immediate child element (e.g. next/link) instead of a plain <a>. */
+  asChild?: boolean;
 }
 
 const TopNavLink = React.forwardRef<HTMLAnchorElement, TopNavLinkProps>(
-  ({ className, children, active, external, ...props }, ref) => (
-    <a
-      ref={ref}
-      data-state={active ? "active" : undefined}
-      className={cn(
-        "inline-flex items-center gap-1",
-        "text-[var(--fg-secondary)] hover:text-[var(--fg-primary)]",
-        "transition-colors duration-150",
-        active && "text-[var(--fg-primary)] font-medium",
-        className,
-      )}
-      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      {...props}
-    >
-      {children}
-      {external && (
-        <span aria-hidden className="text-[var(--fg-muted)]">
-          ↗
-        </span>
-      )}
-    </a>
-  ),
+  ({ className, children, active, external, asChild, ...props }, ref) => {
+    const Comp = asChild ? Slot : "a";
+    // Slot requires exactly one child element; when asChild is used we drop the
+    // external arrow (asChild is for internal client-routed links anyway).
+    return (
+      <Comp
+        ref={ref}
+        data-state={active ? "active" : undefined}
+        className={cn(
+          "inline-flex items-center gap-1",
+          "text-[var(--fg-secondary)] hover:text-[var(--fg-primary)]",
+          "transition-colors duration-150",
+          active && "text-[var(--fg-primary)] font-medium",
+          className,
+        )}
+        {...(external && !asChild ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+        {...props}
+      >
+        {asChild ? (
+          children
+        ) : (
+          <>
+            {children}
+            {external && (
+              <span aria-hidden className="text-[var(--fg-muted)]">
+                ↗
+              </span>
+            )}
+          </>
+        )}
+      </Comp>
+    );
+  },
 );
 TopNavLink.displayName = "TopNavLink";
 

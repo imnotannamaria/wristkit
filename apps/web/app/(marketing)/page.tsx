@@ -41,12 +41,12 @@ export default function HomePage() {
         }
         right={
           <TopNavMenu>
-            <Link href="/" passHref legacyBehavior>
-              <TopNavLink active>home</TopNavLink>
-            </Link>
-            <Link href="/docs" passHref legacyBehavior>
-              <TopNavLink>docs</TopNavLink>
-            </Link>
+            <TopNavLink active asChild>
+              <Link href="/">home</Link>
+            </TopNavLink>
+            <TopNavLink asChild>
+              <Link href="/docs">docs</Link>
+            </TopNavLink>
             <TopNavLink href="https://github.com/imnotannamaria/wristkit" external>
               github
             </TopNavLink>
