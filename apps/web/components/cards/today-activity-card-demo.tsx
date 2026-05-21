@@ -3,16 +3,16 @@
 import { BigNumber, DottedRule, Panel, PanelFooter, PanelHeader } from "@/components/ds";
 
 const C = {
-  move: "#9d80ff",
-  exercise: "#67e8c0",
-  steps: "#f5a623",
-  muted: "#666666",
-  mutedSoft: "#3a3a3a",
-  text: "#f5f5f5",
-  border: "#1f1f1f",
-  bg: "#0b0b0b",
-  borderSoft: "#161616",
-  hrv: "#f06c9b",
+  move: "var(--metric-move)",
+  exercise: "var(--metric-exercise)",
+  steps: "var(--metric-steps)",
+  muted: "var(--fg-muted)",
+  mutedSoft: "var(--border-strong)",
+  text: "var(--fg-primary)",
+  border: "var(--border-subtle)",
+  bg: "var(--bg-surface)",
+  borderSoft: "var(--bg-surface-elevated)",
+  hrv: "var(--metric-hrv)",
 };
 
 function RingLayer({
@@ -782,7 +782,7 @@ export function InstallCard() {
           fontSize: 13,
           color: C.text,
           lineHeight: 1.9,
-          background: "#070707",
+          background: "var(--bg-canvas)",
           borderRadius: 8,
           padding: "14px 16px",
           border: `1px solid ${C.borderSoft}`,

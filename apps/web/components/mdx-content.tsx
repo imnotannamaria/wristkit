@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { CodeBlock } from "@/components/entrepta/code-block";
+import { useMemo } from "react";
 import type React from "react";
 import * as runtime from "react/jsx-runtime";
 
@@ -14,85 +15,7 @@ function extractText(node: React.ReactNode): string {
   return "";
 }
 
-function CopyButton({ text }: { text: string }) {
-  const [copied, setCopied] = useState(false);
-  return (
-    <>
-      <style>{`
-        .wk-copy-btn { transition: color 0.15s ease, border-color 0.15s ease, transform 0.15s cubic-bezier(0.16,1,0.3,1), background 0.15s ease; }
-        .wk-copy-btn:hover { color: #f5f5f5 !important; border-color: #444 !important; background: rgba(255,255,255,0.05) !important; transform: scale(1.05); }
-        .wk-copy-btn:active { transform: scale(0.95); }
-        @keyframes wk-pop { 0% { transform: scale(0.85); opacity: 0; } 60% { transform: scale(1.08); } 100% { transform: scale(1); opacity: 1; } }
-        .wk-copy-copied { animation: wk-pop 0.22s cubic-bezier(0.16,1,0.3,1) both; }
-        @keyframes wk-check-draw { from { stroke-dashoffset: 20; } to { stroke-dashoffset: 0; } }
-        .wk-check { stroke-dasharray: 20; stroke-dashoffset: 20; animation: wk-check-draw 0.25s 0.05s cubic-bezier(0.16,1,0.3,1) forwards; }
-      `}</style>
-      <button
-        type="button"
-        className={`wk-copy-btn${copied ? " wk-copy-copied" : ""}`}
-        onClick={() => {
-          navigator.clipboard.writeText(text).then(() => {
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-          });
-        }}
-        style={{
-          background: "none",
-          border: "1px solid #2a2a2a",
-          borderRadius: 6,
-          cursor: "pointer",
-          padding: "4px 8px",
-          color: copied ? "#67e8c0" : "#555",
-          fontFamily: "var(--font-mono)",
-          fontSize: 10,
-          letterSpacing: "0.06em",
-          display: "flex",
-          alignItems: "center",
-          gap: 5,
-        }}
-      >
-        {copied ? (
-          <>
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-              <path
-                className="wk-check"
-                d="M2 6l3 3 5-5"
-                stroke="currentColor"
-                strokeWidth="1.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
-            copied
-          </>
-        ) : (
-          <>
-            <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-              <rect
-                x="4"
-                y="4"
-                width="7"
-                height="7"
-                rx="1.5"
-                stroke="currentColor"
-                strokeWidth="1.2"
-              />
-              <path
-                d="M8 4V2.5A1.5 1.5 0 006.5 1H2.5A1.5 1.5 0 001 2.5v4A1.5 1.5 0 002.5 8H4"
-                stroke="currentColor"
-                strokeWidth="1.2"
-                strokeLinecap="round"
-              />
-            </svg>
-            copy
-          </>
-        )}
-      </button>
-    </>
-  );
-}
-
-function CodeBlock({ children, ...props }: React.HTMLAttributes<HTMLPreElement>) {
+function MdxPre({ children, ...props }: React.HTMLAttributes<HTMLPreElement>) {
   const codeEl = children as React.ReactElement<{
     "data-language"?: string;
     children?: React.ReactNode;
@@ -101,53 +24,12 @@ function CodeBlock({ children, ...props }: React.HTMLAttributes<HTMLPreElement>)
   const text = extractText(codeEl?.props?.children);
 
   return (
-    <div
-      style={{
-        margin: "0 0 28px",
-        borderRadius: 12,
-        overflow: "hidden",
-        border: "1px solid #1e1e1e",
-      }}
-    >
-      {/* Header bar */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "10px 16px",
-          background: "#111",
-          borderBottom: "1px solid #1e1e1e",
-        }}
-      >
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 11,
-            color: "#555",
-            letterSpacing: "0.04em",
-          }}
-        >
-          {lang ?? "code"}
-        </span>
-        <CopyButton text={text} />
-      </div>
-      {/* Code area */}
-      <pre
-        {...props}
-        style={{
-          background: "#0d0d0d",
-          margin: 0,
-          padding: "22px 24px",
-          overflowX: "auto",
-          fontFamily: "var(--font-mono)",
-          fontSize: 13,
-          lineHeight: 1.8,
-          borderRadius: 0,
-        }}
-      >
-        {children}
-      </pre>
+    <div style={{ margin: "0 0 28px" }}>
+      <CodeBlock code={text} language={lang}>
+        <pre {...props} style={{ margin: 0 }}>
+          {children}
+        </pre>
+      </CodeBlock>
     </div>
   );
 }
@@ -162,7 +44,7 @@ const customComponents = {
         fontWeight: 500,
         letterSpacing: "-0.02em",
         margin: "0 0 20px",
-        color: "#f5f5f5",
+        color: "var(--fg-primary)",
       }}
     />
   ),
@@ -176,9 +58,9 @@ const customComponents = {
         fontWeight: 500,
         letterSpacing: "-0.02em",
         margin: "48px 0 16px",
-        color: "#f5f5f5",
+        color: "var(--fg-primary)",
         paddingTop: 24,
-        borderTop: "1px dashed #222",
+        borderTop: "1px dashed var(--border-subtle)",
       }}
     />
   ),
@@ -192,7 +74,7 @@ const customComponents = {
         fontWeight: 600,
         letterSpacing: "0.12em",
         textTransform: "uppercase" as const,
-        color: "#67e8c0",
+        color: "var(--fg-brand)",
         margin: "32px 0 10px",
       }}
     />
@@ -202,10 +84,10 @@ const customComponents = {
     <p
       {...props}
       style={{
-        fontFamily: "var(--font-mono)",
-        fontSize: 13,
-        lineHeight: 1.85,
-        color: "#aaa",
+        fontFamily: "var(--font-sans)",
+        fontSize: 14,
+        lineHeight: 1.7,
+        color: "var(--fg-secondary)",
         margin: "0 0 18px",
       }}
     />
@@ -214,17 +96,20 @@ const customComponents = {
   a: (props: React.AnchorHTMLAttributes<HTMLAnchorElement>) => (
     <a
       {...props}
-      className="docs-prose-link"
-      style={{ color: "#9d80ff", textDecoration: "none" }}
+      style={{
+        color: "var(--fg-brand)",
+        textDecoration: "none",
+        transition: "color 150ms",
+      }}
     />
   ),
 
   strong: (props: React.HTMLAttributes<HTMLElement>) => (
-    <strong {...props} style={{ color: "#e5e5e5", fontWeight: 600 }} />
+    <strong {...props} style={{ color: "var(--fg-primary)", fontWeight: 600 }} />
   ),
 
   em: (props: React.HTMLAttributes<HTMLElement>) => (
-    <em {...props} style={{ color: "#bbb", fontStyle: "italic" }} />
+    <em {...props} style={{ color: "var(--fg-brand)", fontStyle: "italic" }} />
   ),
 
   code: (props: React.HTMLAttributes<HTMLElement>) => {
@@ -236,25 +121,25 @@ const customComponents = {
         style={{
           fontFamily: "var(--font-mono)",
           fontSize: "0.88em",
-          background: "#0f0f0f",
-          border: "1px solid #222",
-          borderRadius: 5,
+          background: "var(--bg-surface-elevated)",
+          border: "1px solid var(--border-subtle)",
+          borderRadius: "var(--radius-sm)",
           padding: "2px 7px",
-          color: "#67e8c0",
+          color: "var(--fg-brand)",
         }}
       />
     );
   },
 
-  pre: (props: React.HTMLAttributes<HTMLPreElement>) => <CodeBlock {...props} />,
+  pre: (props: React.HTMLAttributes<HTMLPreElement>) => <MdxPre {...props} />,
 
   ul: (props: React.HTMLAttributes<HTMLUListElement>) => (
     <ul
       {...props}
       style={{
-        fontFamily: "var(--font-mono)",
-        fontSize: 13,
-        color: "#aaa",
+        fontFamily: "var(--font-sans)",
+        fontSize: 14,
+        color: "var(--fg-secondary)",
         lineHeight: 1.8,
         paddingLeft: 22,
         margin: "0 0 18px",
@@ -266,9 +151,9 @@ const customComponents = {
     <ol
       {...props}
       style={{
-        fontFamily: "var(--font-mono)",
-        fontSize: 13,
-        color: "#aaa",
+        fontFamily: "var(--font-sans)",
+        fontSize: 14,
+        color: "var(--fg-secondary)",
         lineHeight: 1.8,
         paddingLeft: 22,
         margin: "0 0 18px",
@@ -276,18 +161,16 @@ const customComponents = {
     />
   ),
 
-  li: (props: React.HTMLAttributes<HTMLLIElement>) => (
-    <li {...props} style={{ marginBottom: 7, color: "#aaa" }} />
-  ),
+  li: (props: React.HTMLAttributes<HTMLLIElement>) => <li {...props} style={{ marginBottom: 7 }} />,
 
   blockquote: (props: React.HTMLAttributes<HTMLQuoteElement>) => (
     <blockquote
       {...props}
       style={{
-        borderLeft: "2px solid #9d80ff55",
+        borderLeft: "2px solid var(--fg-brand)",
         paddingLeft: 18,
         margin: "0 0 20px",
-        color: "#777",
+        color: "var(--fg-secondary)",
         fontStyle: "italic" as const,
         fontFamily: "var(--font-serif)",
         fontSize: 15,
@@ -301,7 +184,7 @@ const customComponents = {
       style={{
         margin: "40px 0",
         height: 1,
-        backgroundImage: "linear-gradient(to right, #1f1f1f 50%, transparent 50%)",
+        backgroundImage: "linear-gradient(to right, var(--border-subtle) 50%, transparent 50%)",
         backgroundSize: "6px 1px",
         backgroundRepeat: "repeat-x",
       }}
@@ -313,8 +196,8 @@ const customComponents = {
       style={{
         overflowX: "auto" as const,
         marginBottom: 28,
-        borderRadius: 8,
-        border: "1px solid #1a1a1a",
+        borderRadius: "var(--radius-md)",
+        border: "1px solid var(--border-subtle)",
       }}
     >
       <table
@@ -333,15 +216,15 @@ const customComponents = {
     <th
       {...props}
       style={{
-        borderBottom: "1px solid #1f1f1f",
+        borderBottom: "1px solid var(--border-subtle)",
         padding: "10px 14px",
         textAlign: "left" as const,
-        color: "#555",
+        color: "var(--fg-muted)",
         fontSize: 10,
         letterSpacing: "0.1em",
         textTransform: "uppercase" as const,
         fontWeight: 500,
-        background: "#0b0b0b",
+        background: "var(--bg-surface)",
       }}
     />
   ),
@@ -350,9 +233,9 @@ const customComponents = {
     <td
       {...props}
       style={{
-        borderBottom: "1px solid #141414",
+        borderBottom: "1px solid var(--border-subtle)",
         padding: "9px 14px",
-        color: "#999",
+        color: "var(--fg-secondary)",
         fontSize: 12,
       }}
     />

@@ -12,6 +12,16 @@
     "rules": { "recommended": true }
   },
   "files": {
-    "ignore": ["node_modules", "dist", ".next", ".turbo", ".velite", "public/r/**", "agents/**"]
+    "ignore": [
+      "node_modules",
+      "dist",
+      ".next",
+      ".turbo",
+      ".velite",
+      "public/r/**",
+      "agents/**",
+      "test-results/**",
+      "playwright-report/**"
+    ]
   }
 }

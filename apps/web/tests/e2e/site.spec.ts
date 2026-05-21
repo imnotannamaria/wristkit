@@ -9,7 +9,7 @@ test.describe("home page", () => {
 
   test("install block tabs are interactive", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: /\$ add/i }).click();
+    await page.getByRole("tab", { name: /\$ add/i }).click();
     await expect(page.locator("table").getByText("add today-activity-card").first()).toBeVisible();
   });
 });
@@ -23,7 +23,7 @@ test.describe("docs", () => {
 
   test("sidebar nav highlights active link", async ({ page }) => {
     await page.goto("/docs/installation");
-    const activeLink = page.locator(".docs-nav-link--active");
+    const activeLink = page.locator('a[aria-current="page"]');
     await expect(activeLink).toBeVisible();
     await expect(activeLink).toContainText("Installation");
   });
