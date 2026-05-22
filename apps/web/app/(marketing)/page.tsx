@@ -172,7 +172,7 @@ export default function HomePage() {
           <div
             className="t-mono-xs"
             style={{
-              color: "var(--metric-steps)",
+              color: "var(--status-warning)",
               letterSpacing: "0.12em",
               textTransform: "uppercase",
               marginBottom: 14,

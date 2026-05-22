@@ -448,19 +448,6 @@ button:focus-visible,
 }
 
 /* ============================================================
-   wristkit — semantic metric colors (match Apple Activity rings)
-   These stay fixed across themes so the data has consistent meaning.
-   ============================================================ */
-
-:root {
-  --metric-move: #9d80ff;
-  --metric-exercise: #67e8c0;
-  --metric-steps: #f5a623;
-  --metric-sleep: #7ab7ff;
-  --metric-hrv: #f06c9b;
-}
-
-/* ============================================================
    wristkit — rehype-pretty-code overrides (docs prose)
    ============================================================ */
 

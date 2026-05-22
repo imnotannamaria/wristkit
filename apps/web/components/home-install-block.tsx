@@ -20,7 +20,7 @@ const tabs: { id: string; label: string; lang: string; lines: Line[] }[] = [
         <span key="c" style={{ color: "var(--fg-muted)" }}>
           npx{" "}
         </span>,
-        <span key="w" style={{ color: "var(--metric-move)" }}>
+        <span key="w" style={{ color: "var(--fg-brand)" }}>
           wristkit
         </span>,
         <span key="i" style={{ color: "var(--fg-primary)" }}>
@@ -43,7 +43,7 @@ const tabs: { id: string; label: string; lang: string; lines: Line[] }[] = [
         <span key="c" style={{ color: "var(--fg-muted)" }}>
           npx wristkit{" "}
         </span>,
-        <span key="a" style={{ color: "var(--metric-exercise)" }}>
+        <span key="a" style={{ color: "var(--status-success)" }}>
           add today-activity-card
         </span>,
       ],
@@ -55,23 +55,23 @@ const tabs: { id: string; label: string; lang: string; lines: Line[] }[] = [
     lang: "tsx",
     lines: [
       [
-        <span key="k" style={{ color: "var(--metric-move)" }}>
+        <span key="k" style={{ color: "var(--fg-brand)" }}>
           import{" "}
         </span>,
         <span key="b" style={{ color: "var(--fg-primary)" }}>
           {"{ "}
         </span>,
-        <span key="n" style={{ color: "var(--metric-exercise)" }}>
+        <span key="n" style={{ color: "var(--status-success)" }}>
           TodayActivityCard
         </span>,
         <span key="b2" style={{ color: "var(--fg-primary)" }}>
           {" }"}
         </span>,
-        <span key="f" style={{ color: "var(--metric-move)" }}>
+        <span key="f" style={{ color: "var(--fg-brand)" }}>
           {" "}
           from{" "}
         </span>,
-        <span key="s" style={{ color: "var(--metric-steps)" }}>
+        <span key="s" style={{ color: "var(--status-warning)" }}>
           "@/components/today-activity-card"
         </span>,
         <span key="sc" style={{ color: "var(--fg-primary)" }}>
@@ -80,10 +80,10 @@ const tabs: { id: string; label: string; lang: string; lines: Line[] }[] = [
       ],
       [],
       [
-        <span key="k" style={{ color: "var(--metric-move)" }}>
+        <span key="k" style={{ color: "var(--fg-brand)" }}>
           export default async function{" "}
         </span>,
-        <span key="n" style={{ color: "var(--metric-exercise)" }}>
+        <span key="n" style={{ color: "var(--status-success)" }}>
           Dashboard
         </span>,
         <span key="p" style={{ color: "var(--fg-primary)" }}>
@@ -94,7 +94,7 @@ const tabs: { id: string; label: string; lang: string; lines: Line[] }[] = [
         <span key="sp" style={{ color: "var(--fg-primary)" }}>
           {"  "}
         </span>,
-        <span key="k" style={{ color: "var(--metric-move)" }}>
+        <span key="k" style={{ color: "var(--fg-brand)" }}>
           const{" "}
         </span>,
         <span key="n" style={{ color: "var(--fg-primary)" }}>
@@ -103,10 +103,10 @@ const tabs: { id: string; label: string; lang: string; lines: Line[] }[] = [
         <span key="e" style={{ color: "var(--fg-muted)" }}>
           ={" "}
         </span>,
-        <span key="a" style={{ color: "var(--metric-move)" }}>
+        <span key="a" style={{ color: "var(--fg-brand)" }}>
           await{" "}
         </span>,
-        <span key="fn" style={{ color: "var(--metric-exercise)" }}>
+        <span key="fn" style={{ color: "var(--status-success)" }}>
           loadTodayActivity
         </span>,
         <span key="c" style={{ color: "var(--fg-primary)" }}>
@@ -117,16 +117,16 @@ const tabs: { id: string; label: string; lang: string; lines: Line[] }[] = [
         <span key="sp" style={{ color: "var(--fg-primary)" }}>
           {"  "}
         </span>,
-        <span key="r" style={{ color: "var(--metric-move)" }}>
+        <span key="r" style={{ color: "var(--fg-brand)" }}>
           return{" "}
         </span>,
         <span key="lt" style={{ color: "var(--fg-muted)" }}>
           &lt;
         </span>,
-        <span key="comp" style={{ color: "var(--metric-exercise)" }}>
+        <span key="comp" style={{ color: "var(--status-success)" }}>
           TodayActivityCard{" "}
         </span>,
-        <span key="pr" style={{ color: "var(--metric-steps)" }}>
+        <span key="pr" style={{ color: "var(--status-warning)" }}>
           state
         </span>,
         <span key="eq" style={{ color: "var(--fg-muted)" }}>
@@ -135,7 +135,7 @@ const tabs: { id: string; label: string; lang: string; lines: Line[] }[] = [
         <span key="br" style={{ color: "var(--fg-primary)" }}>
           {"{"}
         </span>,
-        <span key="st" style={{ color: "var(--metric-steps)" }}>
+        <span key="st" style={{ color: "var(--status-warning)" }}>
           state
         </span>,
         <span key="br2" style={{ color: "var(--fg-primary)" }}>
@@ -174,7 +174,7 @@ const tabs: { id: string; label: string; lang: string; lines: Line[] }[] = [
         <span key="c" style={{ color: "var(--fg-muted)" }}>
           npx wristkit{" "}
         </span>,
-        <span key="a" style={{ color: "var(--metric-steps)" }}>
+        <span key="a" style={{ color: "var(--status-warning)" }}>
           shortcut
         </span>,
       ],

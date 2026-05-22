@@ -18,6 +18,7 @@
       ".next",
       ".turbo",
       ".velite",
+      ".claude/**",
       "public/r/**",
       "agents/**",
       "test-results/**",

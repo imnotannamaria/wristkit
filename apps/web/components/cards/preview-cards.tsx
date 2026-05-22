@@ -1,11 +1,11 @@
 import { BigNumber, DottedRule, Label, Panel, PanelFooter, PanelHeader } from "@/components/ds";
 
 const C = {
-  move: "var(--metric-move)",
-  exercise: "var(--metric-exercise)",
-  steps: "var(--metric-steps)",
-  sleep: "var(--metric-sleep)",
-  hrv: "var(--metric-hrv)",
+  move: "var(--fg-brand)",
+  exercise: "var(--status-success)",
+  steps: "var(--status-warning)",
+  sleep: "var(--status-info)",
+  hrv: "var(--status-error)",
   muted: "var(--fg-muted)",
   mutedSoft: "var(--border-strong)",
   text: "var(--fg-primary)",
@@ -29,7 +29,7 @@ export function SleepCard() {
   ] as const;
   const stageColor = {
     deep: C.sleep,
-    rem: "var(--metric-move)",
+    rem: "var(--fg-brand)",
     light: "var(--border-strong)",
     awake: C.mutedSoft,
   };
@@ -71,7 +71,7 @@ export function SleepCard() {
         {(
           [
             ["DEEP", C.sleep, "1h 12m"],
-            ["REM", "var(--metric-move)", "1h 44m"],
+            ["REM", "var(--fg-brand)", "1h 44m"],
             ["LIGHT", "var(--border-strong)", "3h 58m"],
             ["AWAKE", C.mutedSoft, "14m"],
           ] as const
