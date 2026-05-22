@@ -448,6 +448,28 @@ button:focus-visible,
 }
 
 /* ============================================================
+   wristkit — page layout helpers (mirror entrepta kit.css)
+   ============================================================ */
+
+.page {
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 48px;
+}
+
+.bt-subtle {
+  border-top: 1px solid var(--border-subtle);
+}
+
+.bb-subtle {
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* ============================================================
    wristkit — rehype-pretty-code overrides (docs prose)
    ============================================================ */
 

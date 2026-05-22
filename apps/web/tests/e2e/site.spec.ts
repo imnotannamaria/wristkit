@@ -3,14 +3,14 @@ import { expect, test } from "@playwright/test";
 test.describe("home page", () => {
   test("renders hero and today activity card demo", async ({ page }) => {
     await page.goto("/");
-    await expect(page.locator("h1")).toContainText("Health data");
-    await expect(page.getByText("Today / Activity").first()).toBeVisible();
+    await expect(page.locator("h1")).toContainText("Apple Health");
+    await expect(page.getByText(/today\s*\/\s*activity/i).first()).toBeVisible();
   });
 
-  test("install block tabs are interactive", async ({ page }) => {
+  test("hero IDE preview tabs are interactive", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("tab", { name: /\$ add/i }).click();
-    await expect(page.locator("table").getByText("add today-activity-card").first()).toBeVisible();
+    await page.getByRole("tab", { name: /page\.tsx/i }).click();
+    await expect(page.getByText("loadTodayActivity").first()).toBeVisible();
   });
 });
 
