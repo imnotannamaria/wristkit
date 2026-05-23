@@ -5,12 +5,11 @@
   "scripts": {
     "pretypecheck": "velite build --clean",
     "dev": "next dev",
-    "prebuild": "velite build --clean && pnpm -C ../../packages/registry build:registry && mkdir -p public && cp ../../packages/registry/shortcuts/wristkit-sync.shortcut public/wristkit-sync.shortcut",
+    "prebuild": "velite build --clean && mkdir -p public && cp ../../packages/registry/shortcuts/wristkit-sync.shortcut public/wristkit-sync.shortcut",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
     "typecheck": "tsc --noEmit",
-    "pretest": "pnpm -C ../../packages/registry build:registry",
     "test": "sh -c 'if [ \"${CI:-}\" = \"true\" ]; then pnpm exec playwright install --with-deps chromium; fi; playwright test'",
     "test:e2e": "playwright test"
   },

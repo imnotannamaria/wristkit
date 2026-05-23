@@ -29,22 +29,6 @@ test.describe("docs", () => {
   });
 });
 
-test.describe("registry API", () => {
-  test("/r/today-activity-card returns valid JSON", async ({ request }) => {
-    const res = await request.get("/r/today-activity-card");
-    expect(res.status()).toBe(200);
-    const body = await res.json();
-    expect(body.name).toBe("today-activity-card");
-    expect(Array.isArray(body.files)).toBe(true);
-    expect(body.files.length).toBeGreaterThan(0);
-  });
-
-  test("/r/unknown returns 404", async ({ request }) => {
-    const res = await request.get("/r/does-not-exist");
-    expect(res.status()).toBe(404);
-  });
-});
-
 test.describe("shortcut endpoint", () => {
   test("/shortcut returns application/x-apple-shortcut content-type", async ({ request }) => {
     const res = await request.get("/shortcut");

@@ -1,6 +1,5 @@
 import { TodayActivityCardDemo } from "@/components/cards/today-activity-card-demo";
 import { Badge } from "@/components/entrepta/badge";
-import { Button } from "@/components/entrepta/button";
 import { buttonVariants } from "@/components/entrepta/button-variants";
 import {
   Card,
@@ -176,9 +175,9 @@ function HeroSection() {
           style={{ marginTop: 28, maxWidth: 540, lineHeight: 1.65 }}
         >
           <strong style={{ color: "var(--fg-primary)", fontWeight: 500 }}>wristkit</strong> is a
-          small CLI that drops ready to use React components into your Next.js project, so you can
-          show your Apple Health data on the web. You bring your own Supabase. The iOS Shortcut
-          posts straight to your endpoint, with no third party cloud and no SDK in the middle.
+          small set of React components for your Next.js project, so you can show your Apple Health
+          data on the web. Copy the files from the docs, point them at your own Supabase, and the
+          iOS Shortcut posts straight to your endpoint. No third party cloud, no SDK in the middle.
         </p>
         <div
           style={{
@@ -189,11 +188,14 @@ function HeroSection() {
             flexWrap: "wrap",
           }}
         >
-          <Button variant="command" size="lg">
-            npx wristkit init
-          </Button>
+          <Link
+            href="/docs/components/today-activity-card"
+            className={buttonVariants({ variant: "primary", size: "lg" })}
+          >
+            browse the components →
+          </Link>
           <Link href="/docs" className={buttonVariants({ variant: "secondary", size: "lg" })}>
-            read the docs →
+            read the docs
           </Link>
         </div>
         <dl
@@ -292,15 +294,17 @@ const REGISTRY_ITEMS = [
     label: "components/wristkit",
     num: "01",
     title: "TodayActivityCard",
-    desc: "A React Server Component with all 7 states (loading, empty, stale, partial, error, ok and rings only). Drop it into any /app page.",
+    desc: "A React Server Component with all 7 states (loading, empty, stale, partial, error, ok and rings only). Copy it into any /app page.",
     tag: "<TodayActivityCard state={state} />",
+    href: "/docs/components/today-activity-card",
   },
   {
-    label: "app/api/healthkit",
+    label: "app/api/wristkit-sync",
     num: "02",
     title: "Route handler",
     desc: "A POST endpoint that checks the x-api-key, parses the Shortcut payload with Zod and writes to your Supabase through Drizzle.",
     tag: "export async function POST(req)",
+    href: "/docs/installation",
   },
   {
     label: "shortcuts/wristkit",
@@ -308,6 +312,7 @@ const REGISTRY_ITEMS = [
     title: "iOS Shortcut",
     desc: "Reads Active Energy, Exercise Minutes and Steps from HealthKit. You can schedule it to run every day at 23:59 with iOS Automation.",
     tag: "wristkit-sync.shortcut",
+    href: "/docs/shortcut-setup",
   },
 ];
 
@@ -347,28 +352,34 @@ function PackagesSection() {
         }}
       >
         {REGISTRY_ITEMS.map((p) => (
-          <Card key={p.num}>
-            <CardHeader>
-              <CardLabel>{p.label}</CardLabel>
-              <CardMeta>{p.num}</CardMeta>
-            </CardHeader>
-            <CardTitle>{p.title}</CardTitle>
-            <p
-              style={{
-                fontFamily: "var(--font-sans)",
-                fontSize: 13,
-                lineHeight: 1.6,
-                color: "var(--fg-secondary)",
-                margin: 0,
-              }}
-            >
-              {p.desc}
-            </p>
-            <CardFooter>
-              <CardComment>{p.tag}</CardComment>
-              <span style={{ color: "var(--fg-brand)" }}>→</span>
-            </CardFooter>
-          </Card>
+          <Link
+            key={p.num}
+            href={p.href}
+            style={{ display: "block", color: "inherit", textDecoration: "none" }}
+          >
+            <Card>
+              <CardHeader>
+                <CardLabel>{p.label}</CardLabel>
+                <CardMeta>{p.num}</CardMeta>
+              </CardHeader>
+              <CardTitle>{p.title}</CardTitle>
+              <p
+                style={{
+                  fontFamily: "var(--font-sans)",
+                  fontSize: 13,
+                  lineHeight: 1.6,
+                  color: "var(--fg-secondary)",
+                  margin: 0,
+                }}
+              >
+                {p.desc}
+              </p>
+              <CardFooter>
+                <CardComment>{p.tag}</CardComment>
+                <span style={{ color: "var(--fg-brand)" }}>→</span>
+              </CardFooter>
+            </Card>
+          </Link>
         ))}
       </div>
     </section>
@@ -379,17 +390,22 @@ function PackagesSection() {
 const INSTALL_STEPS = [
   {
     n: "01",
-    cmd: "npx wristkit init",
-    out: "components.json written · .env.local.example written",
+    cmd: "copy → components/wristkit/today-activity-card",
+    out: "card, states, load and queries",
   },
   {
     n: "02",
-    cmd: "npx wristkit add today-activity-card",
-    out: "3 files copied · 4 deps installed",
+    cmd: "copy → app/api/wristkit-sync/route.ts",
+    out: "ingest handler · zod + drizzle",
   },
   {
     n: "03",
-    cmd: "open wristkit.vercel.app/shortcut",
+    cmd: "psql -f schemas/0001_initial.sql",
+    out: "supabase sql editor",
+  },
+  {
+    n: "04",
+    cmd: "open wristkit-web.vercel.app/shortcut",
     out: null,
   },
 ];
@@ -414,13 +430,13 @@ function InstallSection() {
           · getting started
         </div>
         <h2 className="t-display-md" style={{ margin: "0 0 16px", fontSize: 52, lineHeight: 1.05 }}>
-          <em className="t-italic">Three</em> commands.
+          <em className="t-italic">Four</em> files.
           <br />
           <span className="t-muted">You own the pipeline.</span>
         </h2>
         <p className="t-body-md t-secondary" style={{ maxWidth: 540, lineHeight: 1.65, margin: 0 }}>
-          Install the CLI, wire up the API route and set the Apple Shortcut to run once a day.
-          Snapshots land in your Supabase and your React renders them.
+          Copy the component into your project, paste the route handler, run the SQL on Supabase and
+          install the Apple Shortcut. Snapshots land in your database and your React renders them.
         </p>
       </div>
       <div
@@ -643,9 +659,12 @@ function CtaStrip() {
             flexWrap: "wrap",
           }}
         >
-          <Button variant="command" size="lg">
-            npx wristkit init
-          </Button>
+          <Link
+            href="/docs/components/today-activity-card"
+            className={buttonVariants({ variant: "primary", size: "lg" })}
+          >
+            browse the components →
+          </Link>
           <Link href="/docs" className={buttonVariants({ variant: "secondary", size: "lg" })}>
             read the docs
           </Link>

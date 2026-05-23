@@ -5,9 +5,9 @@
     "jsx": "preserve",
     "lib": ["ES2022", "DOM", "DOM.Iterable"],
     "paths": {
-      "@/*": ["./*"],
-      "velite-data": ["./.velite/index.js"]
+      "@/*": ["./*"]
     },
+    "resolveJsonModule": true,
     "plugins": [
       {
         "name": "next"
@@ -18,11 +18,9 @@
   },
   "include": [
     "next-env.d.ts",
-    "velite-data.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    ".next/types/**/*.ts",
-    ".velite/**/*.ts"
+    ".next/types/**/*.ts"
   ],
   "exclude": ["node_modules"]
 }

@@ -27,7 +27,7 @@ const FILES: FileTab[] = [
     cursor: "Ln 4, Col 18",
     body: (
       <>
-        <span style={muted}>{"// POST /api/healthkit  ·  x-api-key ✓"}</span>
+        <span style={muted}>{"// POST /api/wristkit-sync  ·  x-api-key ✓"}</span>
         {"\n"}
         <span style={sec}>{"{"}</span>
         {"\n  "}
@@ -123,7 +123,7 @@ const FILES: FileTab[] = [
         <span style={fg}>POST</span>
         <span style={sec}>{" } "}</span>
         <span style={info}>from</span>{" "}
-        <span style={warn}>"@/components/wristkit/healthkit-handler"</span>
+        <span style={warn}>"@/components/wristkit/wristkit-sync-handler"</span>
         {"\n\n"}
         <span style={info}>export</span> <span style={sec}>{"{ "}</span>
         <span style={fg}>POST</span>
@@ -207,7 +207,7 @@ export function HeroIdePreview() {
           <span style={{ opacity: 0.6 }}>·</span>
           <span>{current.cursor}</span>
         </div>
-        <span>wristkit · POST /api/healthkit</span>
+        <span>wristkit · POST /api/wristkit-sync</span>
       </div>
     </aside>
   );
