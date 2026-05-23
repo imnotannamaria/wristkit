@@ -11,7 +11,6 @@ import {
   CardMeta,
   CardTitle,
 } from "@/components/entrepta/card";
-import { StatusBar, StatusBarItem, StatusBarSeparator } from "@/components/entrepta/status-bar";
 import { TopNav, TopNavLink, TopNavMenu } from "@/components/entrepta/top-nav";
 import { HeroIdePreview } from "@/components/home/hero-ide-preview";
 import { WristKitMark } from "@/components/mark";
@@ -29,55 +28,6 @@ export default function HomePage() {
         <CtaStrip />
         <SiteFooter />
       </main>
-      <StatusBar
-        left={
-          <>
-            <StatusBarItem>wristkit</StatusBarItem>
-            <StatusBarSeparator />
-            <StatusBarItem>v0.1.0</StatusBarItem>
-            <StatusBarSeparator />
-            <StatusBarItem>/home</StatusBarItem>
-            <StatusBarSeparator />
-            <StatusBarItem>
-              <span
-                aria-hidden
-                style={{
-                  display: "inline-block",
-                  width: 6,
-                  height: 6,
-                  borderRadius: "50%",
-                  background: "rgba(255,255,255,0.85)",
-                  marginRight: 6,
-                }}
-              />
-              synced · 21:14
-            </StatusBarItem>
-          </>
-        }
-        right={
-          <>
-            <StatusBarItem>
-              <kbd
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 10,
-                  color: "inherit",
-                  padding: "1px 4px",
-                  border: "1px solid rgba(255,255,255,0.4)",
-                  borderRadius: 3,
-                  background: "transparent",
-                  marginRight: 6,
-                }}
-              >
-                ⌘K
-              </kbd>
-              commands
-            </StatusBarItem>
-            <StatusBarSeparator />
-            <StatusBarItem>annamaria.app</StatusBarItem>
-          </>
-        }
-      />
     </>
   );
 }
