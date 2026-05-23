@@ -4,8 +4,8 @@ import { useId } from "react";
 
 export function WristKitMark({
   size = 64,
-  color = "#f5f5f5",
-  accent = "#9d80ff",
+  color = "var(--fg-primary)",
+  accent = "var(--fg-brand)",
 }: {
   size?: number;
   color?: string;
@@ -27,7 +27,6 @@ export function WristKitMark({
           <path d="M 46 12 L 22 52" stroke="black" strokeWidth="8" strokeLinecap="butt" />
         </mask>
       </defs>
-      {/* outer ring */}
       <circle
         cx="32"
         cy="32"
@@ -37,7 +36,6 @@ export function WristKitMark({
         strokeWidth="4"
         mask={`url(#${maskId})`}
       />
-      {/* inner ring */}
       <circle
         cx="32"
         cy="32"
@@ -48,7 +46,6 @@ export function WristKitMark({
         strokeOpacity="0.55"
         mask={`url(#${maskId})`}
       />
-      {/* accent slash */}
       <path d="M 46 12 L 22 52" stroke={accent} strokeWidth="5" strokeLinecap="round" />
     </svg>
   );

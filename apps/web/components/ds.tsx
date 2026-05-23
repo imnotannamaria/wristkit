@@ -1,6 +1,5 @@
 import type * as React from "react";
 
-// ─── Panel ────────────────────────────────────────────────────
 export function Panel({
   children,
   style,
@@ -14,11 +13,11 @@ export function Panel({
     <div
       className={className}
       style={{
-        backgroundColor: "var(--bg-panel)",
-        border: "1px solid var(--border)",
-        borderRadius: 14,
+        backgroundColor: "var(--bg-surface)",
+        border: "1px solid var(--border-subtle)",
+        borderRadius: "var(--radius-lg)",
         padding: "18px 20px 16px",
-        color: "var(--text)",
+        color: "var(--fg-primary)",
         fontFamily: "var(--font-mono)",
         boxSizing: "border-box",
         height: "100%",
@@ -32,7 +31,6 @@ export function Panel({
   );
 }
 
-// ─── PanelHeader ──────────────────────────────────────────────
 export function PanelHeader({
   icon = "⚡",
   eyebrow,
@@ -61,10 +59,10 @@ export function PanelHeader({
           alignItems: "center",
           gap: 8,
           textTransform: "uppercase",
-          color: "var(--muted)",
+          color: "var(--fg-muted)",
         }}
       >
-        <span aria-hidden style={{ fontSize: 13 }}>
+        <span aria-hidden style={{ fontSize: 13, color: "var(--fg-brand)" }}>
           {icon}
         </span>
         {eyebrow}
@@ -72,7 +70,7 @@ export function PanelHeader({
       {status && (
         <span
           style={{
-            color: statusColor ?? "var(--synced)",
+            color: statusColor ?? "var(--status-success)",
             display: "flex",
             alignItems: "center",
             gap: 6,
@@ -87,7 +85,6 @@ export function PanelHeader({
   );
 }
 
-// ─── DottedRule ───────────────────────────────────────────────
 export function DottedRule({
   vertical,
   style,
@@ -101,7 +98,7 @@ export function DottedRule({
         style={{
           width: 1,
           alignSelf: "stretch",
-          backgroundImage: "linear-gradient(to bottom, var(--border) 50%, transparent 50%)",
+          backgroundImage: "linear-gradient(to bottom, var(--border-subtle) 50%, transparent 50%)",
           backgroundSize: "1px 6px",
           backgroundRepeat: "repeat-y",
           opacity: 0.85,
@@ -114,7 +111,7 @@ export function DottedRule({
     <div
       style={{
         height: 1,
-        backgroundImage: "linear-gradient(to right, var(--border) 50%, transparent 50%)",
+        backgroundImage: "linear-gradient(to right, var(--border-subtle) 50%, transparent 50%)",
         backgroundSize: "6px 1px",
         backgroundRepeat: "repeat-x",
         opacity: 0.85,
@@ -124,7 +121,6 @@ export function DottedRule({
   );
 }
 
-// ─── PanelFooter ──────────────────────────────────────────────
 export function PanelFooter({
   note,
   right,
@@ -138,7 +134,7 @@ export function PanelFooter({
         style={{
           marginTop: 16,
           marginBottom: 10,
-          borderTop: "1px dashed var(--border)",
+          borderTop: "1px dashed var(--border-subtle)",
           opacity: 0.9,
         }}
       />
@@ -149,7 +145,7 @@ export function PanelFooter({
           alignItems: "baseline",
           gap: 12,
           fontSize: 11,
-          color: "var(--muted)",
+          color: "var(--fg-muted)",
         }}
       >
         <span
@@ -167,7 +163,6 @@ export function PanelFooter({
   );
 }
 
-// ─── BigNumber ────────────────────────────────────────────────
 export function BigNumber({
   value,
   suffix,
@@ -188,7 +183,7 @@ export function BigNumber({
           fontFamily: "var(--font-serif)",
           fontSize: size,
           fontWeight: 500,
-          color: color ?? "var(--text)",
+          color: color ?? "var(--fg-primary)",
           letterSpacing: "-0.02em",
         }}
       >
@@ -199,7 +194,7 @@ export function BigNumber({
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: 11,
-            color: suffixColor ?? "var(--muted)",
+            color: suffixColor ?? "var(--fg-muted)",
             marginLeft: 6,
           }}
         >
@@ -210,7 +205,6 @@ export function BigNumber({
   );
 }
 
-// ─── Label ────────────────────────────────────────────────────
 export function Label({
   children,
   dot,
@@ -240,7 +234,7 @@ export function Label({
       )}
       <span
         style={{
-          color: color ?? "var(--muted)",
+          color: color ?? "var(--fg-muted)",
           fontSize: size,
           letterSpacing: "0.12em",
           textTransform: "uppercase",
@@ -252,7 +246,6 @@ export function Label({
   );
 }
 
-// ─── Ring ─────────────────────────────────────────────────────
 export function Ring({
   value,
   max,

@@ -38,13 +38,11 @@ export function SidebarNav() {
     <>
       <Link
         href="/"
-        className="docs-logo"
         style={{
           display: "flex",
           alignItems: "center",
           gap: 10,
           marginBottom: 36,
-          textDecoration: "none",
         }}
       >
         <WristKitMark size={20} />
@@ -52,7 +50,7 @@ export function SidebarNav() {
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: 12,
-            color: "#f5f5f5",
+            color: "var(--fg-primary)",
             letterSpacing: "0.04em",
           }}
         >
@@ -66,7 +64,7 @@ export function SidebarNav() {
             style={{
               fontFamily: "var(--font-mono)",
               fontSize: 9,
-              color: "#3a3a3a",
+              color: "var(--fg-muted)",
               letterSpacing: "0.16em",
               textTransform: "uppercase",
               marginBottom: 6,
@@ -81,17 +79,19 @@ export function SidebarNav() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`docs-nav-link${active ? " docs-nav-link--active" : ""}`}
+                aria-current={active ? "page" : undefined}
                 style={{
                   display: "block",
                   fontFamily: "var(--font-mono)",
                   fontSize: 12,
-                  color: active ? "#f5f5f5" : "#666",
-                  textDecoration: "none",
+                  color: active ? "var(--fg-primary)" : "var(--fg-secondary)",
                   padding: "6px 10px 6px 12px",
-                  borderRadius: 5,
+                  borderRadius: "var(--radius-sm)",
                   marginBottom: 1,
                   position: "relative",
+                  background: active ? "var(--bg-hover-soft)" : "transparent",
+                  borderLeft: active ? "2px solid var(--fg-brand)" : "2px solid transparent",
+                  transition: "color 150ms, background 150ms",
                 }}
               >
                 {link.label}
@@ -101,12 +101,18 @@ export function SidebarNav() {
         </div>
       ))}
 
-      <div style={{ marginTop: "auto", paddingTop: 32, borderTop: "1px dashed #1a1a1a" }}>
+      <div
+        style={{
+          marginTop: "auto",
+          paddingTop: 32,
+          borderTop: "1px dashed var(--border-subtle)",
+        }}
+      >
         <div
           style={{
             fontFamily: "var(--font-mono)",
             fontSize: 10,
-            color: "#3a3a3a",
+            color: "var(--fg-muted)",
             letterSpacing: "0.04em",
           }}
         >

@@ -1,17 +1,17 @@
 ---
 title: Installation
-description: Get wristkit running in your Next.js project in under 10 minutes.
+description: Get wristkit running in your Next.js project in less than 10 minutes.
 ---
 
-## Prerequisites
+## Before you start
 
 - Next.js 15 with App Router
-- A [Supabase](https://supabase.com) project (free tier is fine)
-- Node.js ≥ 20
+- A [Supabase](https://supabase.com) project (free tier works fine)
+- Node.js 20 or newer
 
 ## 1. Run init
 
-Inside your Next.js project:
+Inside your Next.js project, run:
 
 ```bash
 npx wristkit init
@@ -19,12 +19,12 @@ npx wristkit init
 
 This will:
 
-- Detect your framework and check for App Router
-- Prompt for a theme (`default`, `neutral`, or `violet`)
+- Check that you are on Next.js with the App Router
+- Ask you which theme you want (`default`, `neutral` or `violet`)
 - Write `components.json` to your project root
-- Write `.env.local.example` with the required variables
-- Print the SQL migration to run in Supabase
-- Install peer dependencies: `drizzle-orm`, `postgres`, `zod`, `framer-motion`
+- Write `.env.local.example` with the variables you need
+- Print the SQL you need to run on Supabase
+- Install the peer dependencies: `drizzle-orm`, `postgres`, `zod` and `framer-motion`
 
 ## 2. Set your environment variables
 
@@ -35,17 +35,18 @@ cp .env.local.example .env.local
 ```
 
 ```
+
 WRISTKIT_DATABASE_URL=postgresql://postgres:password@db.xxx.supabase.co:5432/postgres
- WRISTKIT_API_KEY=your-secret-key-here
+WRISTKIT_API_KEY=your-secret-key-here
 ```
 
-`WRISTKIT_DATABASE_URL` — your Supabase connection string (find it in Project Settings → Database → Connection string → URI)
+`WRISTKIT_DATABASE_URL` is your Supabase connection string. You can find it in Project Settings, Database, Connection string, URI.
 
-`WRISTKIT_API_KEY` — a secret you invent. The iOS Shortcut will send this in the `x-api-key` header on every POST.
+`WRISTKIT_API_KEY` is a secret you pick yourself. The iOS Shortcut will send it in the `x-api-key` header on every POST.
 
 ## 3. Run the SQL migration
 
-In your Supabase dashboard, go to **SQL Editor** and run:
+In your Supabase dashboard, open **SQL Editor** and run:
 
 ```sql
 create table if not exists wristkit_samples (
@@ -72,7 +73,7 @@ create index if not exists idx_user_metric_recorded
 npx wristkit add today-activity-card
 ```
 
-This fetches the component from the registry, installs its npm dependencies, and copies the files to your project.
+This pulls the component from the registry, installs its npm dependencies and copies the files into your project.
 
 ## 5. Use the component
 

@@ -1,20 +1,6 @@
+import { ThemeScript } from "@/components/entrepta/theme-switcher";
 import type { Metadata } from "next";
-import { JetBrains_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
-
-const jbMono = JetBrains_Mono({
-  subsets: ["latin"],
-  variable: "--jb-mono",
-  display: "swap",
-});
-
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  variable: "--newsreader",
-  display: "swap",
-  style: ["normal", "italic"],
-  weight: ["400", "500", "600"],
-});
 
 export const metadata: Metadata = {
   title: "wristkit — Apple Health on the web",
@@ -25,8 +11,11 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${jbMono.variable} ${newsreader.variable}`}>
-      <body suppressHydrationWarning>{children}</body>
+    <html lang="en" data-theme="ivy" suppressHydrationWarning>
+      <head>
+        <ThemeScript />
+      </head>
+      <body>{children}</body>
     </html>
   );
 }

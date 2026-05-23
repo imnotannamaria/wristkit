@@ -1,21 +1,21 @@
 ---
 title: Introduction
-description: What wristkit is, who it's for, and how it works.
+description: What wristkit is, who it is for, and how it works.
 ---
 
 ## What is wristkit?
 
-wristkit is an open-source CLI + component library that lets you ship Apple Health visualizations on a personal site, portfolio, or athlete-facing web app — without writing a backend, without a third-party SaaS, and without storing data outside infrastructure you own.
+wristkit is a small open source CLI and component library. It drops ready to use React components into your Next.js project so you can show your Apple Health data on the web. No backend to write, no third party SaaS, and no data leaving the infrastructure you already own.
 
-Run `npx wristkit init`, point it at your own Supabase, import an iOS Shortcut on your iPhone, and minutes later your Apple Watch data is rendering in your Next.js app.
+Run `npx wristkit init`, point it at your own Supabase, import the iOS Shortcut on your iPhone, and a few minutes later your Apple Watch data is showing up in your Next.js app.
 
-**Zero telemetry. MIT-licensed. Single-user in v1.**
+**Zero telemetry. MIT license. Single user in v1.**
 
 ## Who is it for?
 
-- Developers who want their own health dashboard on their personal site
-- Athletes who want to share training data without giving it to a third party
-- Anyone who wants to own their health data end-to-end
+- Developers who want a personal health dashboard on their own site
+- Athletes who want to share training data without handing it to a third party
+- Anyone who wants to keep their health data end to end on their own stack
 
 ## How it works
 
@@ -24,22 +24,22 @@ iOS Shortcut → POST /api/healthkit → Supabase → React components
 ```
 
 1. The iOS Shortcut reads your Apple Health data and posts it to your Next.js app
-2. A route handler validates and writes it to your Supabase Postgres database
-3. React components query your database and render the data
+2. A route handler checks the payload and writes it to your Supabase Postgres database
+3. React components read from your database and render the data
 
-wristkit never touches your data. We ship code — you run it on your infrastructure.
+wristkit never touches your data. We ship code. You run it on your own stack.
 
 ## What ships in v1
 
-- `TodayActivityCard` — Move, Exercise, and Steps rings with five states
-- `wristkit init` — scaffolds your project
-- `wristkit add` — installs components from the registry
-- `wristkit update` — shows diffs before overwriting
-- `wristkit shortcut` — prints iOS Shortcut setup instructions
+- `TodayActivityCard`, with Move, Exercise and Steps rings and five states
+- `wristkit init`, sets up your project
+- `wristkit add`, installs components from the registry
+- `wristkit update`, shows a diff before changing anything
+- `wristkit shortcut`, prints the iOS Shortcut setup steps
 - A hosted registry at `wristkit-web.vercel.app`
 
 ## Stack requirements
 
-- Next.js 15 (App Router)
-- A Supabase project (free tier works)
+- Next.js 15 with App Router
+- A Supabase project (the free tier works)
 - An iPhone with the Shortcuts app

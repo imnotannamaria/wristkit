@@ -9,7 +9,7 @@ export default function Icon() {
       style={{
         width: 32,
         height: 32,
-        background: "#050505",
+        background: "#09090b",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -27,7 +27,7 @@ export default function Icon() {
           cy="32"
           r="22"
           fill="none"
-          stroke="#f5f5f5"
+          stroke="#fafafa"
           strokeWidth="4"
           mask="url(#m)"
         />
@@ -36,12 +36,12 @@ export default function Icon() {
           cy="32"
           r="13"
           fill="none"
-          stroke="#f5f5f5"
+          stroke="#fafafa"
           strokeWidth="4"
           strokeOpacity="0.55"
           mask="url(#m)"
         />
-        <path d="M 46 12 L 22 52" stroke="#9d80ff" strokeWidth="5" strokeLinecap="round" />
+        <path d="M 46 12 L 22 52" stroke="#35a365" strokeWidth="5" strokeLinecap="round" />
       </svg>
     </div>,
     { ...size },

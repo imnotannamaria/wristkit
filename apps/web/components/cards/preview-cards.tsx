@@ -1,16 +1,16 @@
 import { BigNumber, DottedRule, Label, Panel, PanelFooter, PanelHeader } from "@/components/ds";
 
 const C = {
-  move: "#9d80ff",
-  exercise: "#67e8c0",
-  steps: "#f5a623",
-  sleep: "#7ab7ff",
-  hrv: "#f06c9b",
-  muted: "#666666",
-  mutedSoft: "#3a3a3a",
-  text: "#f5f5f5",
-  border: "#1f1f1f",
-  bg: "#0b0b0b",
+  move: "var(--ring-move)",
+  exercise: "var(--ring-exercise)",
+  steps: "var(--ring-steps)",
+  sleep: "var(--status-info)",
+  hrv: "var(--status-error)",
+  muted: "var(--fg-muted)",
+  mutedSoft: "var(--border-strong)",
+  text: "var(--fg-primary)",
+  border: "var(--border-subtle)",
+  bg: "var(--bg-surface)",
 };
 
 // ─── SleepCard ───────────────────────────────────────────────
@@ -27,7 +27,12 @@ export function SleepCard() {
     { kind: "rem", w: 9 },
     { kind: "light", w: 3 },
   ] as const;
-  const stageColor = { deep: C.sleep, rem: "#a394ff", light: "#2d3d58", awake: C.mutedSoft };
+  const stageColor = {
+    deep: C.sleep,
+    rem: "var(--fg-brand)",
+    light: "var(--border-strong)",
+    awake: C.mutedSoft,
+  };
   const over = hours >= goal;
   return (
     <Panel>
@@ -66,8 +71,8 @@ export function SleepCard() {
         {(
           [
             ["DEEP", C.sleep, "1h 12m"],
-            ["REM", "#a394ff", "1h 44m"],
-            ["LIGHT", "#2d3d58", "3h 58m"],
+            ["REM", "var(--fg-brand)", "1h 44m"],
+            ["LIGHT", "var(--border-strong)", "3h 58m"],
             ["AWAKE", C.mutedSoft, "14m"],
           ] as const
         ).map(([lbl, col, val]) => (
@@ -461,7 +466,12 @@ export function SnapshotLog() {
         {entries.map((e) => (
           <div key={`${e.t}-${e.status}`} style={{ display: "contents" }}>
             <div style={{ color: C.muted }}>{e.t}</div>
-            <div style={{ color: e.status === 200 ? C.exercise : "#f06c9b", fontWeight: 600 }}>
+            <div
+              style={{
+                color: e.status === 200 ? C.exercise : "var(--status-error)",
+                fontWeight: 600,
+              }}
+            >
               {e.status}
             </div>
             <div
@@ -473,7 +483,7 @@ export function SnapshotLog() {
               }}
             >
               {"err" in e && e.err ? (
-                <span style={{ color: "#f06c9b" }}>× {e.err}</span>
+                <span style={{ color: "var(--status-error)" }}>× {e.err}</span>
               ) : (
                 <>
                   <span style={{ color: C.move }}>{e.kcal}</span>

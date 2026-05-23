@@ -1,578 +1,804 @@
+import { TodayActivityCardDemo } from "@/components/cards/today-activity-card-demo";
+import { Badge } from "@/components/entrepta/badge";
+import { Button } from "@/components/entrepta/button";
+import { buttonVariants } from "@/components/entrepta/button-variants";
 import {
-  EnvCard,
-  InstallCard,
-  TodayActivityCardDemo,
-  TodayActivityCardEmpty,
-  TodayActivityCardError,
-  TodayActivityCardLoading,
-  TodayActivityCardPartial,
-  TodayActivityCardStale,
-} from "@/components/cards/today-activity-card-demo";
-import { HomeInstallBlock } from "@/components/home-install-block";
+  Card,
+  CardComment,
+  CardFooter,
+  CardHeader,
+  CardLabel,
+  CardMeta,
+  CardTitle,
+} from "@/components/entrepta/card";
+import { TopNav, TopNavLink, TopNavMenu } from "@/components/entrepta/top-nav";
+import { HeroIdePreview } from "@/components/home/hero-ide-preview";
 import { WristKitMark } from "@/components/mark";
 import Link from "next/link";
 
-const C = {
-  move: "#9d80ff",
-  exercise: "#67e8c0",
-  steps: "#f5a623",
-  muted: "#666666",
-  mutedSoft: "#3a3a3a",
-  text: "#f5f5f5",
-  border: "#1f1f1f",
-  bg: "#050505",
-};
-
 export default function HomePage() {
+  return (
+    <>
+      <HomeTopNav />
+      <main className="page" style={{ paddingTop: 88, paddingBottom: 96 }}>
+        <HeroSection />
+        <ComponentShowcase />
+        <PackagesSection />
+        <InstallSection />
+        <CtaStrip />
+        <SiteFooter />
+      </main>
+    </>
+  );
+}
+
+// ─── TopNav ───────────────────────────────────────────────────
+function HomeTopNav() {
   return (
     <div
       style={{
-        background: C.bg,
-        minHeight: "100vh",
-        padding: "56px 56px 80px",
-        color: C.text,
-        fontFamily: "var(--font-mono)",
-        boxSizing: "border-box",
-        maxWidth: 1280,
-        margin: "0 auto",
+        position: "fixed",
+        top: 0,
+        left: 0,
+        right: 0,
+        zIndex: 40,
+        background: "rgba(9, 9, 11, 0.9)",
+        backdropFilter: "blur(12px)",
+        WebkitBackdropFilter: "blur(12px)",
+        borderBottom: "1px solid var(--border-subtle)",
       }}
     >
-      {/* ─── Topbar ─── */}
+      <div style={{ maxWidth: 1280, margin: "0 auto" }}>
+        <TopNav
+          style={{
+            background: "transparent",
+            borderBottom: "none",
+            paddingTop: 12,
+            paddingBottom: 12,
+          }}
+          left={
+            <Link
+              href="/"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 10,
+              }}
+            >
+              <WristKitMark size={22} />
+              <span
+                style={{
+                  fontFamily: "var(--font-serif)",
+                  fontSize: 18,
+                  color: "var(--fg-primary)",
+                  lineHeight: 1,
+                }}
+              >
+                wristkit
+                <span style={{ color: "var(--fg-brand)" }}>.</span>
+              </span>
+              <span
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 10,
+                  color: "var(--fg-muted)",
+                  border: "1px solid var(--border-subtle)",
+                  borderRadius: 3,
+                  padding: "2px 6px",
+                  marginLeft: 6,
+                }}
+              >
+                v0.1
+              </span>
+            </Link>
+          }
+          right={
+            <TopNavMenu>
+              <TopNavLink active asChild>
+                <Link href="/">home</Link>
+              </TopNavLink>
+              <TopNavLink asChild>
+                <Link href="/docs">docs</Link>
+              </TopNavLink>
+              <TopNavLink asChild>
+                <Link href="/docs/shortcut-setup">shortcut</Link>
+              </TopNavLink>
+              <TopNavLink asChild>
+                <Link href="/docs/components/today-activity-card">components</Link>
+              </TopNavLink>
+              <TopNavLink href="https://github.com/imnotannamaria/wristkit" external>
+                github
+              </TopNavLink>
+            </TopNavMenu>
+          }
+        />
+      </div>
+    </div>
+  );
+}
+
+// ─── Hero ─────────────────────────────────────────────────────
+function HeroSection() {
+  const stats = [
+    { dt: "package", dd: "1" },
+    { dt: "registry items", dd: "4" },
+    { dt: "telemetry", dd: "zero" },
+    { dt: "license", dd: "MIT" },
+  ];
+  return (
+    <section
+      className="container"
+      style={{
+        paddingTop: 80,
+        paddingBottom: 64,
+        display: "grid",
+        gridTemplateColumns: "minmax(0, 1fr) minmax(0, 480px)",
+        gap: 56,
+        alignItems: "start",
+      }}
+    >
+      <div>
+        <div
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 11,
+            color: "var(--fg-muted)",
+            marginBottom: 24,
+            display: "inline-flex",
+            alignItems: "center",
+            gap: 12,
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+          }}
+        >
+          <span>open source · MIT</span>
+          <span
+            style={{
+              border: "1px solid var(--border-subtle)",
+              borderRadius: 3,
+              padding: "2px 6px",
+              color: "var(--fg-brand)",
+              textTransform: "none",
+              letterSpacing: "normal",
+            }}
+          >
+            v0.1
+          </span>
+          <span>by anna maria</span>
+        </div>
+        <h1 className="t-display-xl" style={{ margin: 0 }}>
+          Apple Health,
+          <br />
+          on <em className="t-italic">your</em> <span className="t-muted">web stack.</span>
+        </h1>
+        <p
+          className="t-body-lg t-secondary"
+          style={{ marginTop: 28, maxWidth: 540, lineHeight: 1.65 }}
+        >
+          <strong style={{ color: "var(--fg-primary)", fontWeight: 500 }}>wristkit</strong> is a
+          small CLI that drops ready to use React components into your Next.js project, so you can
+          show your Apple Health data on the web. You bring your own Supabase. The iOS Shortcut
+          posts straight to your endpoint, with no third party cloud and no SDK in the middle.
+        </p>
+        <div
+          style={{
+            display: "flex",
+            gap: 12,
+            marginTop: 32,
+            marginBottom: 40,
+            flexWrap: "wrap",
+          }}
+        >
+          <Button variant="command" size="lg">
+            npx wristkit init
+          </Button>
+          <Link href="/docs" className={buttonVariants({ variant: "secondary", size: "lg" })}>
+            read the docs →
+          </Link>
+        </div>
+        <dl
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(4, 1fr)",
+            gap: 12,
+            margin: 0,
+          }}
+        >
+          {stats.map((s) => (
+            <div
+              key={s.dt}
+              style={{
+                border: "1px solid var(--border-subtle)",
+                borderRadius: "var(--radius-sm)",
+                padding: 12,
+              }}
+            >
+              <dt
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 10,
+                  color: "var(--fg-muted)",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.08em",
+                  marginBottom: 4,
+                }}
+              >
+                {s.dt}
+              </dt>
+              <dd
+                style={{
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 14,
+                  color: "var(--fg-primary)",
+                  margin: 0,
+                }}
+              >
+                {s.dd}
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <HeroIdePreview />
+    </section>
+  );
+}
+
+// ─── Component showcase ──────────────────────────────────────
+function ComponentShowcase() {
+  return (
+    <section className="container bt-subtle" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div
         style={{
           display: "flex",
-          alignItems: "center",
+          alignItems: "flex-end",
           justifyContent: "space-between",
-          marginBottom: 48,
-        }}
-      >
-        <div className="wk-logo-area" style={{ display: "flex", alignItems: "center", gap: 10 }}>
-          <WristKitMark size={22} />
-          <span style={{ fontFamily: "var(--font-mono)", fontSize: 13, letterSpacing: "0.04em" }}>
-            <span style={{ color: C.muted }}>wristkit</span>
-            <span style={{ color: C.mutedSoft }}> / </span>
-            <span>home</span>
-          </span>
-        </div>
-        <nav
-          style={{
-            display: "flex",
-            gap: 22,
-            fontFamily: "var(--font-mono)",
-            fontSize: 11,
-            color: C.muted,
-            letterSpacing: "0.08em",
-            textTransform: "uppercase",
-            alignItems: "center",
-          }}
-        >
-          <Link href="/" className="wk-nav-link" style={{ color: C.text, textDecoration: "none" }}>
-            home
-          </Link>
-          <Link
-            href="/docs"
-            className="wk-nav-link"
-            style={{ color: C.muted, textDecoration: "none" }}
-          >
-            docs
-          </Link>
-          <a
-            href="https://github.com/imnotannamaria/wristkit"
-            target="_blank"
-            rel="noreferrer"
-            className="wk-nav-link"
-            style={{ color: C.muted, textDecoration: "none" }}
-          >
-            github ↗
-          </a>
-          <a
-            href="https://www.npmjs.com/package/wristkit"
-            target="_blank"
-            rel="noreferrer"
-            className="wk-nav-link"
-            style={{ color: C.muted, textDecoration: "none" }}
-          >
-            npm ↗
-          </a>
-        </nav>
-      </div>
-
-      {/* ─── Hero ─── */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1.1fr) minmax(0, 1fr)",
-          gap: 48,
-          alignItems: "end",
-          marginBottom: 64,
+          marginBottom: 40,
+          gap: 24,
         }}
       >
         <div>
           <div
+            className="t-mono-xs t-brand"
             style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 11,
-              color: C.exercise,
-              letterSpacing: "0.12em",
               textTransform: "uppercase",
-              marginBottom: 18,
+              letterSpacing: "0.08em",
+              marginBottom: 12,
             }}
           >
-            <span style={{ color: C.mutedSoft }}>{/* // */}</span> apple health → web, in minutes
+            · components/wristkit
           </div>
-          <h1
-            style={{
-              fontFamily: "var(--font-serif)",
-              fontWeight: 500,
-              fontSize: 72,
-              lineHeight: 1.05,
-              letterSpacing: "-0.03em",
-              margin: 0,
-              color: C.text,
-            }}
-          >
-            Your Health data.
+          <h2 className="t-display-md" style={{ margin: 0, fontSize: 52, lineHeight: 1.05 }}>
+            One <em className="t-italic">card</em>.
             <br />
-            <span style={{ color: C.muted }}>On</span> <span style={{ color: C.move }}>your</span>{" "}
-            <span style={{ color: C.muted }}>site.</span>
-          </h1>
-          <p
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 14,
-              color: C.muted,
-              lineHeight: 1.6,
-              marginTop: 20,
-              maxWidth: 440,
-            }}
-          >
-            A CLI that drops production-ready React components for visualizing Apple Health data
-            into any Next.js project. You bring your own Supabase. Zero telemetry. MIT.
-          </p>
-          <div style={{ display: "flex", gap: 12, marginTop: 26 }}>
-            <code
-              className="wk-cmd"
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 12,
-                letterSpacing: "0.06em",
-                background: C.text,
-                color: C.bg,
-                padding: "12px 18px",
-                borderRadius: 8,
-                userSelect: "all",
-              }}
-            >
-              $ npx wristkit init
-            </code>
-            <Link
-              href="/docs"
-              className="wk-btn-ghost"
-              style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 12,
-                letterSpacing: "0.08em",
-                textTransform: "uppercase",
-                background: "transparent",
-                color: C.text,
-                border: `1px solid ${C.border}`,
-                padding: "12px 18px",
-                borderRadius: 8,
-                textDecoration: "none",
-                display: "inline-flex",
-                alignItems: "center",
-              }}
-            >
-              read the docs →
-            </Link>
-          </div>
-        </div>
-        <div>
-          <TodayActivityCardDemo />
-        </div>
-      </div>
-
-      {/* ─── Quick start ─── */}
-      <div style={{ marginBottom: 8 }}>
-        <span
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            color: C.move,
-            fontSize: 10,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-          }}
-        >
-          ⎯⎯ quick start
-        </span>
-        <h2
-          style={{
-            fontFamily: "var(--font-serif)",
-            fontSize: 28,
-            fontWeight: 500,
-            margin: "6px 0 20px",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          Ship in an evening. <span style={{ color: C.muted }}>Three commands.</span>
-        </h2>
-      </div>
-      <HomeInstallBlock />
-
-      {/* ─── Components section ─── */}
-      <div
-        style={{
-          marginBottom: 22,
-          display: "flex",
-          alignItems: "baseline",
-          justifyContent: "space-between",
-        }}
-      >
-        <div>
-          <span
-            style={{
-              display: "inline-flex",
-              alignItems: "center",
-              gap: 8,
-              color: C.exercise,
-              fontSize: 10,
-              letterSpacing: "0.12em",
-              textTransform: "uppercase",
-            }}
-          >
-            ⎯⎯ today · activity
-          </span>
-          <h2
-            style={{
-              fontFamily: "var(--font-serif)",
-              fontSize: 32,
-              fontWeight: 500,
-              margin: "6px 0 0",
-              letterSpacing: "-0.02em",
-            }}
-          >
-            One card. <span style={{ color: C.muted }}>Six states, every edge handled.</span>
+            <span className="t-muted">Your day, at a glance.</span>
           </h2>
         </div>
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: C.muted }}>
-          {/* 6 states · 1 card */}
+        <span
+          className="t-mono-xs t-muted"
+          style={{ textTransform: "uppercase", letterSpacing: "0.08em" }}
+        >
+          section 2.1 · components
         </span>
       </div>
+      <TodayActivityCardDemo />
+    </section>
+  );
+}
 
-      {/* Today states — 2-col grid */}
+// ─── Packages (registry items) ───────────────────────────────
+const REGISTRY_ITEMS = [
+  {
+    label: "components/wristkit",
+    num: "01",
+    title: "TodayActivityCard",
+    desc: "A React Server Component with all 7 states (loading, empty, stale, partial, error, ok and rings only). Drop it into any /app page.",
+    tag: "<TodayActivityCard state={state} />",
+  },
+  {
+    label: "app/api/healthkit",
+    num: "02",
+    title: "Route handler",
+    desc: "A POST endpoint that checks the x-api-key, parses the Shortcut payload with Zod and writes to your Supabase through Drizzle.",
+    tag: "export async function POST(req)",
+  },
+  {
+    label: "shortcuts/wristkit",
+    num: "03",
+    title: "iOS Shortcut",
+    desc: "Reads Active Energy, Exercise Minutes and Steps from HealthKit. You can schedule it to run every day at 23:59 with iOS Automation.",
+    tag: "wristkit-sync.shortcut",
+  },
+];
+
+function PackagesSection() {
+  return (
+    <section className="container bt-subtle" style={{ paddingTop: 80, paddingBottom: 80 }}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "flex-end",
+          justifyContent: "space-between",
+          marginBottom: 40,
+          gap: 24,
+        }}
+      >
+        <h2 className="t-display-md" style={{ margin: 0, fontSize: 52, lineHeight: 1.05 }}>
+          <em className="t-italic">Three</em> pieces. <span className="t-muted">One evening.</span>
+        </h2>
+        <Link
+          href="/docs"
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: 12,
+            color: "var(--fg-brand)",
+            textTransform: "uppercase",
+            letterSpacing: "0.06em",
+          }}
+        >
+          browse all ↗
+        </Link>
+      </div>
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-          gap: 22,
-          marginBottom: 56,
+          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
+          gap: 16,
         }}
       >
-        {[
-          { label: "default · synced", card: <TodayActivityCardDemo /> },
-          { label: "B · loading", card: <TodayActivityCardLoading /> },
-          { label: "A · empty", card: <TodayActivityCardEmpty /> },
-          { label: "C · partial", card: <TodayActivityCardPartial /> },
-          { label: "D · stale", card: <TodayActivityCardStale /> },
-          { label: "E · error", card: <TodayActivityCardError /> },
-        ].map(({ label, card }) => (
-          <div key={label} style={{ display: "flex", flexDirection: "column" }}>
-            <div
+        {REGISTRY_ITEMS.map((p) => (
+          <Card key={p.num}>
+            <CardHeader>
+              <CardLabel>{p.label}</CardLabel>
+              <CardMeta>{p.num}</CardMeta>
+            </CardHeader>
+            <CardTitle>{p.title}</CardTitle>
+            <p
               style={{
-                fontFamily: "var(--font-mono)",
-                fontSize: 10,
-                color: C.muted,
-                letterSpacing: "0.08em",
-                marginBottom: 8,
+                fontFamily: "var(--font-sans)",
+                fontSize: 13,
+                lineHeight: 1.6,
+                color: "var(--fg-secondary)",
+                margin: 0,
               }}
             >
-              {label}
-            </div>
-            <div className="wk-card-lift" style={{ flex: 1 }}>
-              {card}
-            </div>
-          </div>
+              {p.desc}
+            </p>
+            <CardFooter>
+              <CardComment>{p.tag}</CardComment>
+              <span style={{ color: "var(--fg-brand)" }}>→</span>
+            </CardFooter>
+          </Card>
         ))}
       </div>
+    </section>
+  );
+}
 
-      {/* ─── Zero telemetry block ─── */}
-      <div
-        style={{
-          border: `1px solid ${C.border}`,
-          borderRadius: 14,
-          padding: "32px 36px",
-          marginBottom: 56,
-          background: "#0b0b0b",
-        }}
-      >
+// ─── Install ────────────────────────────────────────────────
+const INSTALL_STEPS = [
+  {
+    n: "01",
+    cmd: "npx wristkit init",
+    out: "components.json written · .env.local.example written",
+  },
+  {
+    n: "02",
+    cmd: "npx wristkit add today-activity-card",
+    out: "3 files copied · 4 deps installed",
+  },
+  {
+    n: "03",
+    cmd: "open wristkit.vercel.app/shortcut",
+    out: null,
+  },
+];
+
+const ENV_VARS = [
+  { k: "WRISTKIT_DATABASE_URL", v: "set" },
+  { k: "WRISTKIT_API_KEY", v: "set" },
+];
+
+function InstallSection() {
+  return (
+    <section className="container bt-subtle" style={{ paddingTop: 80, paddingBottom: 80 }}>
+      <div style={{ marginBottom: 40 }}>
         <div
+          className="t-mono-xs t-brand"
           style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 11,
-            color: C.steps,
-            letterSpacing: "0.12em",
             textTransform: "uppercase",
+            letterSpacing: "0.08em",
             marginBottom: 12,
           }}
         >
-          {/* zero telemetry */}
+          · getting started
         </div>
-        <h2
-          style={{
-            fontFamily: "var(--font-serif)",
-            fontSize: 40,
-            fontWeight: 500,
-            margin: "0 0 16px",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          Your data never leaves <span style={{ color: C.move }}>your infrastructure.</span>
+        <h2 className="t-display-md" style={{ margin: "0 0 16px", fontSize: 52, lineHeight: 1.05 }}>
+          <em className="t-italic">Three</em> commands.
+          <br />
+          <span className="t-muted">You own the pipeline.</span>
         </h2>
-        <p
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 13,
-            color: C.muted,
-            lineHeight: 1.7,
-            maxWidth: 620,
-            margin: 0,
-          }}
-        >
-          wristkit is a CLI tool and component library. We ship code to your project — we never see
-          your data, your Supabase credentials, or your users. The iOS Shortcut posts directly to
-          your own endpoint. We have zero access to anything.
+        <p className="t-body-md t-secondary" style={{ maxWidth: 540, lineHeight: 1.65, margin: 0 }}>
+          Install the CLI, wire up the API route and set the Apple Shortcut to run once a day.
+          Snapshots land in your Supabase and your React renders them.
         </p>
-        <div
-          style={{
-            marginTop: 24,
-            display: "flex",
-            gap: 32,
-            fontFamily: "var(--font-mono)",
-            fontSize: 11,
-          }}
-        >
-          {[
-            { icon: "●", color: C.exercise, text: "No analytics SDK" },
-            { icon: "●", color: C.exercise, text: "No server-side logging" },
-            { icon: "●", color: C.exercise, text: "No third-party cloud" },
-            { icon: "●", color: C.exercise, text: "BYO Supabase" },
-          ].map((item) => (
-            <span
-              key={item.text}
-              style={{ display: "flex", alignItems: "center", gap: 8, color: C.muted }}
-            >
-              <span style={{ color: item.color, fontSize: 8 }}>{item.icon}</span>
-              {item.text}
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* ─── Dev section ─── */}
-      <div style={{ marginBottom: 22 }}>
-        <span
-          style={{
-            display: "inline-flex",
-            alignItems: "center",
-            gap: 8,
-            color: C.move,
-            fontSize: 10,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-          }}
-        >
-          ⎯⎯ for developers
-        </span>
-        <h2
-          style={{
-            fontFamily: "var(--font-serif)",
-            fontSize: 32,
-            fontWeight: 500,
-            margin: "6px 0 0",
-            letterSpacing: "-0.02em",
-          }}
-        >
-          Three commands. <span style={{ color: C.muted }}>One evening.</span>
-        </h2>
       </div>
       <div
         style={{
           display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) minmax(0, 1fr)",
-          gap: 22,
-          marginBottom: 80,
+          gridTemplateColumns: "minmax(0, 1fr) 360px",
+          gap: 24,
         }}
       >
-        <InstallCard />
-        <EnvCard />
-      </div>
-
-      {/* ─── How it works ─── */}
-      <div style={{ marginBottom: 56 }}>
         <div
           style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: 11,
-            color: C.muted,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            marginBottom: 12,
-          }}
-        >
-          ⎯⎯ how it works
-        </div>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, minmax(0, 1fr))",
-            gap: 0,
-            border: `1px solid ${C.border}`,
-            borderRadius: 14,
+            borderRadius: "var(--radius-md)",
+            border: "1px solid var(--border-subtle)",
+            background: "var(--bg-surface)",
             overflow: "hidden",
           }}
         >
-          {[
-            {
-              n: "01",
-              title: "npx wristkit init",
-              body: "Detects your Next.js app, prompts for theme, writes components.json and .env.local.example.",
-            },
-            {
-              n: "02",
-              title: "Run the SQL",
-              body: "Copy the migration block into your Supabase SQL editor. One table, two indexes, done.",
-            },
-            {
-              n: "03",
-              title: "Import the Shortcut",
-              body: "Open the wristkit shortcut link on iPhone. Edit two fields: your URL and API key.",
-            },
-            {
-              n: "04",
-              title: "Add a component",
-              body: "npx wristkit add today-activity-card — files land in your project, import and render.",
-            },
-          ].map((step, i) => (
-            <div
-              key={step.n}
-              className="wk-step"
-              style={{
-                padding: "28px 24px",
-                borderLeft: i === 0 ? "none" : `1px dashed ${C.border}`,
-                background: "#0b0b0b",
-              }}
-            >
-              <div
-                className="wk-step-num"
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 11,
-                  color: C.mutedSoft,
-                  marginBottom: 12,
-                }}
-              >
-                {step.n}
-              </div>
-              <div
-                className="wk-step-title"
-                style={{
-                  fontFamily: "var(--font-mono)",
-                  fontSize: 12,
-                  color: C.exercise,
-                  marginBottom: 10,
-                  transition: "color 0.18s ease",
-                }}
-              >
-                {step.title}
-              </div>
-              <div
-                style={{
-                  fontFamily: "var(--font-serif)",
-                  fontSize: 14,
-                  color: C.muted,
-                  lineHeight: 1.55,
-                }}
-              >
-                {step.body}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* ─── CTA ─── */}
-      <div
-        style={{
-          textAlign: "center",
-          padding: "64px 0",
-          borderTop: `1px dashed ${C.border}`,
-          borderBottom: `1px dashed ${C.border}`,
-          marginBottom: 48,
-        }}
-      >
-        <h2
-          style={{
-            fontFamily: "var(--font-serif)",
-            fontSize: 56,
-            fontWeight: 500,
-            margin: "0 0 24px",
-            letterSpacing: "-0.03em",
-          }}
-        >
-          Ship your health dashboard{" "}
-          <span style={{ color: C.muted, fontStyle: "italic" }}>today.</span>
-        </h2>
-        <code
-          className="wk-cmd"
-          style={{
-            display: "inline-block",
-            fontFamily: "var(--font-mono)",
-            fontSize: 18,
-            background: C.text,
-            color: C.bg,
-            padding: "16px 28px",
-            borderRadius: 10,
-            userSelect: "all",
-            cursor: "text",
-          }}
-        >
-          $ npx wristkit init
-        </code>
-        <div style={{ marginTop: 16 }}>
-          <Link
-            href="/docs"
-            className="wk-cta-link"
+          <div
             style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 12,
+              padding: "8px 16px",
+              borderBottom: "1px solid var(--border-subtle)",
+              background: "var(--bg-chrome)",
               fontFamily: "var(--font-mono)",
-              fontSize: 12,
-              color: C.muted,
-              textDecoration: "none",
-              letterSpacing: "0.06em",
+              fontSize: 11,
+              color: "var(--fg-secondary)",
             }}
           >
-            or read the docs first →
+            <div aria-hidden style={{ display: "flex", gap: 6 }}>
+              <span
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: "50%",
+                  background: "var(--status-error)",
+                  opacity: 0.6,
+                }}
+              />
+              <span
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: "50%",
+                  background: "var(--status-warning)",
+                  opacity: 0.6,
+                }}
+              />
+              <span
+                style={{
+                  width: 10,
+                  height: 10,
+                  borderRadius: "50%",
+                  background: "var(--status-success)",
+                  opacity: 0.6,
+                }}
+              />
+            </div>
+            <span style={{ color: "var(--fg-muted)" }}>terminal · zsh</span>
+            <span style={{ marginLeft: "auto", color: "var(--fg-muted)" }}>~/your-portfolio</span>
+            <span
+              style={{
+                textTransform: "uppercase",
+                letterSpacing: "0.08em",
+                color: "var(--fg-brand)",
+                fontSize: 10,
+              }}
+            >
+              bash
+            </span>
+          </div>
+          <div
+            style={{
+              padding: 24,
+              display: "flex",
+              flexDirection: "column",
+              gap: 16,
+              fontFamily: "var(--font-mono)",
+              fontSize: 13,
+              lineHeight: 1.6,
+            }}
+          >
+            {INSTALL_STEPS.map((s) => (
+              <div key={s.n} style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <span style={{ color: "var(--fg-muted)", fontSize: 11, width: 20 }}>{s.n}</span>
+                  <span style={{ color: "var(--fg-secondary)" }}>
+                    <span style={{ color: "var(--fg-brand)" }}>$</span> {s.cmd}
+                  </span>
+                </div>
+                {s.out && (
+                  <div
+                    style={{
+                      paddingLeft: 32,
+                      fontSize: 11,
+                      color: "var(--fg-muted)",
+                    }}
+                  >
+                    → {s.out}
+                  </div>
+                )}
+              </div>
+            ))}
+            <div
+              style={{
+                paddingLeft: 32,
+                display: "flex",
+                alignItems: "center",
+                gap: 8,
+                fontSize: 11,
+              }}
+            >
+              <span
+                aria-hidden
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: "50%",
+                  background: "var(--status-success)",
+                }}
+              />
+              <span style={{ color: "var(--status-success-fg)" }}>synced</span>
+              <span style={{ color: "var(--fg-muted)" }}>
+                {"// first snapshot arrived 21:14:08"}
+              </span>
+            </div>
+          </div>
+        </div>
+        <Card>
+          <CardHeader>
+            <CardLabel>environment</CardLabel>
+            <Badge variant="soft" color="success" dot>
+              {ENV_VARS.length} / {ENV_VARS.length}
+            </Badge>
+          </CardHeader>
+          <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            {ENV_VARS.map((e, i) => (
+              <div
+                key={e.k}
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  fontFamily: "var(--font-mono)",
+                  fontSize: 12,
+                  paddingTop: i ? 12 : 0,
+                  borderTop: i ? "1px solid var(--border-subtle)" : "none",
+                }}
+              >
+                <span style={{ color: "var(--fg-secondary)" }}>{e.k}</span>
+                <span
+                  style={{
+                    color: "var(--status-success-fg)",
+                    display: "inline-flex",
+                    alignItems: "center",
+                    gap: 6,
+                  }}
+                >
+                  <span
+                    aria-hidden
+                    style={{
+                      width: 6,
+                      height: 6,
+                      borderRadius: "50%",
+                      background: "var(--status-success)",
+                    }}
+                  />
+                  {e.v}
+                </span>
+              </div>
+            ))}
+          </div>
+          <CardFooter>
+            <CardComment>loaded from .env.local</CardComment>
+            <Link href="/docs/installation" style={{ color: "var(--fg-brand)" }}>
+              docs ↗
+            </Link>
+          </CardFooter>
+        </Card>
+      </div>
+    </section>
+  );
+}
+
+// ─── CTA ─────────────────────────────────────────────────────
+function CtaStrip() {
+  return (
+    <section className="container bt-subtle" style={{ paddingTop: 80, paddingBottom: 80 }}>
+      <div
+        style={{
+          position: "relative",
+          padding: "64px 48px",
+          textAlign: "center",
+          background: "radial-gradient(ellipse at top, var(--bg-surface-brand), transparent 60%)",
+          border: "1px solid var(--border-subtle)",
+          borderRadius: "var(--radius-xl)",
+        }}
+      >
+        <div
+          className="t-mono-xs t-brand"
+          style={{ textTransform: "uppercase", letterSpacing: "0.08em" }}
+        >
+          · own your data
+        </div>
+        <h2 className="t-display-lg" style={{ margin: "24px 0", fontWeight: 400 }}>
+          Start <em className="t-italic">shipping.</em>
+        </h2>
+        <p
+          className="t-body-md t-secondary"
+          style={{ maxWidth: 460, margin: "0 auto 32px", lineHeight: 1.65 }}
+        >
+          Your iPhone is already counting. Pipe it into your portfolio in one evening. Zero
+          telemetry, your own Supabase and MIT.
+        </p>
+        <div
+          style={{
+            display: "flex",
+            gap: 12,
+            justifyContent: "center",
+            flexWrap: "wrap",
+          }}
+        >
+          <Button variant="command" size="lg">
+            npx wristkit init
+          </Button>
+          <Link href="/docs" className={buttonVariants({ variant: "secondary", size: "lg" })}>
+            read the docs
           </Link>
         </div>
       </div>
+    </section>
+  );
+}
 
-      {/* ─── Footer ─── */}
+// ─── Footer ──────────────────────────────────────────────────
+const FOOTER_GROUPS = [
+  {
+    title: "Registry",
+    items: [
+      { label: "TodayActivityCard", href: "/docs/components/today-activity-card" },
+      { label: "Route handler", href: "/docs/installation" },
+      { label: "iOS Shortcut", href: "/docs/shortcut-setup" },
+    ],
+  },
+  {
+    title: "Resources",
+    items: [
+      { label: "GitHub ↗", href: "https://github.com/imnotannamaria/wristkit", external: true },
+      { label: "npm ↗", href: "https://www.npmjs.com/package/wristkit", external: true },
+      { label: "Docs", href: "/docs" },
+    ],
+  },
+  {
+    title: "Author",
+    items: [
+      { label: "Anna Maria", href: "https://github.com/imnotannamaria", external: true },
+      { label: "annamaria.app ↗", href: "https://annamaria.app", external: true },
+      {
+        label: "MIT",
+        href: "https://github.com/imnotannamaria/wristkit/blob/main/LICENSE",
+        external: true,
+      },
+    ],
+  },
+];
+
+function SiteFooter() {
+  return (
+    <footer className="bt-subtle" style={{ marginTop: 64, paddingBottom: 64 }}>
       <div
+        className="container"
         style={{
+          paddingTop: 64,
+          display: "grid",
+          gridTemplateColumns: "1fr auto auto auto",
+          gap: 48,
+        }}
+      >
+        <div>
+          <div style={{ display: "inline-flex", alignItems: "center", gap: 10 }}>
+            <WristKitMark size={22} />
+            <span
+              style={{
+                fontFamily: "var(--font-serif)",
+                fontSize: 18,
+                color: "var(--fg-primary)",
+              }}
+            >
+              wristkit<span style={{ color: "var(--fg-brand)" }}>.</span>
+            </span>
+          </div>
+          <p
+            style={{
+              fontFamily: "var(--font-sans)",
+              fontSize: 13,
+              color: "var(--fg-muted)",
+              maxWidth: 320,
+              lineHeight: 1.6,
+              marginTop: 16,
+            }}
+          >
+            A small CLI for piping Apple Health into the web. Open source, MIT and zero telemetry.
+            You bring the Supabase.
+          </p>
+        </div>
+        {FOOTER_GROUPS.map((group) => (
+          <div key={group.title} style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+            <h4
+              style={{
+                fontFamily: "var(--font-mono)",
+                fontSize: 10,
+                textTransform: "uppercase",
+                letterSpacing: "0.12em",
+                color: "var(--fg-muted)",
+                margin: 0,
+              }}
+            >
+              {group.title}
+            </h4>
+            <ul
+              style={{
+                listStyle: "none",
+                padding: 0,
+                margin: 0,
+                display: "flex",
+                flexDirection: "column",
+                gap: 8,
+              }}
+            >
+              {group.items.map((item) => (
+                <li key={item.label}>
+                  {item.external ? (
+                    <a
+                      href={item.href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: 12,
+                        color: "var(--fg-secondary)",
+                      }}
+                    >
+                      {item.label}
+                    </a>
+                  ) : (
+                    <Link
+                      href={item.href}
+                      style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: 12,
+                        color: "var(--fg-secondary)",
+                      }}
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </div>
+        ))}
+      </div>
+      <div
+        className="container"
+        style={{
+          marginTop: 48,
+          paddingTop: 24,
+          borderTop: "1px solid var(--border-subtle)",
           display: "flex",
           justifyContent: "space-between",
           fontFamily: "var(--font-mono)",
-          fontSize: 11,
-          color: C.muted,
+          fontSize: 10,
+          color: "var(--fg-muted)",
         }}
       >
-        <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <WristKitMark size={14} />
-          wristkit · open-source · MIT
-        </span>
-        <span>v0.1.0 · zero telemetry ✓</span>
+        <span>v0.1.0 · 2026</span>
+        <span>built with entrepta · ivy</span>
       </div>
-    </div>
+    </footer>
   );
 }
