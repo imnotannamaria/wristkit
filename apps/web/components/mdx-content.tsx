@@ -1,5 +1,14 @@
 "use client";
 
+import {
+  TodayActivityCardDemo,
+  TodayActivityCardEmpty,
+  TodayActivityCardError,
+  TodayActivityCardLoading,
+  TodayActivityCardPartial,
+  TodayActivityCardRingsOnly,
+  TodayActivityCardStale,
+} from "@/components/cards/today-activity-card-demo";
 import { CodeBlock } from "@/components/entrepta/code-block";
 import { useMemo } from "react";
 import type React from "react";
@@ -240,6 +249,14 @@ const customComponents = {
       }}
     />
   ),
+
+  TodayActivityCardDemo,
+  TodayActivityCardEmpty,
+  TodayActivityCardLoading,
+  TodayActivityCardStale,
+  TodayActivityCardError,
+  TodayActivityCardPartial,
+  TodayActivityCardRingsOnly,
 };
 
 export function MdxContent({ code }: { code: string }) {

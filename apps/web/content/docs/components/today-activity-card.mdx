@@ -1,6 +1,6 @@
 ---
 title: TodayActivityCard
-description: Shows today's Move, Exercise and Steps rings with five graceful states.
+description: Shows today's Move, Exercise and Steps rings, with every state covered.
 ---
 
 ## Overview
@@ -45,31 +45,49 @@ type Props = {
 
 ## States
 
-The component covers the full five state contract. For the reasoning behind it, see [Component states](/docs/concepts/component-states).
+The component covers every state below. For the reasoning behind the contract, see [Component states](/docs/concepts/component-states).
+
+### `ok`
+
+All three metrics arrived for today. Full rings, real numbers and a `synced` status.
+
+<TodayActivityCardDemo />
 
 ### `loading`
 
 First fetch is in flight. The rings pulse and the metric values show as shimmering skeletons. The footer shows that the request is in progress.
 
+<TodayActivityCardLoading />
+
 ### `empty`
 
 Nothing has been synced yet. The ring tracks are dotted. Values show as `—`. The footer invites the user to install the Shortcut.
+
+<TodayActivityCardEmpty />
 
 ### `partial`
 
 Some metrics are missing, for example because a Health permission was revoked. The metrics that came through render normally. The missing one shows a dotted ring, plus a small hint that says which metric and why.
 
+<TodayActivityCardPartial />
+
 ### `stale`
 
 Data exists but it is older than 24 hours. Numbers are a bit washed out, the status pill shows `stale · Nh` and the footer offers a retry link.
+
+<TodayActivityCardStale />
 
 ### `error`
 
 Something went wrong during sync. The ring area turns into a small diagnostic block with the error code, the endpoint and the timestamp. A short italic sentence translates the technical detail into plain language.
 
-### `ok`
+<TodayActivityCardError />
 
-All three metrics arrived for today. Full rings, real numbers and a `synced` status.
+### Rings only
+
+A compact variant with no card chrome. Handy for a hero block or a small status corner.
+
+<TodayActivityCardRingsOnly />
 
 ## Customization
 
@@ -77,9 +95,9 @@ The component reads theme tokens from CSS variables. You can override them in yo
 
 ```css
 :root {
-  --wristkit-move: #9d80ff;
-  --wristkit-exercise: #67e8c0;
-  --wristkit-steps: #f5a623;
+  --ring-move: #9d80ff;
+  --ring-exercise: #67e8c0;
+  --ring-steps: #f5a623;
 }
 ```
 
