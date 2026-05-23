@@ -12,9 +12,9 @@ import {
 } from "@/components/entrepta/card";
 import { Skeleton } from "@/components/entrepta/skeleton";
 
-const MOVE = "var(--fg-brand)";
-const EXERCISE = "var(--status-success)";
-const STEPS = "var(--status-warning)";
+const MOVE = "var(--ring-move)";
+const EXERCISE = "var(--ring-exercise)";
+const STEPS = "var(--ring-steps)";
 
 type RingState = "on" | "off" | "mute" | "pulse" | "err";
 

@@ -19,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const doc = getDoc(slug);
   if (!doc) return {};
   return {
-    title: `${doc.title} — wristkit docs`,
+    title: `${doc.title} · wristkit docs`,
     description: doc.description,
   };
 }

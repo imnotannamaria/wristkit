@@ -1,9 +1,9 @@
 import { BigNumber, DottedRule, Label, Panel, PanelFooter, PanelHeader } from "@/components/ds";
 
 const C = {
-  move: "var(--fg-brand)",
-  exercise: "var(--status-success)",
-  steps: "var(--status-warning)",
+  move: "var(--ring-move)",
+  exercise: "var(--ring-exercise)",
+  steps: "var(--ring-steps)",
   sleep: "var(--status-info)",
   hrv: "var(--status-error)",
   muted: "var(--fg-muted)",

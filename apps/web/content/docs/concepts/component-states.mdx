@@ -1,11 +1,11 @@
 ---
 title: Component states
-description: Every wristkit component implements a five-state contract. Here's why.
+description: Every wristkit component handles a five state contract. Here is why.
 ---
 
 ## The contract
 
-Every component in the registry must handle these states:
+Every component in the registry has to handle these states:
 
 ```ts
 type ComponentState =
@@ -17,21 +17,21 @@ type ComponentState =
   | { kind: "ok"; data: T };
 ```
 
-This isn't optional. The five-state contract is what makes wristkit components feel polished rather than janky. Real data is intermittent — the user revokes a Health permission, the Shortcut automation pauses, the Supabase connection drops. Components that only handle the `ok` state silently break.
+This is not optional. The five state contract is what makes wristkit feel polished instead of janky. Real data is messy. A user revokes a Health permission, the Shortcut automation pauses, the Supabase connection drops. Components that only handle the `ok` state break in silence.
 
 ## Design principles
 
-**No new vocabulary.** Each state uses the same Panel grammar — dotted rules, mono labels, `//` footer notes, status pill. The card doesn't break character when data is missing.
+**No new vocabulary.** Every state uses the same Panel grammar: dotted rules, mono labels, `//` footer notes, status pill. The card does not break character when data is missing.
 
-**No generic error UI.** "Oops, something went wrong" is not acceptable. The error state shows a server-log-style block with the actual code, endpoint, and timestamp. An italic serif sentence translates the technical detail into plain language.
+**No generic error UI.** "Oops, something went wrong" is not enough. The error state shows a server log style block with the actual code, endpoint and timestamp. A short italic serif sentence translates the technical detail into plain language.
 
-**Numbers vs nothing.** The stale state desaturates existing numbers to signal "old" rather than hiding them. The empty and error states use `—` (em dash) rather than `0` or blank — a zero would suggest the user burned zero calories, which is false.
+**Numbers or nothing.** The stale state washes out the existing numbers to say "old", instead of hiding them. The empty and error states use `—` rather than `0` or a blank, because a zero would suggest the user burned zero calories, which is not true.
 
-**Actions in the footer.** Recovery copy lives in the footer where users already look for context. The empty state offers "install shortcut →". The stale state offers "retry →". No modals, no full-screen takeovers.
+**Actions in the footer.** Recovery copy lives in the footer, where users already look for context. The empty state offers "install shortcut →". The stale state offers "retry →". No modals, no full screen takeovers.
 
 ## State resolution
 
-`loadTodayActivity()` (and every `load` function we ship) resolves the state for you:
+`loadTodayActivity()` (and every `load` function we ship) figures out the state for you:
 
 ```ts
 export async function loadTodayActivity(): Promise<TodayState> {
@@ -58,4 +58,4 @@ export async function loadTodayActivity(): Promise<TodayState> {
 }
 ```
 
-The component is a pure renderer. It receives `state` as a prop and renders the correct UI. It never fetches. This separation makes testing trivial and makes the component reusable across server and client boundaries.
+The component is a pure renderer. It gets `state` as a prop and renders the matching UI. It never fetches. This split makes testing easy and lets the component live on both the server and the client side.

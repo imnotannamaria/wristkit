@@ -1,6 +1,6 @@
 ---
 title: iOS Shortcut setup
-description: Install the wristkit Shortcut on your iPhone to sync Apple Health data.
+description: Install the wristkit Shortcut on your iPhone and start syncing your Apple Health data.
 ---
 
 ## Download the Shortcut
@@ -11,42 +11,42 @@ Open this link **on your iPhone**:
 https://wristkit-web.vercel.app/shortcut
 ```
 
-Tap **Add Shortcut** when prompted.
+Tap **Add Shortcut** when the prompt shows up.
 
 ## Configure the Shortcut
 
-After adding it, open the Shortcut and edit two values:
+After it is added, open the Shortcut and edit two fields:
 
-**URL** — your Next.js app's healthkit endpoint:
+**URL**, the healthkit endpoint of your Next.js app:
 ```
 https://your-site.com/api/healthkit
 ```
 
-**API Key** — the value you set as `WRISTKIT_API_KEY` in your `.env.local`.
+**API Key**, the same value you put in `WRISTKIT_API_KEY` in your `.env.local`.
 
 ## Test it
 
-Run the Shortcut manually once. It will:
+Run the Shortcut once by hand. It will:
 
-1. Read Active Energy, Exercise Minutes, and Step Count from Apple Health for today
+1. Read Active Energy, Exercise Minutes and Step Count from Apple Health for today
 2. POST a JSON payload to your `/api/healthkit` endpoint
-3. Show a success/failure notification
+3. Show a success or failure notification on your phone
 
-If it succeeds, you should see data in your Supabase `wristkit_samples` table within seconds.
+If it works, you should see new rows in your Supabase `wristkit_samples` table within a few seconds.
 
 ## Set up automation
 
-For automatic daily syncs, create an iOS Automation:
+To sync every day on its own, create an iOS Automation:
 
-1. Open **Shortcuts** app → **Automation** tab
-2. Tap **+** → **Time of Day**
-3. Set time to **23:59** daily
-4. Add action: **Run Shortcut** → select **wristkit Sync**
-5. Toggle off "Ask Before Running"
+1. Open the **Shortcuts** app and go to the **Automation** tab
+2. Tap **+**, then **Time of Day**
+3. Set the time to **23:59** every day
+4. Add the action **Run Shortcut** and pick **wristkit Sync**
+5. Turn off "Ask Before Running"
 
 ## Payload format
 
-The Shortcut sends:
+The Shortcut sends something like this:
 
 ```json
 {
@@ -60,8 +60,8 @@ The Shortcut sends:
 
 ## Troubleshooting
 
-**401 Unauthorized** — your API key doesn't match `WRISTKIT_API_KEY`. Double-check both values.
+**401 Unauthorized**: your API key does not match `WRISTKIT_API_KEY`. Double check both values.
 
-**Network error** — make sure your site is publicly accessible, not just on localhost.
+**Network error**: make sure your site is reachable from the public internet, not only on localhost.
 
-**No data in components** — check the Supabase table has rows. The `TodayActivityCard` queries for today's data (midnight to now in your server's timezone).
+**No data in components**: check that the Supabase table actually has rows. `TodayActivityCard` looks for today's data, from midnight to now in your server's timezone.

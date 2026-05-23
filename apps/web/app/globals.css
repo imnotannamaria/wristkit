@@ -79,6 +79,11 @@
   --status-error: var(--rose-500);
   --status-info: var(--indigo-400);
 
+  /* activity rings — fixed across themes (entrepta violet · emerald · amber) */
+  --ring-move: var(--violet-500);
+  --ring-exercise: var(--emerald-500);
+  --ring-steps: var(--amber-500);
+
   /* status — soft (translucent bg + lighter fg, for badge/toast soft variants) */
   --status-success-fg: var(--emerald-400);
   --status-warning-fg: var(--amber-400);

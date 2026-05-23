@@ -226,9 +226,9 @@ function HeroSection() {
           style={{ marginTop: 28, maxWidth: 540, lineHeight: 1.65 }}
         >
           <strong style={{ color: "var(--fg-primary)", fontWeight: 500 }}>wristkit</strong> is a
-          shadcn-style CLI that drops production-ready React components for visualizing Apple Health
-          data into any Next.js project. You bring your own Supabase. The iOS Shortcut posts
-          straight to your endpoint — no third-party cloud, no SDK.
+          small CLI that drops ready to use React components into your Next.js project, so you can
+          show your Apple Health data on the web. You bring your own Supabase. The iOS Shortcut
+          posts straight to your endpoint, with no third party cloud and no SDK in the middle.
         </p>
         <div
           style={{
@@ -342,21 +342,21 @@ const REGISTRY_ITEMS = [
     label: "components/wristkit",
     num: "01",
     title: "TodayActivityCard",
-    desc: "React Server Component with all 7 states (loading, empty, stale, partial, error, ok, rings-only). Drop into any /app page.",
+    desc: "A React Server Component with all 7 states (loading, empty, stale, partial, error, ok and rings only). Drop it into any /app page.",
     tag: "<TodayActivityCard state={state} />",
   },
   {
     label: "app/api/healthkit",
     num: "02",
     title: "Route handler",
-    desc: "POST endpoint that validates the x-api-key, parses the Shortcut payload with Zod, and writes to your Supabase via Drizzle.",
+    desc: "A POST endpoint that checks the x-api-key, parses the Shortcut payload with Zod and writes to your Supabase through Drizzle.",
     tag: "export async function POST(req)",
   },
   {
     label: "shortcuts/wristkit",
     num: "03",
     title: "iOS Shortcut",
-    desc: "Reads Active Energy, Exercise Minutes, Steps from HealthKit. Schedules to fire daily at 23:59 via iOS Automation.",
+    desc: "Reads Active Energy, Exercise Minutes and Steps from HealthKit. You can schedule it to run every day at 23:59 with iOS Automation.",
     tag: "wristkit-sync.shortcut",
   },
 ];
@@ -469,8 +469,8 @@ function InstallSection() {
           <span className="t-muted">You own the pipeline.</span>
         </h2>
         <p className="t-body-md t-secondary" style={{ maxWidth: 540, lineHeight: 1.65, margin: 0 }}>
-          Install the CLI. Wire the API route. Schedule the Apple Shortcut to fire once a day.
-          Snapshots land in your Supabase, your React renders them.
+          Install the CLI, wire up the API route and set the Apple Shortcut to run once a day.
+          Snapshots land in your Supabase and your React renders them.
         </p>
       </div>
       <div
@@ -683,7 +683,7 @@ function CtaStrip() {
           style={{ maxWidth: 460, margin: "0 auto 32px", lineHeight: 1.65 }}
         >
           Your iPhone is already counting. Pipe it into your portfolio in one evening. Zero
-          telemetry, BYO Supabase, MIT.
+          telemetry, your own Supabase and MIT.
         </p>
         <div
           style={{
@@ -772,8 +772,8 @@ function SiteFooter() {
               marginTop: 16,
             }}
           >
-            A shadcn-style CLI for piping Apple Health into the web. Open source, MIT, zero
-            telemetry. You bring the Supabase.
+            A small CLI for piping Apple Health into the web. Open source, MIT and zero telemetry.
+            You bring the Supabase.
           </p>
         </div>
         {FOOTER_GROUPS.map((group) => (
