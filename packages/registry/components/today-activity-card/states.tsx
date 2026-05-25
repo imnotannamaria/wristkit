@@ -2,14 +2,8 @@ import type * as React from "react";
 import type { Metric } from "../../lib/validation";
 import type { TodayData } from "./load";
 
-function pad2(n: number): string {
-  return String(n).padStart(2, "0");
-}
-
-function formatLastSync(d: Date): string {
-  return `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
-}
-
+// Entrepta palette. Kept as literal hex so the component is portable
+// (no CSS variables required in the host project).
 const colors = {
   bg: "#0b0b0f",
   panel: "rgba(255,255,255,0.03)",
@@ -17,11 +11,11 @@ const colors = {
   text: "rgba(255,255,255,0.88)",
   muted: "rgba(255,255,255,0.55)",
   subtle: "rgba(255,255,255,0.70)",
-  move: "#ff2d55",
-  exercise: "#32d74b",
-  steps: "#5ac8fa",
-  warn: "#ff9f0a",
-  danger: "#ff453a",
+  move: "#7c6bff", // violet
+  exercise: "#10b981", // emerald
+  steps: "#f59e0b", // amber
+  warn: "#f59e0b",
+  danger: "#f43f5e",
 };
 
 function clamp01(x: number): number {
@@ -314,16 +308,14 @@ export function TodayActivityCardError({
 
 export function TodayActivityCardStale({
   data,
-  lastSync,
   className,
 }: {
   data: TodayData;
-  lastSync: Date;
   className?: string;
 }) {
   const cx = 72;
   const cy = 72;
-  const hoursAgo = Math.max(1, Math.round((Date.now() - lastSync.getTime()) / (60 * 60 * 1000)));
+  const hoursAgo = data.hoursSinceSync;
   return (
     <Panel className={className}>
       <Header status="stale" statusColor={colors.warn} />
@@ -475,10 +467,7 @@ export function TodayActivityCardPartial({
           <MetricRow dot={colors.steps} label="Steps" value={Math.round(data.steps)} />
         </div>
       </div>
-      <Footer
-        left={`// missing: ${missingText}`}
-        right={`synced ${formatLastSync(data.lastSync)}`}
-      />
+      <Footer left={`// missing: ${missingText}`} right={`synced ${data.lastSyncLabel}`} />
     </Panel>
   );
 }
@@ -546,7 +535,7 @@ export function TodayActivityCardOk({ data, className }: { data: TodayData; clas
           <MetricRow dot={colors.steps} label="Steps" value={Math.round(data.steps)} />
         </div>
       </div>
-      <Footer left="// up to date" right={`synced ${formatLastSync(data.lastSync)}`} />
+      <Footer left="// up to date" right={`synced ${data.lastSyncLabel}`} />
     </Panel>
   );
 }

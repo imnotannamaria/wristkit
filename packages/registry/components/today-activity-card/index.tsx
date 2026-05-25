@@ -28,9 +28,7 @@ export function TodayActivityCard({
     case "error":
       return <TodayActivityCardError className={className} message={state.message} />;
     case "stale":
-      return (
-        <TodayActivityCardStale className={className} data={state.data} lastSync={state.lastSync} />
-      );
+      return <TodayActivityCardStale className={className} data={state.data} />;
     case "partial":
       return (
         <TodayActivityCardPartial className={className} data={state.data} missing={state.missing} />
