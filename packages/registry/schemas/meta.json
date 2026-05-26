@@ -1,17 +1,22 @@
 {
-  "name": "healthkit-schema",
+  "name": "wristkit-schema",
   "type": "schema",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Postgres schema for wristkit Apple Health samples.",
   "files": [
     {
-      "path": "lib/wristkit/schema.sql",
+      "path": "lib/wristkit/schemas/0001_initial.sql",
       "source": "./0001_initial.sql",
+      "overwrite": false
+    },
+    {
+      "path": "lib/wristkit/schemas/0002_dedupe.sql",
+      "source": "./0002_dedupe.sql",
       "overwrite": false
     }
   ],
   "postInstall": {
-    "message": "Run the SQL migration in Supabase to create wristkit_samples.",
-    "sql": ["0001_initial.sql"]
+    "message": "Run 0001_initial.sql and then 0002_dedupe.sql in Supabase to create wristkit_samples and protect against duplicate Shortcut posts.",
+    "sql": ["0001_initial.sql", "0002_dedupe.sql"]
   }
 }
