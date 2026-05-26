@@ -135,11 +135,23 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
               {children}
             </div>
           ) : (
-            <pre className="p-4 m-0 font-mono text-[13px] leading-relaxed text-[var(--fg-secondary)] whitespace-pre">
+            <pre
+              aria-label={
+                filename
+                  ? `${language ?? "code"} sample for ${filename}`
+                  : `${language ?? "code"} sample`
+              }
+              className="p-4 m-0 font-mono text-[13px] leading-relaxed text-[var(--fg-secondary)] whitespace-pre"
+            >
               <code>{code}</code>
             </pre>
           )}
         </div>
+        {/* Polite announcement so the copy state is read by screen readers
+            without stealing keyboard focus. */}
+        <span aria-live="polite" className="sr-only">
+          {copied ? "Copied to clipboard" : ""}
+        </span>
       </div>
     );
   },

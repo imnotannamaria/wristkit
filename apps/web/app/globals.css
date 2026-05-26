@@ -285,6 +285,31 @@
 }
 
 /* ============================================================
+   SKIP LINK — hidden until keyboard-focused
+   ============================================================ */
+
+.skip-link {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 100;
+  padding: 8px 14px;
+  background: var(--fg-brand);
+  color: var(--bg-canvas);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  border-radius: var(--radius-sm);
+  transform: translateY(-200%);
+  transition: transform 120ms ease-out;
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+/* ============================================================
    FOCUS VISIBLE (global ring)
    ============================================================ */
 
@@ -293,31 +318,23 @@
   outline-offset: 2px;
 }
 
-/* form fields, buttons, and menu items manage their own focus state */
-input:focus,
-input:focus-visible,
-textarea:focus,
-textarea:focus-visible,
-select:focus,
-select:focus-visible,
-button:focus,
-button:focus-visible,
-[role="button"]:focus,
-[role="button"]:focus-visible,
-[role="menuitem"]:focus,
-[role="menuitem"]:focus-visible,
-[role="menuitemcheckbox"]:focus,
-[role="menuitemcheckbox"]:focus-visible,
-[role="menuitemradio"]:focus,
-[role="menuitemradio"]:focus-visible,
-[role="option"]:focus,
-[role="option"]:focus-visible,
-[role="tab"]:focus,
-[role="tab"]:focus-visible,
-[cmdk-item]:focus,
-[cmdk-item]:focus-visible {
-  outline: none !important;
-  outline-offset: 0 !important;
+/* Suppress the outline only for mouse focus. Keyboard focus (:focus-visible)
+   still gets the global ring above, so components that do not ship their own
+   focus styling stay reachable. Components that DO style focus-visible
+   (Button, Tabs, code-block copy, etc.) use focus-visible:outline-none to
+   override that ring with their own indicator. */
+input:focus:not(:focus-visible),
+textarea:focus:not(:focus-visible),
+select:focus:not(:focus-visible),
+button:focus:not(:focus-visible),
+[role="button"]:focus:not(:focus-visible),
+[role="menuitem"]:focus:not(:focus-visible),
+[role="menuitemcheckbox"]:focus:not(:focus-visible),
+[role="menuitemradio"]:focus:not(:focus-visible),
+[role="option"]:focus:not(:focus-visible),
+[role="tab"]:focus:not(:focus-visible),
+[cmdk-item]:focus:not(:focus-visible) {
+  outline: none;
 }
 
 /* ============================================================

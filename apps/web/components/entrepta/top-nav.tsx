@@ -152,9 +152,12 @@ const TopNavLink = React.forwardRef<HTMLAnchorElement, TopNavLinkProps>(
           <>
             {children}
             {external && (
-              <span aria-hidden className="text-[var(--fg-muted)]">
-                ↗
-              </span>
+              <>
+                <span aria-hidden className="text-[var(--fg-muted)]">
+                  ↗
+                </span>
+                <span className="sr-only"> (opens in new tab)</span>
+              </>
             )}
           </>
         )}

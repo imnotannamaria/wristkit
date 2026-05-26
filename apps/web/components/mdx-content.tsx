@@ -45,12 +45,14 @@ function MdxPre({ children, ...props }: React.HTMLAttributes<HTMLPreElement>) {
 }
 
 const customComponents = {
+  // Remap MDX `h1` to `h2`. The page header already renders an `<h1>` from the
+  // doc title, so any in-body `#` heading would otherwise produce two H1s.
   h1: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h1
+    <h2
       {...props}
       style={{
         fontFamily: "var(--font-serif)",
-        fontSize: 36,
+        fontSize: 28,
         fontWeight: 500,
         letterSpacing: "-0.02em",
         margin: "0 0 20px",
@@ -108,7 +110,9 @@ const customComponents = {
       {...props}
       style={{
         color: "var(--fg-brand)",
-        textDecoration: "none",
+        textDecoration: "underline",
+        textUnderlineOffset: "0.2em",
+        textDecorationThickness: "1px",
         transition: "color 150ms",
       }}
     />

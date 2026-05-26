@@ -418,7 +418,8 @@ export function TodayActivityCardEmpty() {
 // ─── C · loading ─────────────────────────────────────────────
 export function TodayActivityCardLoading() {
   return (
-    <Card>
+    // biome-ignore lint/a11y/useSemanticElements: Card is a div; role="status" is the right ARIA contract here.
+    <Card role="status" aria-live="polite" aria-label="Loading today's activity">
       <CardHeader>
         <CardLabel>today / activity.tsx</CardLabel>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>

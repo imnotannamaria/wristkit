@@ -13,20 +13,27 @@ import {
 import { TopNav, TopNavLink, TopNavMenu } from "@/components/entrepta/top-nav";
 import { HeroIdePreview } from "@/components/home/hero-ide-preview";
 import { WristKitMark } from "@/components/mark";
+import { SkipLink } from "@/components/skip-link";
 import Link from "next/link";
 
 export default function HomePage() {
   return (
     <>
+      <SkipLink />
       <HomeTopNav />
-      <main className="page" style={{ paddingTop: 88, paddingBottom: 96 }}>
+      <main
+        id="main-content"
+        tabIndex={-1}
+        className="page"
+        style={{ paddingTop: 88, paddingBottom: 96 }}
+      >
         <HeroSection />
         <ComponentShowcase />
         <PackagesSection />
         <InstallSection />
         <CtaStrip />
-        <SiteFooter />
       </main>
+      <SiteFooter />
     </>
   );
 }
@@ -34,7 +41,7 @@ export default function HomePage() {
 // ─── TopNav ───────────────────────────────────────────────────
 function HomeTopNav() {
   return (
-    <div
+    <header
       style={{
         position: "fixed",
         top: 0,
@@ -112,7 +119,7 @@ function HomeTopNav() {
           }
         />
       </div>
-    </div>
+    </header>
   );
 }
 
@@ -769,35 +776,40 @@ function SiteFooter() {
                 gap: 8,
               }}
             >
-              {group.items.map((item) => (
-                <li key={item.label}>
-                  {item.external ? (
-                    <a
-                      href={item.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        fontFamily: "var(--font-mono)",
-                        fontSize: 12,
-                        color: "var(--fg-secondary)",
-                      }}
-                    >
-                      {item.label}
-                    </a>
-                  ) : (
-                    <Link
-                      href={item.href}
-                      style={{
-                        fontFamily: "var(--font-mono)",
-                        fontSize: 12,
-                        color: "var(--fg-secondary)",
-                      }}
-                    >
-                      {item.label}
-                    </Link>
-                  )}
-                </li>
-              ))}
+              {group.items.map((item) => {
+                const cleanLabel = item.label.replace(/\s*↗\s*$/, "");
+                return (
+                  <li key={item.label}>
+                    {item.external ? (
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        style={{
+                          fontFamily: "var(--font-mono)",
+                          fontSize: 12,
+                          color: "var(--fg-secondary)",
+                        }}
+                      >
+                        {cleanLabel}
+                        <span aria-hidden> ↗</span>
+                        <span className="sr-only"> (opens in new tab)</span>
+                      </a>
+                    ) : (
+                      <Link
+                        href={item.href}
+                        style={{
+                          fontFamily: "var(--font-mono)",
+                          fontSize: 12,
+                          color: "var(--fg-secondary)",
+                        }}
+                      >
+                        {cleanLabel}
+                      </Link>
+                    )}
+                  </li>
+                );
+              })}
             </ul>
           </div>
         ))}
