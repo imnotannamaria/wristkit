@@ -10,6 +10,7 @@ import {
   TodayActivityCardStale,
 } from "@/components/cards/today-activity-card-demo";
 import { CodeBlock } from "@/components/entrepta/code-block";
+import { MdxErrorBoundary } from "@/components/mdx-error-boundary";
 import { useMemo } from "react";
 import type React from "react";
 import * as runtime from "react/jsx-runtime";
@@ -261,6 +262,10 @@ const customComponents = {
 
 export function MdxContent({ code }: { code: string }) {
   const Component = useMemo(() => {
+    // Velite compiles each MDX file into a self-contained module body. We
+    // run it once per page render via new Function so the React runtime
+    // can resolve jsx/jsxs. The source is build-time (our own MDX), not
+    // user input — never let untrusted strings reach this call.
     const fn = new Function(code);
     return fn({ ...runtime }).default as React.ComponentType<{
       components?: Record<string, React.ComponentType<unknown>>;
@@ -268,8 +273,10 @@ export function MdxContent({ code }: { code: string }) {
   }, [code]);
 
   return (
-    <Component
-      components={customComponents as unknown as Record<string, React.ComponentType<unknown>>}
-    />
+    <MdxErrorBoundary>
+      <Component
+        components={customComponents as unknown as Record<string, React.ComponentType<unknown>>}
+      />
+    </MdxErrorBoundary>
   );
 }
