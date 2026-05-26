@@ -1,5 +1,13 @@
+import { RegistryFileBundle } from "@/components/docs/registry-file-bundle";
 import { MdxContent } from "@/components/mdx-content";
 import { type Doc, docs } from "@/lib/docs";
+import {
+  HANDLER_FILES,
+  type RegistryFile,
+  SCHEMA_FILES,
+  TODAY_ACTIVITY_CARD_FILES,
+  loadRegistryFiles,
+} from "@/lib/registry-files";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -30,10 +38,41 @@ export function generateStaticParams() {
   });
 }
 
+type Bundle = { title: string; description: string; files: RegistryFile[] };
+
+async function loadBundlesForSlug(slug: string): Promise<Bundle[]> {
+  if (slug === "docs/components/today-activity-card") {
+    return [
+      {
+        title: "Files to copy",
+        description: "Drop each file in its destination path. Copy with the button on the right.",
+        files: await loadRegistryFiles(TODAY_ACTIVITY_CARD_FILES),
+      },
+    ];
+  }
+  if (slug === "docs/installation") {
+    return [
+      {
+        title: "Route handler",
+        description: "Create app/api/wristkit-sync/route.ts in your project and paste this in.",
+        files: await loadRegistryFiles(HANDLER_FILES),
+      },
+      {
+        title: "SQL migrations",
+        description: "Run these in the Supabase SQL editor, in order.",
+        files: await loadRegistryFiles(SCHEMA_FILES),
+      },
+    ];
+  }
+  return [];
+}
+
 export default async function DocPage({ params }: Props) {
   const { slug } = await params;
   const doc = getDoc(slug);
   if (!doc) notFound();
+
+  const bundles = await loadBundlesForSlug(doc.slug);
 
   return (
     <article>
@@ -70,6 +109,14 @@ export default async function DocPage({ params }: Props) {
         />
       </header>
       <MdxContent code={doc.body} />
+      {bundles.map((b) => (
+        <RegistryFileBundle
+          key={b.title}
+          title={b.title}
+          description={b.description}
+          files={b.files}
+        />
+      ))}
     </article>
   );
 }
