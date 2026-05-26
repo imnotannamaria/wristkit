@@ -5,9 +5,9 @@ description: What wristkit is, who it is for, and how it works.
 
 ## What is wristkit?
 
-wristkit is a small open source CLI and component library. It drops ready to use React components into your Next.js project so you can show your Apple Health data on the web. No backend to write, no third party SaaS, and no data leaving the infrastructure you already own.
+wristkit is a small open source library of React components. You copy the files from this site into your Next.js project so you can show your Apple Health data on the web. No backend to write, no third party SaaS, and no data leaving the infrastructure you already own.
 
-Run `npx wristkit init`, point it at your own Supabase, import the iOS Shortcut on your iPhone, and a few minutes later your Apple Watch data is showing up in your Next.js app.
+Copy the component, point it at your own Supabase, import the iOS Shortcut on your iPhone, and a few minutes later your Apple Watch data is showing up in your Next.js app.
 
 **Zero telemetry. MIT license. Single user in v1.**
 
@@ -20,23 +20,21 @@ Run `npx wristkit init`, point it at your own Supabase, import the iOS Shortcut 
 ## How it works
 
 ```
-iOS Shortcut → POST /api/healthkit → Supabase → React components
+iOS Shortcut → POST /api/wristkit-sync → Supabase → React components
 ```
 
 1. The iOS Shortcut reads your Apple Health data and posts it to your Next.js app
 2. A route handler checks the payload and writes it to your Supabase Postgres database
 3. React components read from your database and render the data
 
-wristkit never touches your data. We ship code. You run it on your own stack.
+wristkit never touches your data. The site is a catalog of files. You copy them and run them on your own stack.
 
 ## What ships in v1
 
-- `TodayActivityCard`, with Move, Exercise and Steps rings and five states
-- `wristkit init`, sets up your project
-- `wristkit add`, installs components from the registry
-- `wristkit update`, shows a diff before changing anything
-- `wristkit shortcut`, prints the iOS Shortcut setup steps
-- A hosted registry at `wristkit-web.vercel.app`
+- `TodayActivityCard` with Move, Exercise and Steps rings and every state
+- A route handler at `app/api/wristkit-sync/route.ts`
+- Two SQL migrations for Supabase
+- An iOS Shortcut file you install on your iPhone
 
 ## Stack requirements
 

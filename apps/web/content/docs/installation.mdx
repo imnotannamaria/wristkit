@@ -1,6 +1,6 @@
 ---
 title: Installation
-description: Get wristkit running in your Next.js project in less than 10 minutes.
+description: Copy the files into your Next.js project, set two env vars and run the SQL on Supabase.
 ---
 
 ## Before you start
@@ -9,84 +9,62 @@ description: Get wristkit running in your Next.js project in less than 10 minute
 - A [Supabase](https://supabase.com) project (free tier works fine)
 - Node.js 20 or newer
 
-## 1. Run init
+## 1. Install the peer dependencies
 
-Inside your Next.js project, run:
+In your project, install what the component and the handler need:
 
 ```bash
-npx wristkit init
+pnpm add drizzle-orm postgres zod
 ```
 
-This will:
-
-- Check that you are on Next.js with the App Router
-- Ask you which theme you want (`default`, `neutral` or `violet`)
-- Write `components.json` to your project root
-- Write `.env.local.example` with the variables you need
-- Print the SQL you need to run on Supabase
-- Install the peer dependencies: `drizzle-orm`, `postgres`, `zod` and `framer-motion`
+Or `npm install` / `yarn add` if that is your style. wristkit does not lock you in to a package manager.
 
 ## 2. Set your environment variables
 
-Copy `.env.local.example` to `.env.local` and fill in your values:
-
-```bash
-cp .env.local.example .env.local
-```
+Create a `.env.local` at the project root:
 
 ```
-
 WRISTKIT_DATABASE_URL=postgresql://postgres:password@db.xxx.supabase.co:5432/postgres
-WRISTKIT_API_KEY=your-secret-key-here
+WRISTKIT_API_KEY=replace-with-32-random-bytes
 ```
 
-`WRISTKIT_DATABASE_URL` is your Supabase connection string. You can find it in Project Settings, Database, Connection string, URI.
+`WRISTKIT_DATABASE_URL` is your Supabase connection string. You can find it in Project Settings, Database, Connection string, URI. Use the **pooler** URL in production so the route handler can share connections.
 
-`WRISTKIT_API_KEY` is a secret you pick yourself. The iOS Shortcut will send it in the `x-api-key` header on every POST.
-
-## 3. Run the SQL migration
-
-In your Supabase dashboard, open **SQL Editor** and run:
-
-```sql
-create table if not exists wristkit_samples (
-  id           bigserial primary key,
-  user_id      uuid,
-  metric       text not null,
-  value        numeric not null,
-  unit         text not null,
-  recorded_at  timestamptz not null,
-  source       text,
-  ingested_at  timestamptz not null default now()
-);
-
-create index if not exists idx_metric_recorded
-  on wristkit_samples (metric, recorded_at desc);
-
-create index if not exists idx_user_metric_recorded
-  on wristkit_samples (user_id, metric, recorded_at desc);
-```
-
-## 4. Add a component
+`WRISTKIT_API_KEY` is a secret you pick yourself. The iOS Shortcut sends it in the `x-api-key` header on every POST. Generate one with:
 
 ```bash
-npx wristkit add today-activity-card
+node -e 'console.log(require("crypto").randomBytes(32).toString("base64url"))'
 ```
 
-This pulls the component from the registry, installs its npm dependencies and copies the files into your project.
+## 3. Run the SQL on Supabase
 
-## 5. Use the component
+Open the **SQL Editor** in your Supabase dashboard and run both migrations below, in order. They create the table and the unique index that protects against duplicate Shortcut posts. The actual content is in the "SQL migrations" bundle further down this page (copy with the button on the right).
 
-In any Server Component:
+## 4. Copy the route handler
+
+Create `app/api/wristkit-sync/route.ts` in your project and paste the file from the bundle below. The handler:
+
+- Checks the API key with `crypto.timingSafeEqual`
+- Rate limits each IP at 30 requests every 5 minutes
+- Validates the payload with Zod
+- Inserts the samples through Drizzle
+
+## 5. Copy the component
+
+Go to [TodayActivityCard](/docs/components/today-activity-card) and copy the files listed there into `components/wristkit/today-activity-card/` and `lib/wristkit/` in your project.
+
+Then use it in a Server Component:
 
 ```tsx
 import { TodayActivityCard, loadTodayActivity } from "@/components/wristkit/today-activity-card";
 
 export default async function Page() {
-  const state = await loadTodayActivity();
+  const state = await loadTodayActivity({ tz: "America/Sao_Paulo" });
   return <TodayActivityCard state={state} />;
 }
 ```
+
+`loadTodayActivity` accepts an optional `tz` for the day boundary and optional `goals` if you want to override the defaults (600 kcal, 30 min, 8000 steps).
 
 ## 6. Set up the iOS Shortcut
 

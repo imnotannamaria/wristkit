@@ -17,9 +17,9 @@ Tap **Add Shortcut** when the prompt shows up.
 
 After it is added, open the Shortcut and edit two fields:
 
-**URL**, the healthkit endpoint of your Next.js app:
+**URL**, the sync endpoint of your Next.js app:
 ```
-https://your-site.com/api/healthkit
+https://your-site.com/api/wristkit-sync
 ```
 
 **API Key**, the same value you put in `WRISTKIT_API_KEY` in your `.env.local`.
@@ -29,7 +29,7 @@ https://your-site.com/api/healthkit
 Run the Shortcut once by hand. It will:
 
 1. Read Active Energy, Exercise Minutes and Step Count from Apple Health for today
-2. POST a JSON payload to your `/api/healthkit` endpoint
+2. POST a JSON payload to your `/api/wristkit-sync` endpoint
 3. Show a success or failure notification on your phone
 
 If it works, you should see new rows in your Supabase `wristkit_samples` table within a few seconds.
@@ -62,6 +62,8 @@ The Shortcut sends something like this:
 
 **401 Unauthorized**: your API key does not match `WRISTKIT_API_KEY`. Double check both values.
 
+**429 Too Many Requests**: the route handler limits each IP to 30 requests every 5 minutes. The Shortcut should only fire once a day, so if you hit this you are probably retrying too fast. Wait the `Retry-After` seconds and try again.
+
 **Network error**: make sure your site is reachable from the public internet, not only on localhost.
 
-**No data in components**: check that the Supabase table actually has rows. `TodayActivityCard` looks for today's data, from midnight to now in your server's timezone.
+**No data in components**: check that the Supabase table actually has rows. `TodayActivityCard` looks for today's data in the timezone you pass to `loadTodayActivity({ tz })`. Without a tz it defaults to UTC, so on Vercel that may not match your local "today".
