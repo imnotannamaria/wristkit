@@ -289,8 +289,8 @@
    ============================================================ */
 
 .skip-link {
-  position: absolute;
-  top: 8px;
+  position: fixed;
+  top: -100px;
   left: 8px;
   z-index: 100;
   padding: 8px 14px;
@@ -300,13 +300,12 @@
   font-size: 12px;
   letter-spacing: 0.04em;
   border-radius: var(--radius-sm);
-  transform: translateY(-200%);
-  transition: transform 120ms ease-out;
+  transition: top 120ms ease-out;
 }
 
 .skip-link:focus,
 .skip-link:focus-visible {
-  transform: translateY(0);
+  top: 8px;
 }
 
 /* ============================================================
