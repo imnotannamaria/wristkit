@@ -12,11 +12,17 @@ interface Props {
   files: RegistryFile[];
 }
 
-function fileName(dest: string): string {
-  const last = dest.split("/").pop();
-  return last ?? dest;
+function basename(p: string): string {
+  const last = p.split("/").pop();
+  return last ?? p;
 }
 
+/**
+ * Tabs and destinations both want to display the file name (e.g. 0001_initial.sql)
+ * but the dest can repeat across files (two SQLs that go to the same "Supabase SQL
+ * Editor"). The unique key is the source path, which always points to a different
+ * file on disk.
+ */
 export function RegistryFileBundle({ title, description, files }: Props) {
   if (files.length === 0) return null;
   const first = files[0];
@@ -50,16 +56,16 @@ export function RegistryFileBundle({ title, description, files }: Props) {
           {description}
         </p>
       )}
-      <Tabs defaultValue={first.dest}>
+      <Tabs defaultValue={first.source}>
         <TabsList>
           {files.map((f) => (
-            <TabsTrigger key={f.dest} value={f.dest}>
-              {fileName(f.dest)}
+            <TabsTrigger key={f.source} value={f.source}>
+              {basename(f.source)}
             </TabsTrigger>
           ))}
         </TabsList>
         {files.map((f) => (
-          <TabsContent key={f.dest} value={f.dest} style={{ marginTop: 12 }}>
+          <TabsContent key={f.source} value={f.source} style={{ marginTop: 12 }}>
             <CodeBlock
               code={f.content}
               filename={f.dest}
