@@ -53,14 +53,14 @@ async function loadBundlesForSlug(slug: string): Promise<Bundle[]> {
   if (slug === "docs/installation") {
     return [
       {
-        title: "Route handler",
-        description: "Create app/api/wristkit-sync/route.ts in your project and paste this in.",
-        files: await loadRegistryFiles(HANDLER_FILES),
-      },
-      {
         title: "SQL migrations",
         description: "Run these in the Supabase SQL editor, in order.",
         files: await loadRegistryFiles(SCHEMA_FILES),
+      },
+      {
+        title: "Route handler",
+        description: "Create app/api/wristkit-sync/route.ts in your project and paste this in.",
+        files: await loadRegistryFiles(HANDLER_FILES),
       },
     ];
   }

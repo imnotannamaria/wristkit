@@ -38,11 +38,11 @@ node -e 'console.log(require("crypto").randomBytes(32).toString("base64url"))'
 
 ## 3. Run the SQL on Supabase
 
-Open the **SQL Editor** in your Supabase dashboard and run both migrations below, in order. They create the table and the unique index that protects against duplicate Shortcut posts. The actual content is in the "SQL migrations" bundle further down this page (copy with the button on the right).
+Open the **SQL Editor** in your Supabase dashboard and run both migrations from the **SQL migrations** bundle at the end of this page, in order. They create the `wristkit_samples` table and the unique index that protects against duplicate Shortcut posts.
 
 ## 4. Copy the route handler
 
-Create `app/api/wristkit-sync/route.ts` in your project and paste the file from the bundle below. The handler:
+Create `app/api/wristkit-sync/route.ts` in your project and paste the file from the **Route handler** bundle at the end of this page. The handler:
 
 - Checks the API key with `crypto.timingSafeEqual`
 - Rate limits each IP at 30 requests every 5 minutes
