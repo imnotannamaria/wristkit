@@ -74,16 +74,3 @@ export const HANDLER_FILES: RegistryFileSpec[] = [
     language: "ts",
   },
 ];
-
-export const SCHEMA_FILES: RegistryFileSpec[] = [
-  {
-    source: "packages/registry/schemas/0001_initial.sql",
-    dest: "Supabase SQL Editor",
-    language: "sql",
-  },
-  {
-    source: "packages/registry/schemas/0002_dedupe.sql",
-    dest: "Supabase SQL Editor",
-    language: "sql",
-  },
-];

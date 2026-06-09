@@ -4,7 +4,6 @@ import { type Doc, docs } from "@/lib/docs";
 import {
   HANDLER_FILES,
   type RegistryFile,
-  SCHEMA_FILES,
   TODAY_ACTIVITY_CARD_FILES,
   loadRegistryFiles,
 } from "@/lib/registry-files";
@@ -52,11 +51,6 @@ async function loadBundlesForSlug(slug: string): Promise<Bundle[]> {
   }
   if (slug === "docs/installation") {
     return [
-      {
-        title: "SQL migrations",
-        description: "Run these in the Supabase SQL editor, in order.",
-        files: await loadRegistryFiles(SCHEMA_FILES),
-      },
       {
         title: "Route handler",
         description: "Create app/api/wristkit-sync/route.ts in your project and paste this in.",

@@ -38,7 +38,51 @@ node -e 'console.log(require("crypto").randomBytes(32).toString("base64url"))'
 
 ## 3. Run the SQL on Supabase
 
-Open the **SQL Editor** in your Supabase dashboard and run both migrations from the **SQL migrations** bundle at the end of this page, in order. They create the `wristkit_samples` table and the unique index that protects against duplicate Shortcut posts.
+Open the **SQL Editor** in your Supabase dashboard and run these two migrations, in order. The first creates the `wristkit_samples` table plus the read indexes; the second adds the unique index that protects against duplicate Shortcut posts on retry. For the design rationale see [Data model](/docs/concepts/data-model).
+
+**`0001_initial.sql`**
+
+```sql
+create table if not exists wristkit_samples (
+  id           bigserial primary key,
+  user_id      uuid,
+  metric       text not null,
+  value        numeric not null,
+  unit         text not null,
+  recorded_at  timestamptz not null,
+  source       text,
+  ingested_at  timestamptz not null default now()
+);
+
+create index if not exists idx_metric_recorded
+  on wristkit_samples (metric, recorded_at desc);
+
+create index if not exists idx_user_metric_recorded
+  on wristkit_samples (user_id, metric, recorded_at desc);
+```
+
+**`0002_dedupe.sql`**
+
+```sql
+create unique index if not exists uq_sample_dedupe
+  on wristkit_samples (user_id, metric, recorded_at)
+  nulls not distinct;
+```
+
+If `0002` fails because the table already has duplicates, dedupe first and re-run:
+
+```sql
+with ranked as (
+  select id,
+         row_number() over (
+           partition by user_id, metric, recorded_at
+           order by ingested_at desc
+         ) as rn
+  from wristkit_samples
+)
+delete from wristkit_samples
+where id in (select id from ranked where rn > 1);
+```
 
 ## 4. Copy the route handler
 
