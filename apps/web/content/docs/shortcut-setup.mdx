@@ -8,7 +8,7 @@ description: Install the wristkit Shortcut on your iPhone and start syncing your
 Open this link **on your iPhone**:
 
 ```
-https://wristkit-web.vercel.app/shortcut
+https://www.icloud.com/shortcuts/da2cb73b3e7d4d5e89cfdfa1e990ff01
 ```
 
 Tap **Add Shortcut** when the prompt shows up.
@@ -46,17 +46,17 @@ To sync every day on its own, create an iOS Automation:
 
 ## Payload format
 
-The Shortcut sends something like this:
+The Shortcut sends a flat JSON dictionary with today's three Apple Health values:
 
 ```json
 {
-  "samples": [
-    { "metric": "kcal", "value": 544, "unit": "kcal", "recorded_at": "2026-04-25T23:59:00-03:00", "source": "apple_watch" },
-    { "metric": "exercise_minutes", "value": 80, "unit": "min", "recorded_at": "2026-04-25T23:59:00-03:00", "source": "apple_watch" },
-    { "metric": "steps", "value": 12340, "unit": "count", "recorded_at": "2026-04-25T23:59:00-03:00", "source": "apple_watch" }
-  ]
+  "steps": 12340,
+  "moveKcal": 544,
+  "exerciseMin": 80
 }
 ```
+
+The route handler stamps `recorded_at` with the ingest time and expands these into one row per metric in `wristkit_samples`.
 
 ## Troubleshooting
 

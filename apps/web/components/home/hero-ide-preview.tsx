@@ -24,53 +24,26 @@ const FILES: FileTab[] = [
     id: "snapshot",
     name: "payload.json",
     lang: "JSON",
-    cursor: "Ln 4, Col 18",
+    cursor: "Ln 4, Col 16",
     body: (
       <>
         <span style={muted}>{"// POST /api/wristkit-sync  ·  x-api-key ✓"}</span>
         {"\n"}
         <span style={sec}>{"{"}</span>
         {"\n  "}
-        <span style={brand}>"samples"</span>
-        <span style={sec}>: [</span>
-        {"\n    "}
-        <span style={sec}>{"{ "}</span>
-        <span style={brand}>"metric"</span>
-        <span style={sec}>: </span>
-        <span style={warn}>"kcal"</span>
-        <span style={sec}>, </span>
-        <span style={brand}>"value"</span>
-        <span style={sec}>: </span>
-        <span style={ok}>544</span>
-        <span style={sec}>, </span>
-        <span style={brand}>"recorded_at"</span>
-        <span style={sec}>: </span>
-        <span style={warn}>"2026-04-21T21:14:00-03:00"</span>
-        <span style={sec}>{" }"}</span>
-        <span style={sec}>,</span>
-        {"\n    "}
-        <span style={sec}>{"{ "}</span>
-        <span style={brand}>"metric"</span>
-        <span style={sec}>: </span>
-        <span style={warn}>"exercise_minutes"</span>
-        <span style={sec}>, </span>
-        <span style={brand}>"value"</span>
-        <span style={sec}>: </span>
-        <span style={ok}>80</span>
-        <span style={sec}>{" }"}</span>
-        <span style={sec}>,</span>
-        {"\n    "}
-        <span style={sec}>{"{ "}</span>
-        <span style={brand}>"metric"</span>
-        <span style={sec}>: </span>
-        <span style={warn}>"steps"</span>
-        <span style={sec}>, </span>
-        <span style={brand}>"value"</span>
+        <span style={brand}>"steps"</span>
         <span style={sec}>: </span>
         <span style={ok}>6480</span>
-        <span style={sec}>{" }"}</span>
+        <span style={sec}>,</span>
         {"\n  "}
-        <span style={sec}>]</span>
+        <span style={brand}>"moveKcal"</span>
+        <span style={sec}>: </span>
+        <span style={ok}>544</span>
+        <span style={sec}>,</span>
+        {"\n  "}
+        <span style={brand}>"exerciseMin"</span>
+        <span style={sec}>: </span>
+        <span style={ok}>80</span>
         {"\n"}
         <span style={sec}>{"}"}</span>
         {"\n"}

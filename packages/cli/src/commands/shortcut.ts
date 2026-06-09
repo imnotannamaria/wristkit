@@ -1,7 +1,7 @@
 import kleur from "kleur";
 
 export async function shortcutCommand() {
-  const url = "https://wristkit-web.vercel.app/shortcut";
+  const url = "https://www.icloud.com/shortcuts/da2cb73b3e7d4d5e89cfdfa1e990ff01";
   console.log(
     [
       "1. Open this URL on your iPhone:",

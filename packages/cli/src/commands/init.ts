@@ -112,7 +112,7 @@ export async function initCommand() {
       "",
       "Next steps:",
       "- Run the SQL migration in Supabase (see packages/registry/schemas/0001_initial.sql)",
-      "- Download the iOS Shortcut: https://wristkit-web.vercel.app/shortcut",
+      "- Download the iOS Shortcut: https://www.icloud.com/shortcuts/da2cb73b3e7d4d5e89cfdfa1e990ff01",
       "- Add the component: npx wristkit add today-activity-card",
     ].join("\n"),
   );

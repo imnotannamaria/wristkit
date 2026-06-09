@@ -83,15 +83,26 @@ export async function POST(req: Request) {
     );
   }
 
+  // The Shortcut sends a flat dictionary with today's three Apple Health
+  // values and no timestamp. Expand into one row per metric, stamping
+  // recorded_at with the ingest time — the Shortcut is scheduled at
+  // end-of-day so this is close enough for the daily aggregate.
+  const recordedAt = new Date();
+  const rows = [
+    { metric: "kcal" as const, value: parsed.data.moveKcal, unit: "kcal" },
+    { metric: "exercise_minutes" as const, value: parsed.data.exerciseMin, unit: "min" },
+    { metric: "steps" as const, value: parsed.data.steps, unit: "count" },
+  ];
+
   const { db } = createDb(url);
   try {
     await db.insert(samples).values(
-      parsed.data.samples.map((s) => ({
-        metric: s.metric,
-        value: s.value.toString(),
-        unit: s.unit,
-        recordedAt: new Date(s.recorded_at),
-        source: s.source ?? null,
+      rows.map((r) => ({
+        metric: r.metric,
+        value: r.value.toString(),
+        unit: r.unit,
+        recordedAt,
+        source: "apple_watch",
       })),
     );
   } catch (err) {
@@ -99,5 +110,5 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "ingest failed" }, { status: 500 });
   }
 
-  return NextResponse.json({ ok: true, inserted: parsed.data.samples.length });
+  return NextResponse.json({ ok: true, inserted: rows.length });
 }
