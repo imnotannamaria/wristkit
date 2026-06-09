@@ -74,21 +74,15 @@ Nothing has been synced yet. The ring tracks are dotted. Values show as `—`. T
 
 <TodayActivityCardEmpty />
 
-### `partial`
-
-Some metrics are missing, for example because a Health permission was revoked. The metrics that came through render normally. The missing one shows a dotted ring, plus a small hint that says which metric and why.
-
-<TodayActivityCardPartial />
-
 ### `stale`
 
-Data exists but it is older than 24 hours. Numbers are a bit washed out, the status pill shows `stale · Nh` and the footer offers a retry link.
+Data exists but it is older than 24 hours. Numbers are a bit washed out and the status pill shows `stale · Nh`.
 
 <TodayActivityCardStale />
 
 ### `error`
 
-Something went wrong during sync. The ring area turns into a small diagnostic block with the error code, the endpoint and the timestamp. A short italic sentence translates the technical detail into plain language.
+Something went wrong during sync. The card shows a short, generic message — it never echoes the underlying error or code so you don't leak details about your auth or your database.
 
 <TodayActivityCardError />
 

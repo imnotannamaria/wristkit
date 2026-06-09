@@ -6,7 +6,6 @@ import {
   TodayActivityCardError,
   TodayActivityCardLoading,
   TodayActivityCardOk,
-  TodayActivityCardPartial,
   TodayActivityCardStale,
 } from "./states";
 
@@ -26,13 +25,9 @@ export function TodayActivityCard({
     case "empty":
       return <TodayActivityCardEmpty className={className} />;
     case "error":
-      return <TodayActivityCardError className={className} message={state.message} />;
+      return <TodayActivityCardError className={className} />;
     case "stale":
       return <TodayActivityCardStale className={className} data={state.data} />;
-    case "partial":
-      return (
-        <TodayActivityCardPartial className={className} data={state.data} missing={state.missing} />
-      );
     case "ok":
       return <TodayActivityCardOk className={className} data={state.data} />;
   }

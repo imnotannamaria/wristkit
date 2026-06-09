@@ -5,7 +5,6 @@ import {
   TodayActivityCardEmpty,
   TodayActivityCardError,
   TodayActivityCardLoading,
-  TodayActivityCardPartial,
   TodayActivityCardRingsOnly,
   TodayActivityCardStale,
 } from "@/components/cards/today-activity-card-demo";
@@ -260,7 +259,6 @@ const customComponents = {
   TodayActivityCardLoading,
   TodayActivityCardStale,
   TodayActivityCardError,
-  TodayActivityCardPartial,
   TodayActivityCardRingsOnly,
 };
 

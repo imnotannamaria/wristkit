@@ -1,5 +1,4 @@
 import type * as React from "react";
-import type { Metric } from "../../lib/validation";
 import type { TodayData } from "./load";
 
 // Entrepta palette. Kept as literal hex so the component is portable
@@ -280,26 +279,16 @@ export function TodayActivityCardEmpty({ className }: { className?: string }) {
   );
 }
 
-export function TodayActivityCardError({
-  message,
-  className,
-}: {
-  message?: string;
-  className?: string;
-}) {
+export function TodayActivityCardError({ className }: { className?: string }) {
   return (
     <Panel className={className}>
       <Header status="error" statusColor={colors.danger} />
       <div style={{ marginTop: 12, color: colors.muted, fontSize: 13, lineHeight: 1.5 }}>
-        <div style={{ color: colors.text, marginBottom: 6 }}>Couldn’t load today’s activity.</div>
-        <div
-          style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace" }}
-        >
-          {message ?? "unknown error"}
-        </div>
+        <div style={{ color: colors.text, marginBottom: 6 }}>Something went wrong.</div>
+        <div>We couldn't load today's activity. Try again later.</div>
       </div>
       <Footer
-        left="// check env + database connection"
+        left="// showing nothing rather than guessing"
         right={<span style={{ color: colors.muted }}>see docs</span>}
       />
     </Panel>
@@ -380,94 +369,6 @@ export function TodayActivityCardStale({
         left={`// last sync ${hoursAgo}h ago`}
         right={<span style={{ color: colors.warn }}>run shortcut</span>}
       />
-    </Panel>
-  );
-}
-
-function metricLabel(m: Metric): string {
-  switch (m) {
-    case "kcal":
-      return "Move";
-    case "exercise_minutes":
-      return "Exercise";
-    case "steps":
-      return "Steps";
-  }
-}
-
-export function TodayActivityCardPartial({
-  data,
-  missing,
-  className,
-}: {
-  data: TodayData;
-  missing: Metric[];
-  className?: string;
-}) {
-  const cx = 72;
-  const cy = 72;
-  const missingText = missing.map(metricLabel).join(", ");
-  return (
-    <Panel className={className}>
-      <Header status="partial" statusColor={colors.warn} />
-      <div
-        style={{
-          marginTop: 12,
-          display: "grid",
-          gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)",
-          gap: 20,
-          alignItems: "center",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <svg
-            width={144}
-            height={144}
-            viewBox="0 0 144 144"
-            role="img"
-            aria-label="Activity rings"
-          >
-            <title>Activity rings</title>
-            <Ring
-              r={52}
-              value={data.kcal}
-              max={data.kcalGoal}
-              color={colors.move}
-              cx={cx}
-              cy={cy}
-            />
-            <Ring
-              r={38}
-              value={data.exerciseMinutes}
-              max={data.exerciseGoal}
-              color={colors.exercise}
-              cx={cx}
-              cy={cy}
-            />
-            <Ring
-              r={24}
-              value={data.steps}
-              max={data.stepsGoal}
-              color={colors.steps}
-              cx={cx}
-              cy={cy}
-            />
-          </svg>
-        </div>
-        <div>
-          <MetricRow dot={colors.move} label="Move" value={Math.round(data.kcal)} suffix="kcal" />
-          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
-          <MetricRow
-            dot={colors.exercise}
-            label="Exercise"
-            value={Math.round(data.exerciseMinutes)}
-            suffix="min"
-          />
-          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
-          <MetricRow dot={colors.steps} label="Steps" value={Math.round(data.steps)} />
-        </div>
-      </div>
-      <Footer left={`// missing: ${missingText}`} right={`synced ${data.lastSyncLabel}`} />
     </Panel>
   );
 }
