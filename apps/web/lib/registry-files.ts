@@ -10,9 +10,14 @@ export type RegistryFileSpec = {
   dest: string;
   /** Language tag for the code block (tsx, ts, sql, json, etc). */
   language: string;
+  /** Optional post-read transform — use to rewrite monorepo-internal imports to user-facing paths. */
+  transform?: (content: string) => string;
 };
 
-export type RegistryFile = RegistryFileSpec & {
+export type RegistryFile = {
+  source: string;
+  dest: string;
+  language: string;
   content: string;
 };
 
@@ -20,11 +25,12 @@ export async function loadRegistryFiles(specs: RegistryFileSpec[]): Promise<Regi
   return Promise.all(
     specs.map(async (spec) => {
       const abs = path.resolve(ROOT, spec.source);
-      if (!abs.startsWith(ROOT)) {
+      if (!abs.startsWith(ROOT + path.sep)) {
         throw new Error(`registry file outside monorepo: ${spec.source}`);
       }
-      const content = await readFile(abs, "utf8");
-      return { ...spec, content };
+      const raw = await readFile(abs, "utf8");
+      const content = spec.transform ? spec.transform(raw) : raw;
+      return { source: spec.source, dest: spec.dest, language: spec.language, content };
     }),
   );
 }
@@ -44,6 +50,9 @@ export const TODAY_ACTIVITY_CARD_FILES: RegistryFileSpec[] = [
     source: "packages/registry/components/today-activity-card/load.ts",
     dest: "components/wristkit/today-activity-card/load.ts",
     language: "ts",
+    // The monorepo source imports from the local shim "./queries"; rewrite to
+    // the path the user will actually have in their project.
+    transform: (c) => c.replace(/from "\.\/queries"/, 'from "@/lib/wristkit/queries"'),
   },
   {
     source: "packages/registry/lib/queries.ts",
