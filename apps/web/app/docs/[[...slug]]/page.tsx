@@ -2,7 +2,6 @@ import { RegistryFileBundle } from "@/components/docs/registry-file-bundle";
 import { MdxContent } from "@/components/mdx-content";
 import { type Doc, docs } from "@/lib/docs";
 import {
-  HANDLER_FILES,
   type RegistryFile,
   TODAY_ACTIVITY_CARD_FILES,
   loadRegistryFiles,
@@ -46,15 +45,6 @@ async function loadBundlesForSlug(slug: string): Promise<Bundle[]> {
         title: "Files to copy",
         description: "Drop each file in its destination path. Copy with the button on the right.",
         files: await loadRegistryFiles(TODAY_ACTIVITY_CARD_FILES),
-      },
-    ];
-  }
-  if (slug === "docs/installation") {
-    return [
-      {
-        title: "Route handler",
-        description: "Create app/api/wristkit-sync/route.ts in your project and paste this in.",
-        files: await loadRegistryFiles(HANDLER_FILES),
       },
     ];
   }
