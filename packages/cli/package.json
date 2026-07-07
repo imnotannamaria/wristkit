@@ -24,9 +24,7 @@
   },
   "license": "MIT",
   "author": "imnotannamaria",
-  "publishConfig": {
-    "access": "public"
-  },
+  "private": true,
   "engines": {
     "node": ">=20"
   },
