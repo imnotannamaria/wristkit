@@ -1,5 +1,5 @@
 {
-  "name": "healthkit-handler",
+  "name": "wristkit-sync-handler",
   "type": "handler",
   "version": "0.0.0",
   "description": "Next.js route handler that ingests Apple Health samples into Postgres.",
@@ -8,7 +8,7 @@
   },
   "files": [
     {
-      "path": "app/api/healthkit/route.ts",
+      "path": "app/api/wristkit-sync/route.ts",
       "source": "./route.ts",
       "overwrite": false
     },

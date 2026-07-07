@@ -1,4 +1,13 @@
-import { bigserial, index, numeric, pgTable, text, timestamp, uuid } from "drizzle-orm/pg-core";
+import {
+  bigserial,
+  index,
+  numeric,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from "drizzle-orm/pg-core";
 
 export const samples = pgTable(
   "wristkit_samples",
@@ -15,5 +24,6 @@ export const samples = pgTable(
   (t) => ({
     metricRecordedIdx: index("idx_metric_recorded").on(t.metric, t.recordedAt),
     userMetricRecordedIdx: index("idx_user_metric_recorded").on(t.userId, t.metric, t.recordedAt),
+    sampleDedupeIdx: uniqueIndex("uq_sample_dedupe").on(t.userId, t.metric, t.recordedAt),
   }),
 );

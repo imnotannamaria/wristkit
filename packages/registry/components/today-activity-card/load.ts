@@ -1,5 +1,16 @@
 import { getTodayActivity } from "./queries";
-import type { Metric } from "./validation";
+
+export type Goals = {
+  kcal: number;
+  exerciseMinutes: number;
+  steps: number;
+};
+
+export const DEFAULT_GOALS: Goals = {
+  kcal: 600,
+  exerciseMinutes: 30,
+  steps: 8000,
+};
 
 export type TodayData = {
   kcal: number;
@@ -8,46 +19,64 @@ export type TodayData = {
   exerciseGoal: number;
   steps: number;
   stepsGoal: number;
-  lastSync: Date;
+  /** Raw timestamp of the freshest sample (in UTC). */
+  lastSyncIso: string;
+  /** Pre-formatted "HH:mm" label in the requested tz. Safe for SSR/CSR. */
+  lastSyncLabel: string;
+  /** Whole hours since the freshest sample, snapped to >= 1 for the stale UI. */
+  hoursSinceSync: number;
 };
 
 export type TodayState =
   | { kind: "loading" }
   | { kind: "empty" }
   | { kind: "error"; message?: string }
-  | { kind: "stale"; lastSync: Date; data: TodayData }
-  | { kind: "partial"; data: TodayData; missing: Metric[] }
+  | { kind: "stale"; data: TodayData }
   | { kind: "ok"; data: TodayData };
+
+export type LoadOptions = {
+  /** IANA timezone for "today" boundary and the rendered timestamp. Defaults to UTC. */
+  tz?: string;
+  /** Override the default daily goals (600 kcal / 30 min / 8000 steps). */
+  goals?: Partial<Goals>;
+};
 
 const STALE_MS = 24 * 60 * 60 * 1000;
 
-export async function loadTodayActivity(): Promise<TodayState> {
+function formatHourMinute(d: Date, tz: string): string {
+  return new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: tz,
+  }).format(d);
+}
+
+export async function loadTodayActivity(options: LoadOptions = {}): Promise<TodayState> {
   const url = process.env.WRISTKIT_DATABASE_URL;
   if (!url) return { kind: "error", message: "WRISTKIT_DATABASE_URL not set" };
 
+  const tz = options.tz ?? "UTC";
+  const goals: Goals = { ...DEFAULT_GOALS, ...options.goals };
+
   try {
-    const r = await getTodayActivity(url);
+    const r = await getTodayActivity(url, tz);
     if (!r.lastSync) return { kind: "empty" };
 
-    const missing = [
-      r.kcal === null ? ("kcal" as const) : null,
-      r.exerciseMinutes === null ? ("exercise_minutes" as const) : null,
-      r.steps === null ? ("steps" as const) : null,
-    ].filter((x): x is Metric => x !== null);
-
+    const ageMs = Date.now() - r.lastSync.getTime();
     const data: TodayData = {
       kcal: r.kcal ?? 0,
-      kcalGoal: 600,
+      kcalGoal: goals.kcal,
       exerciseMinutes: r.exerciseMinutes ?? 0,
-      exerciseGoal: 30,
+      exerciseGoal: goals.exerciseMinutes,
       steps: r.steps ?? 0,
-      stepsGoal: 8000,
-      lastSync: r.lastSync,
+      stepsGoal: goals.steps,
+      lastSyncIso: r.lastSync.toISOString(),
+      lastSyncLabel: formatHourMinute(r.lastSync, tz),
+      hoursSinceSync: Math.max(1, Math.round(ageMs / (60 * 60 * 1000))),
     };
 
-    const age = Date.now() - r.lastSync.getTime();
-    if (age > STALE_MS) return { kind: "stale", lastSync: r.lastSync, data };
-    if (missing.length) return { kind: "partial", data, missing };
+    if (ageMs > STALE_MS) return { kind: "stale", data };
     return { kind: "ok", data };
   } catch (err) {
     return {

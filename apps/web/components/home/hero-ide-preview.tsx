@@ -24,53 +24,26 @@ const FILES: FileTab[] = [
     id: "snapshot",
     name: "payload.json",
     lang: "JSON",
-    cursor: "Ln 4, Col 18",
+    cursor: "Ln 4, Col 16",
     body: (
       <>
-        <span style={muted}>{"// POST /api/healthkit  ·  x-api-key ✓"}</span>
+        <span style={muted}>{"// POST /api/wristkit-sync  ·  x-api-key ✓"}</span>
         {"\n"}
         <span style={sec}>{"{"}</span>
         {"\n  "}
-        <span style={brand}>"samples"</span>
-        <span style={sec}>: [</span>
-        {"\n    "}
-        <span style={sec}>{"{ "}</span>
-        <span style={brand}>"metric"</span>
-        <span style={sec}>: </span>
-        <span style={warn}>"kcal"</span>
-        <span style={sec}>, </span>
-        <span style={brand}>"value"</span>
-        <span style={sec}>: </span>
-        <span style={ok}>544</span>
-        <span style={sec}>, </span>
-        <span style={brand}>"recorded_at"</span>
-        <span style={sec}>: </span>
-        <span style={warn}>"2026-04-21T21:14:00-03:00"</span>
-        <span style={sec}>{" }"}</span>
-        <span style={sec}>,</span>
-        {"\n    "}
-        <span style={sec}>{"{ "}</span>
-        <span style={brand}>"metric"</span>
-        <span style={sec}>: </span>
-        <span style={warn}>"exercise_minutes"</span>
-        <span style={sec}>, </span>
-        <span style={brand}>"value"</span>
-        <span style={sec}>: </span>
-        <span style={ok}>80</span>
-        <span style={sec}>{" }"}</span>
-        <span style={sec}>,</span>
-        {"\n    "}
-        <span style={sec}>{"{ "}</span>
-        <span style={brand}>"metric"</span>
-        <span style={sec}>: </span>
-        <span style={warn}>"steps"</span>
-        <span style={sec}>, </span>
-        <span style={brand}>"value"</span>
+        <span style={brand}>"steps"</span>
         <span style={sec}>: </span>
         <span style={ok}>6480</span>
-        <span style={sec}>{" }"}</span>
+        <span style={sec}>,</span>
         {"\n  "}
-        <span style={sec}>]</span>
+        <span style={brand}>"moveKcal"</span>
+        <span style={sec}>: </span>
+        <span style={ok}>544</span>
+        <span style={sec}>,</span>
+        {"\n  "}
+        <span style={brand}>"exerciseMin"</span>
+        <span style={sec}>: </span>
+        <span style={ok}>80</span>
         {"\n"}
         <span style={sec}>{"}"}</span>
         {"\n"}
@@ -123,7 +96,7 @@ const FILES: FileTab[] = [
         <span style={fg}>POST</span>
         <span style={sec}>{" } "}</span>
         <span style={info}>from</span>{" "}
-        <span style={warn}>"@/components/wristkit/healthkit-handler"</span>
+        <span style={warn}>"@/components/wristkit/wristkit-sync-handler"</span>
         {"\n\n"}
         <span style={info}>export</span> <span style={sec}>{"{ "}</span>
         <span style={fg}>POST</span>
@@ -207,7 +180,7 @@ export function HeroIdePreview() {
           <span style={{ opacity: 0.6 }}>·</span>
           <span>{current.cursor}</span>
         </div>
-        <span>wristkit · POST /api/healthkit</span>
+        <span>wristkit · POST /api/wristkit-sync</span>
       </div>
     </aside>
   );

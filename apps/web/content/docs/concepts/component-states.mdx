@@ -12,18 +12,17 @@ type ComponentState =
   | { kind: "loading" }
   | { kind: "empty" }
   | { kind: "error"; message?: string }
-  | { kind: "stale"; lastSync: Date }
-  | { kind: "partial"; missing: string[] }
-  | { kind: "ok"; data: T };
+  | { kind: "stale"; data: TodayData }
+  | { kind: "ok"; data: TodayData };
 ```
 
-This is not optional. The five state contract is what makes wristkit feel polished instead of janky. Real data is messy. A user revokes a Health permission, the Shortcut automation pauses, the Supabase connection drops. Components that only handle the `ok` state break in silence.
+This is not optional. The state contract is what makes wristkit feel polished instead of janky. Real data is messy. The Shortcut automation pauses, the Supabase connection drops, an env var is missing. Components that only handle the `ok` state break in silence.
 
 ## Design principles
 
 **No new vocabulary.** Every state uses the same Panel grammar: dotted rules, mono labels, `//` footer notes, status pill. The card does not break character when data is missing.
 
-**No generic error UI.** "Oops, something went wrong" is not enough. The error state shows a server log style block with the actual code, endpoint and timestamp. A short italic serif sentence translates the technical detail into plain language.
+**Generic error copy.** The error card shows a short, generic message. It never echoes the underlying error or status code — that would leak details about your auth or database to whoever is looking at the page.
 
 **Numbers or nothing.** The stale state washes out the existing numbers to say "old", instead of hiding them. The empty and error states use `—` rather than `0` or a blank, because a zero would suggest the user burned zero calories, which is not true.
 
@@ -34,23 +33,35 @@ This is not optional. The five state contract is what makes wristkit feel polish
 `loadTodayActivity()` (and every `load` function we ship) figures out the state for you:
 
 ```ts
-export async function loadTodayActivity(): Promise<TodayState> {
+export async function loadTodayActivity(options: { tz?: string } = {}): Promise<TodayState> {
   const url = process.env.WRISTKIT_DATABASE_URL;
   if (!url) return { kind: "error", message: "WRISTKIT_DATABASE_URL not set" };
 
+  const tz = options.tz ?? "UTC";
+
   try {
-    const r = await getTodayActivity(url);
+    const r = await getTodayActivity(url, tz);
     if (!r.lastSync) return { kind: "empty" };
 
-    const missing = [
-      r.kcal === null && "kcal",
-      r.exerciseMinutes === null && "exercise_minutes",
-      r.steps === null && "steps",
-    ].filter(Boolean) as string[];
+    const data = {
+      kcal: r.kcal ?? 0,
+      kcalGoal: 600,
+      exerciseMinutes: r.exerciseMinutes ?? 0,
+      exerciseGoal: 30,
+      steps: r.steps ?? 0,
+      stepsGoal: 8000,
+      lastSyncIso: r.lastSync.toISOString(),
+      lastSyncLabel: new Intl.DateTimeFormat("en-GB", {
+        hour: "2-digit",
+        minute: "2-digit",
+        hour12: false,
+        timeZone: tz,
+      }).format(r.lastSync),
+      hoursSinceSync: Math.max(1, Math.round((Date.now() - r.lastSync.getTime()) / 3_600_000)),
+    };
 
     const age = Date.now() - r.lastSync.getTime();
-    if (age > 24 * 60 * 60 * 1000) return { kind: "stale", lastSync: r.lastSync, data };
-    if (missing.length) return { kind: "partial", data, missing };
+    if (age > 24 * 60 * 60 * 1000) return { kind: "stale", data };
     return { kind: "ok", data };
   } catch (err) {
     return { kind: "error", message: err instanceof Error ? err.message : "unknown" };
@@ -59,3 +70,5 @@ export async function loadTodayActivity(): Promise<TodayState> {
 ```
 
 The component is a pure renderer. It gets `state` as a prop and renders the matching UI. It never fetches. This split makes testing easy and lets the component live on both the server and the client side.
+
+`lastSyncLabel` and `hoursSinceSync` are pre-computed on the server using the timezone you pass to `loadTodayActivity`. That keeps the rendered string identical between server and client (no hydration mismatch) and respects the user's local "today" instead of the server's timezone.

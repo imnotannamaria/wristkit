@@ -36,9 +36,15 @@ create index if not exists idx_metric_recorded
 
 create index if not exists idx_user_metric_recorded
   on wristkit_samples (user_id, metric, recorded_at desc);
+
+create unique index if not exists uq_sample_dedupe
+  on wristkit_samples (user_id, metric, recorded_at)
+  nulls not distinct;
 ```
 
-Both indexes back the most common query pattern: `WHERE metric = $1 AND recorded_at >= $2 ORDER BY recorded_at DESC LIMIT 1`.
+The first two back the most common query pattern: `WHERE metric = $1 AND recorded_at >= $2 ORDER BY recorded_at DESC LIMIT 1`.
+
+The unique index protects against duplicate samples when the Shortcut retries. `NULLS NOT DISTINCT` treats two NULL `user_id` rows as equal, which matches v1 single user mode.
 
 ## Metrics in v1
 
@@ -55,7 +61,7 @@ These are the three metrics `TodayActivityCard` needs. New components in v2 will
 `lib/wristkit/queries.ts` exports typed helpers:
 
 ```ts
-export async function getTodayActivity(url: string): Promise<{
+export async function getTodayActivity(url: string, tz: string): Promise<{
   kcal: number | null;
   exerciseMinutes: number | null;
   steps: number | null;
@@ -63,4 +69,4 @@ export async function getTodayActivity(url: string): Promise<{
 }>;
 ```
 
-Components call `loadTodayActivity()` (which calls `getTodayActivity()` for you), and never query the database directly.
+Components call `loadTodayActivity({ tz })` (which calls `getTodayActivity()` for you) and never query the database directly. `lastSync` is the `recorded_at` of the most recent sample, so a backfill of yesterday's data still reads as stale.

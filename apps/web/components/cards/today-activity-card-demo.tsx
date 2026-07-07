@@ -311,7 +311,6 @@ const splitGrid = {
 } as const;
 
 const italicBrand = { fontStyle: "italic", color: "var(--fg-brand)" } as const;
-const italicError = { fontStyle: "italic", color: "var(--status-error-fg)" } as const;
 
 // ─── A · default ─────────────────────────────────────────────
 export function TodayActivityCardDemo({
@@ -334,13 +333,10 @@ export function TodayActivityCardDemo({
   return (
     <Card>
       <CardHeader>
-        <CardLabel>today / activity.tsx</CardLabel>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-          <Badge variant="soft" color="success" dot>
-            synced
-          </Badge>
-          <CardMeta>Ln 4, Col 18</CardMeta>
-        </span>
+        <CardLabel>today / activity</CardLabel>
+        <Badge variant="soft" color="success" dot>
+          synced
+        </Badge>
       </CardHeader>
       <div style={splitGrid}>
         <RingViz
@@ -351,10 +347,6 @@ export function TodayActivityCardDemo({
           ]}
         />
         <div>
-          <CardHeadline kicker="monday · apr 21 · 21:14">
-            <em style={italicBrand}>Strength</em> day.{" "}
-            <span style={{ color: "var(--fg-muted)" }}>Low cardio.</span>
-          </CardHeadline>
           <MetricLine token={MOVE} label="MOVE" value={moveKcal} max={moveGoal} unit="kcal" top />
           <MetricLine
             token={EXERCISE}
@@ -367,7 +359,6 @@ export function TodayActivityCardDemo({
         </div>
       </div>
       <CardFooter>
-        <CardComment>strength day · low cardio · 4 cycles tracked</CardComment>
         <span style={{ color: "var(--fg-muted)" }}>updated {updatedAt}</span>
       </CardFooter>
     </Card>
@@ -379,7 +370,7 @@ export function TodayActivityCardEmpty() {
   return (
     <Card>
       <CardHeader>
-        <CardLabel>today / activity.tsx</CardLabel>
+        <CardLabel>today / activity</CardLabel>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
           <Badge variant="soft" color="neutral" dot>
             not connected
@@ -418,9 +409,10 @@ export function TodayActivityCardEmpty() {
 // ─── C · loading ─────────────────────────────────────────────
 export function TodayActivityCardLoading() {
   return (
-    <Card>
+    // biome-ignore lint/a11y/useSemanticElements: Card is a div; role="status" is the right ARIA contract here.
+    <Card role="status" aria-live="polite" aria-label="Loading today's activity">
       <CardHeader>
-        <CardLabel>today / activity.tsx</CardLabel>
+        <CardLabel>today / activity</CardLabel>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
           <Badge variant="soft" color="info" dot>
             syncing…
@@ -437,24 +429,13 @@ export function TodayActivityCardLoading() {
           ]}
         />
         <div>
-          <CardHeadline kicker="GET /api/healthkit/today">
-            <Skeleton
-              style={{
-                display: "inline-block",
-                width: 220,
-                height: 22,
-                verticalAlign: "middle",
-              }}
-            />
-          </CardHeadline>
           <MetricLine token={MOVE} label="MOVE" max={600} unit="kcal" variant="skel" top />
           <MetricLine token={EXERCISE} label="EXERCISE" max={30} unit="min" variant="skel" />
           <MetricLine token={STEPS} label="STEPS" max={8000} unit="" variant="skel" />
         </div>
       </div>
       <CardFooter>
-        <CardComment>fetching from Supabase · usually under 80ms</CardComment>
-        <span style={{ color: "var(--fg-muted)" }}>Ln 1, Col 1</span>
+        <span style={{ color: "var(--fg-muted)" }}>syncing…</span>
       </CardFooter>
     </Card>
   );
@@ -479,7 +460,7 @@ export function TodayActivityCardStale({
   return (
     <Card>
       <CardHeader>
-        <CardLabel>today / activity.tsx</CardLabel>
+        <CardLabel>today / activity</CardLabel>
         <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
           <Badge variant="soft" color="warning" dot>
             stale · 6h
@@ -529,30 +510,20 @@ export function TodayActivityCardStale({
       </div>
       <CardFooter>
         <CardComment>showing cached values · automation due 23:00</CardComment>
-        <button type="button" style={{ color: "var(--fg-brand)", cursor: "pointer" }}>
-          retry now →
-        </button>
       </CardFooter>
     </Card>
   );
 }
 
 // ─── E · error ───────────────────────────────────────────────
-export function TodayActivityCardError({
-  occurredAt = "21:14:08",
-}: {
-  occurredAt?: string;
-} = {}) {
+export function TodayActivityCardError() {
   return (
     <Card>
       <CardHeader>
-        <CardLabel>today / activity.tsx</CardLabel>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-          <Badge variant="soft" color="error" dot>
-            401 · auth
-          </Badge>
-          <CardMeta>{occurredAt}</CardMeta>
-        </span>
+        <CardLabel>today / activity</CardLabel>
+        <Badge variant="soft" color="error" dot>
+          error
+        </Badge>
       </CardHeader>
       <div style={splitGrid}>
         <RingViz
@@ -569,130 +540,40 @@ export function TodayActivityCardError({
           )}
         />
         <div>
-          <CardHeadline kicker="POST /api/healthkit/sync">
-            <em style={italicError}>Token</em> expired.{" "}
-            <span style={{ color: "var(--fg-muted)" }}>Sign in once on iPhone.</span>
-          </CardHeadline>
           <div
             style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: 11,
-              color: "var(--fg-secondary)",
-              lineHeight: 1.7,
-              paddingTop: 6,
+              fontFamily: "var(--font-serif)",
+              fontStyle: "italic",
+              fontSize: 22,
+              color: "var(--status-error-fg)",
+              letterSpacing: "-0.02em",
             }}
           >
-            <div style={{ display: "flex", gap: 10 }}>
-              <span style={{ color: "var(--status-error-fg)", minWidth: 32 }}>401</span>
-              <span>x-api-key rejected</span>
-            </div>
-            <div style={{ display: "flex", gap: 10, color: "var(--fg-muted)" }}>
-              <span style={{ minWidth: 32 }}>at</span>
-              <span>POST /api/healthkit/sync</span>
-            </div>
-            <div style={{ display: "flex", gap: 10, color: "var(--fg-muted)" }}>
-              <span style={{ minWidth: 32 }}>tz</span>
-              <span>America/Sao_Paulo · 21:14</span>
-            </div>
-            <div
-              style={{
-                borderTop: "1px solid var(--border-subtle)",
-                margin: "10px 0 8px",
-              }}
-            />
-            <span
-              style={{
-                fontFamily: "var(--font-sans)",
-                fontSize: 13,
-                fontStyle: "italic",
-                color: "var(--fg-secondary)",
-              }}
-            >
-              Last good sync was four hours ago.
-            </span>
+            Something went wrong.
           </div>
+          <p
+            style={{
+              marginTop: 8,
+              fontSize: 13,
+              lineHeight: 1.6,
+              color: "var(--fg-secondary)",
+            }}
+          >
+            We couldn't load today's activity. Check that the sync ran and try again later.
+          </p>
         </div>
       </div>
       <CardFooter>
         <CardComment>showing nothing rather than guessing</CardComment>
-        <span style={{ display: "inline-flex", gap: 8 }}>
-          <Button variant="ghost" size="sm">
-            docs
-          </Button>
-          <Button variant="secondary" size="sm">
-            retry
-          </Button>
-        </span>
+        <Button variant="ghost" size="sm">
+          docs
+        </Button>
       </CardFooter>
     </Card>
   );
 }
 
-// ─── F · partial ─────────────────────────────────────────────
-export function TodayActivityCardPartial({
-  moveKcal = 544,
-  exerciseMin = 80,
-  moveGoal = 600,
-  exerciseGoal = 30,
-}: {
-  moveKcal?: number;
-  exerciseMin?: number;
-  moveGoal?: number;
-  exerciseGoal?: number;
-} = {}) {
-  return (
-    <Card>
-      <CardHeader>
-        <CardLabel>today / activity.tsx</CardLabel>
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-          <Badge variant="soft" color="warning" dot>
-            partial
-          </Badge>
-          <CardMeta>2 of 3</CardMeta>
-        </span>
-      </CardHeader>
-      <div style={splitGrid}>
-        <RingViz
-          rings={[
-            { value: moveKcal, max: moveGoal, color: MOVE, state: "on" },
-            { value: exerciseMin, max: exerciseGoal, color: EXERCISE, state: "on" },
-            { color: STEPS, state: "off" },
-          ]}
-        />
-        <div>
-          <CardHeadline kicker="permission · steps">
-            <em style={italicBrand}>Two</em> of three.{" "}
-            <span style={{ color: "var(--fg-muted)" }}>Steps is locked.</span>
-          </CardHeadline>
-          <MetricLine token={MOVE} label="MOVE" value={moveKcal} max={moveGoal} unit="kcal" top />
-          <MetricLine
-            token={EXERCISE}
-            label="EXERCISE"
-            value={exerciseMin}
-            max={exerciseGoal}
-            unit="min"
-          />
-          <MetricLine
-            token={STEPS}
-            label="STEPS"
-            max={8000}
-            unit=""
-            variant="missing"
-            hint="permission denied"
-          />
-        </div>
-      </div>
-      <CardFooter>
-        <CardComment>re-grant Steps in Health → Sources</CardComment>
-        <button type="button" style={{ color: "var(--fg-brand)", cursor: "pointer" }}>
-          open settings →
-        </button>
-      </CardFooter>
-    </Card>
-  );
-}
-
-// ─── G · rings only (no card chrome) ─────────────────────────
+// ─── F · rings only (no card chrome) ─────────────────────────
 export function TodayActivityCardRingsOnly() {
   return (
     <div

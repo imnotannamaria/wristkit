@@ -54,7 +54,7 @@ const badgeVariants = cva(
       {
         variant: "solid",
         color: "error",
-        className: "bg-[var(--status-error)] text-[var(--fg-primary)]",
+        className: "bg-[var(--status-error)] text-[var(--bg-canvas)]",
       },
       {
         variant: "solid",

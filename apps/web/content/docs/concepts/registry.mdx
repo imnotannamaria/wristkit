@@ -1,56 +1,35 @@
 ---
 title: Registry
-description: How the wristkit registry works, what it serves and how the CLI uses it.
+description: How wristkit is distributed and how to keep your copy in sync.
 ---
 
 ## What is the registry?
 
-The registry is a set of JSON files served from `wristkit-web.vercel.app/r/:name`. Each file describes one thing you can install: a component, a handler, a schema or a shortcut.
+The registry is **this site**. Each component page lists the files you need, with a copy button on every file and the destination path in your project. There is no CLI, no SDK and no install step beyond pasting the code.
 
-When you run `npx wristkit add today-activity-card`, the CLI fetches `https://wristkit-web.vercel.app/r/today-activity-card.json`, resolves the dependencies and copies the files into your project.
-
-## Item shape
-
-```ts
-type RegistryItem = {
-  name: string;
-  type: "component" | "handler" | "schema" | "shortcut" | "lib";
-  version: string;
-  description: string;
-  dependencies?: {
-    npm?: string[];
-    registry?: string[];
-  };
-  files: {
-    path: string;
-    content: string;
-    overwrite?: boolean;
-  }[];
-  metrics?: string[];
-  postInstall?: {
-    message?: string;
-    sql?: string[];
-  };
-};
-```
+That choice keeps wristkit simple. You always see the real code before you run it, you can diff it in your editor, and there is no extra surface between us and your project.
 
 ## Available items
 
-| Name | Type | Description |
+| Name | Path in your project | Where to find it |
 |---|---|---|
-| `today-activity-card` | component | Move, Exercise and Steps rings |
-| `healthkit-handler` | handler | POST /api/healthkit route |
-| `healthkit-schema` | schema | SQL migration |
-| `wristkit-sync` | shortcut | iOS Shortcut file |
+| `TodayActivityCard` | `components/wristkit/today-activity-card/` | [TodayActivityCard](/docs/components/today-activity-card) |
+| Route handler | `app/api/wristkit-sync/route.ts` | [Installation](/docs/installation) |
+| SQL migrations | Supabase SQL editor | [Installation](/docs/installation) |
+| iOS Shortcut | `wristkit-sync.shortcut` on iPhone | [Shortcut setup](/docs/shortcut-setup) |
 
-## How items are built
+## How to update
 
-`packages/registry/build.ts` walks the registry source, reads each `meta.json` and writes one JSON file per item into `apps/web/public/r/`. This happens at build time, not at request time, so the result is static, fast and free.
+When the files on this site change, copy them again. Diff your local copy against the new content in your editor and apply the parts you want. Most updates are additive (new states, new options) and a side by side diff makes them obvious.
 
-The registry endpoint at `app/r/[name]/route.ts` just reads these pre built JSON files and returns them with a 5 minute cache header.
+There is no versioning beyond the wristkit release tag on GitHub. If you pin to a specific commit, copy from that commit's docs build.
 
-## Versioning
+## Why no CLI
 
-Registry items are versioned on their own, through the `version` field in `meta.json`. When you run `npx wristkit update`, the CLI compares your local version with the registry and shows a diff before overwriting anything.
+Earlier drafts of wristkit shipped a `wristkit` CLI that fetched JSON from a registry endpoint and wrote files into your project. We dropped it for v0.1 because:
 
-Breaking changes bump the minor version. In v2 we will introduce versioned paths like `/r/v2/...`, once the first schema breaking change makes it necessary.
+- It added an attack surface (path traversal, registry integrity, package install confirmation) that did not earn its keep for four files.
+- Most users want to read the code before pasting it. A copy button does that better than a download.
+- Updates were opaque. A copy paste loop is honest.
+
+If you really want to script the copy, a `curl + jq` against the files on this site is a few lines.

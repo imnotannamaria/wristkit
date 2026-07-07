@@ -4,7 +4,6 @@
   "private": true,
   "scripts": {
     "build": "echo placeholder",
-    "build:registry": "tsx build.ts",
     "dev": "echo placeholder",
     "lint": "echo placeholder",
     "typecheck": "tsc --noEmit",
@@ -19,7 +18,6 @@
     "@vitejs/plugin-react": "^5.2.0",
     "drizzle-kit": "^0.31.10",
     "jsdom": "^26",
-    "tsx": "^4.21.0",
     "typescript": "5.9.2",
     "vitest": "^4.1.5"
   },

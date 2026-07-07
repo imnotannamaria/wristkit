@@ -7,19 +7,15 @@ description: Shows today's Move, Exercise and Steps rings, with every state cove
 
 `TodayActivityCard` renders three activity rings (Move in kcal, Exercise in minutes and Steps) with real data from your Supabase database. It also handles every state the component can be in, from loading to fully synced.
 
-## Installation
+## How to install it
 
-```bash
-npx wristkit add today-activity-card
-```
+There is no CLI. You copy the files below into your project:
 
-This installs:
-- `components/wristkit/today-activity-card/index.tsx`
-- `components/wristkit/today-activity-card/states.tsx`
-- `lib/wristkit/db.ts`
-- `lib/wristkit/schema.ts`
-- `lib/wristkit/queries.ts`
-- `app/api/healthkit/route.ts`
+- The seven files in the bundle further down this page go into `components/wristkit/today-activity-card/` and `lib/wristkit/` (paths are shown on each tab)
+- The route handler at [Installation](/docs/installation) goes into `app/api/wristkit-sync/route.ts`
+- The SQL migrations from the same page go into Supabase
+
+Make sure you have these peer dependencies in your project: `drizzle-orm`, `postgres`, `zod`.
 
 ## Usage
 
@@ -27,12 +23,25 @@ This installs:
 import { TodayActivityCard, loadTodayActivity } from "@/components/wristkit/today-activity-card";
 
 export default async function Page() {
-  const state = await loadTodayActivity();
+  const state = await loadTodayActivity({ tz: "America/Sao_Paulo" });
   return <TodayActivityCard state={state} />;
 }
 ```
 
-`loadTodayActivity()` is a server side helper. It reads from your Supabase database and returns the right state. You can pass it straight to the component, so you never have to think about the state machine yourself.
+`loadTodayActivity()` is a server side helper. It reads from your Supabase database and returns the right state. Pass it straight to the component, so you never have to think about the state machine yourself.
+
+### Options
+
+```ts
+loadTodayActivity({
+  tz?: string,           // IANA timezone for the day boundary and label. Default "UTC".
+  goals?: {
+    kcal?: number,             // default 600
+    exerciseMinutes?: number,  // default 30
+    steps?: number,            // default 8000
+  },
+});
+```
 
 ## Props
 
@@ -65,21 +74,15 @@ Nothing has been synced yet. The ring tracks are dotted. Values show as `—`. T
 
 <TodayActivityCardEmpty />
 
-### `partial`
-
-Some metrics are missing, for example because a Health permission was revoked. The metrics that came through render normally. The missing one shows a dotted ring, plus a small hint that says which metric and why.
-
-<TodayActivityCardPartial />
-
 ### `stale`
 
-Data exists but it is older than 24 hours. Numbers are a bit washed out, the status pill shows `stale · Nh` and the footer offers a retry link.
+Data exists but it is older than 24 hours. Numbers are a bit washed out and the status pill shows `stale · Nh`.
 
 <TodayActivityCardStale />
 
 ### `error`
 
-Something went wrong during sync. The ring area turns into a small diagnostic block with the error code, the endpoint and the timestamp. A short italic sentence translates the technical detail into plain language.
+Something went wrong during sync. The card shows a short, generic message — it never echoes the underlying error or code so you don't leak details about your auth or your database.
 
 <TodayActivityCardError />
 
@@ -91,14 +94,4 @@ A compact variant with no card chrome. Handy for a hero block or a small status 
 
 ## Customization
 
-The component reads theme tokens from CSS variables. You can override them in your `globals.css`:
-
-```css
-:root {
-  --ring-move: #9d80ff;
-  --ring-exercise: #67e8c0;
-  --ring-steps: #f5a623;
-}
-```
-
-The goals (600 kcal, 30 min and 8000 steps) are hard coded in v1. Custom goals are coming in v2.
+The component file uses literal hex colors (entrepta violet, emerald, amber) so nothing breaks if you do not have wristkit's CSS variables in your project. To match a different palette, edit `colors` at the top of `states.tsx`.

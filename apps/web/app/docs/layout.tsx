@@ -1,4 +1,5 @@
 import { SidebarNav } from "@/components/docs/sidebar-nav";
+import { SkipLink } from "@/components/skip-link";
 
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -10,6 +11,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
         background: "var(--bg-canvas)",
       }}
     >
+      <SkipLink href="#docs-content" />
       <aside
         style={{
           borderRight: "1px solid var(--border-subtle)",
@@ -23,9 +25,13 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
           flexDirection: "column",
         }}
       >
-        <SidebarNav />
+        <nav aria-label="Documentation">
+          <SidebarNav />
+        </nav>
       </aside>
-      <main style={{ padding: "52px 72px 96px", maxWidth: 800 }}>{children}</main>
+      <main id="docs-content" tabIndex={-1} style={{ padding: "52px 72px 96px", maxWidth: 800 }}>
+        {children}
+      </main>
     </div>
   );
 }

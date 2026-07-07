@@ -1,17 +1,22 @@
+import { RegistryFileBundle } from "@/components/docs/registry-file-bundle";
 import { MdxContent } from "@/components/mdx-content";
+import { type Doc, docs } from "@/lib/docs";
+import {
+  type RegistryFile,
+  TODAY_ACTIVITY_CARD_FILES,
+  loadRegistryFiles,
+} from "@/lib/registry-files";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import type { Doc } from "velite-data";
-import { docs } from "velite-data";
 
 interface Props {
   params: Promise<{ slug?: string[] }>;
 }
 
-function getDoc(slug: string[] | undefined) {
+function getDoc(slug: string[] | undefined): Doc | undefined {
   const path = slug && slug.length > 0 ? slug.join("/") : "";
   const target = path ? `docs/${path}` : "docs";
-  return (docs as Doc[]).find((doc) => doc.slug === target);
+  return docs.find((doc) => doc.slug === target);
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
@@ -25,16 +30,33 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export function generateStaticParams() {
-  return (docs as Doc[]).map((doc) => {
+  return docs.map((doc) => {
     const path = doc.slug.replace(/^docs\/?/, "");
     return { slug: path ? path.split("/") : [] };
   });
+}
+
+type Bundle = { title: string; description: string; files: RegistryFile[] };
+
+async function loadBundlesForSlug(slug: string): Promise<Bundle[]> {
+  if (slug === "docs/components/today-activity-card") {
+    return [
+      {
+        title: "Files to copy",
+        description: "Drop each file in its destination path. Copy with the button on the right.",
+        files: await loadRegistryFiles(TODAY_ACTIVITY_CARD_FILES),
+      },
+    ];
+  }
+  return [];
 }
 
 export default async function DocPage({ params }: Props) {
   const { slug } = await params;
   const doc = getDoc(slug);
   if (!doc) notFound();
+
+  const bundles = await loadBundlesForSlug(doc.slug);
 
   return (
     <article>
@@ -71,6 +93,14 @@ export default async function DocPage({ params }: Props) {
         />
       </header>
       <MdxContent code={doc.body} />
+      {bundles.map((b) => (
+        <RegistryFileBundle
+          key={b.title}
+          title={b.title}
+          description={b.description}
+          files={b.files}
+        />
+      ))}
     </article>
   );
 }

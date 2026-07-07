@@ -1,6 +1,6 @@
 ---
 title: Installation
-description: Get wristkit running in your Next.js project in less than 10 minutes.
+description: Everything you need to get Apple Health data rendering in your Next.js app — all on one page.
 ---
 
 ## Before you start
@@ -9,44 +9,46 @@ description: Get wristkit running in your Next.js project in less than 10 minute
 - A [Supabase](https://supabase.com) project (free tier works fine)
 - Node.js 20 or newer
 
-## 1. Run init
+---
 
-Inside your Next.js project, run:
+## 1. Install the peer dependencies
 
 ```bash
-npx wristkit init
+pnpm add drizzle-orm postgres zod
 ```
 
-This will:
+Or `npm install` / `yarn add` — wristkit does not lock you in to a package manager.
 
-- Check that you are on Next.js with the App Router
-- Ask you which theme you want (`default`, `neutral` or `violet`)
-- Write `components.json` to your project root
-- Write `.env.local.example` with the variables you need
-- Print the SQL you need to run on Supabase
-- Install the peer dependencies: `drizzle-orm`, `postgres`, `zod` and `framer-motion`
+---
 
 ## 2. Set your environment variables
 
-Copy `.env.local.example` to `.env.local` and fill in your values:
+Create a `.env.local` at your project root:
+
+```
+WRISTKIT_DATABASE_URL=postgresql://postgres.PROJECT_REF:SENHA@aws-0-REGION.pooler.supabase.com:6543/postgres
+WRISTKIT_API_KEY=replace-with-32-random-bytes
+```
+
+`WRISTKIT_DATABASE_URL` is your Supabase connection string. No painel do Supabase vá em **Project Settings → Database**, clique em **Connect** e selecione **Transaction pooler** (não "Direct connection"). O Vercel é serverless — a conexão direta não consegue resolver o hostname e vai falhar. A URI do pooler tem o formato:
+
+```
+postgresql://postgres.PROJECT_REF:SENHA@aws-0-REGION.pooler.supabase.com:6543/postgres
+```
+
+`WRISTKIT_API_KEY` is a secret you pick yourself. The iOS Shortcut sends it in the `x-api-key` header on every POST. Generate one with:
 
 ```bash
-cp .env.local.example .env.local
+node -e 'console.log(require("crypto").randomBytes(32).toString("base64url"))'
 ```
 
-```
+---
 
-WRISTKIT_DATABASE_URL=postgresql://postgres:password@db.xxx.supabase.co:5432/postgres
-WRISTKIT_API_KEY=your-secret-key-here
-```
+## 3. Run the SQL on Supabase
 
-`WRISTKIT_DATABASE_URL` is your Supabase connection string. You can find it in Project Settings, Database, Connection string, URI.
+Open the **SQL Editor** in your Supabase dashboard and run these two blocks in order.
 
-`WRISTKIT_API_KEY` is a secret you pick yourself. The iOS Shortcut will send it in the `x-api-key` header on every POST.
-
-## 3. Run the SQL migration
-
-In your Supabase dashboard, open **SQL Editor** and run:
+**First — create the table and indexes:**
 
 ```sql
 create table if not exists wristkit_samples (
@@ -67,15 +69,635 @@ create index if not exists idx_user_metric_recorded
   on wristkit_samples (user_id, metric, recorded_at desc);
 ```
 
-## 4. Add a component
+**Second — add the deduplication index:**
 
-```bash
-npx wristkit add today-activity-card
+```sql
+create unique index if not exists uq_sample_dedupe
+  on wristkit_samples (user_id, metric, recorded_at)
+  nulls not distinct;
 ```
 
-This pulls the component from the registry, installs its npm dependencies and copies the files into your project.
+If the second block fails because the table already has duplicates, run this first, then retry:
 
-## 5. Use the component
+```sql
+with ranked as (
+  select id,
+         row_number() over (
+           partition by user_id, metric, recorded_at
+           order by ingested_at desc
+         ) as rn
+  from wristkit_samples
+)
+delete from wristkit_samples
+where id in (select id from ranked where rn > 1);
+```
+
+---
+
+## 4. Copy the lib files
+
+Create a `lib/wristkit/` folder in your project and add these four files.
+
+**`lib/wristkit/schema.ts`**
+
+```ts
+import {
+  bigserial,
+  index,
+  numeric,
+  pgTable,
+  text,
+  timestamp,
+  uniqueIndex,
+  uuid,
+} from "drizzle-orm/pg-core";
+
+export const samples = pgTable(
+  "wristkit_samples",
+  {
+    id: bigserial("id", { mode: "number" }).primaryKey(),
+    userId: uuid("user_id"),
+    metric: text("metric").notNull(),
+    value: numeric("value").notNull(),
+    unit: text("unit").notNull(),
+    recordedAt: timestamp("recorded_at", { withTimezone: true }).notNull(),
+    source: text("source"),
+    ingestedAt: timestamp("ingested_at", { withTimezone: true }).defaultNow().notNull(),
+  },
+  (t) => ({
+    metricRecordedIdx: index("idx_metric_recorded").on(t.metric, t.recordedAt),
+    userMetricRecordedIdx: index("idx_user_metric_recorded").on(t.userId, t.metric, t.recordedAt),
+    sampleDedupeIdx: uniqueIndex("uq_sample_dedupe").on(t.userId, t.metric, t.recordedAt),
+  }),
+);
+```
+
+**`lib/wristkit/validation.ts`**
+
+```ts
+import { z } from "zod";
+
+export const MetricSchema = z.enum(["kcal", "exercise_minutes", "steps"]);
+export type Metric = z.infer<typeof MetricSchema>;
+
+const MetricValue = z.number().finite().min(0).max(1_000_000);
+
+export const IngestPayloadSchema = z
+  .object({
+    steps: MetricValue,
+    moveKcal: MetricValue,
+    exerciseMin: MetricValue,
+  })
+  .strict();
+export type IngestPayload = z.infer<typeof IngestPayloadSchema>;
+```
+
+**`lib/wristkit/db.ts`**
+
+```ts
+import { type PostgresJsDatabase, drizzle } from "drizzle-orm/postgres-js";
+import postgres, { type Sql } from "postgres";
+import * as schema from "./schema";
+
+export type RegistryDb = {
+  db: PostgresJsDatabase<typeof schema>;
+  sql: Sql;
+  close: () => Promise<void>;
+};
+
+let cached: { url: string; entry: RegistryDb } | null = null;
+
+export function createDb(url: string): RegistryDb {
+  if (cached && cached.url === url) return cached.entry;
+
+  const sql = postgres(url, { prepare: false });
+  const db = drizzle(sql, { schema });
+  const entry: RegistryDb = {
+    db,
+    sql,
+    close: async () => {},
+  };
+  cached = { url, entry };
+  return entry;
+}
+```
+
+**`lib/wristkit/queries.ts`**
+
+```ts
+import { and, desc, eq, gte } from "drizzle-orm";
+import { createDb } from "./db";
+import { samples } from "./schema";
+import type { Metric } from "./validation";
+
+function startOfToday(tz: string): Date {
+  const now = new Date();
+  const local = new Date(now.toLocaleString("en-US", { timeZone: tz }));
+  const offsetMs = local.getTime() - now.getTime();
+  const midnightInNodeTz = new Date(local.getFullYear(), local.getMonth(), local.getDate());
+  return new Date(midnightInNodeTz.getTime() - offsetMs);
+}
+
+export async function getLatestByMetric(url: string, metric: Metric, tz: string) {
+  const { db } = createDb(url);
+  return db
+    .select()
+    .from(samples)
+    .where(and(eq(samples.metric, metric), gte(samples.recordedAt, startOfToday(tz))))
+    .orderBy(desc(samples.recordedAt))
+    .limit(1);
+}
+
+export async function getTodayActivity(url: string, tz: string) {
+  const [kcal, ex, steps] = await Promise.all([
+    getLatestByMetric(url, "kcal", tz),
+    getLatestByMetric(url, "exercise_minutes", tz),
+    getLatestByMetric(url, "steps", tz),
+  ]);
+
+  const lastSync =
+    [kcal[0]?.recordedAt, ex[0]?.recordedAt, steps[0]?.recordedAt]
+      .filter((x): x is Date => Boolean(x))
+      .sort((a, b) => a.getTime() - b.getTime())
+      .pop() ?? null;
+
+  return {
+    kcal: kcal[0]?.value != null ? Number(kcal[0].value) : null,
+    exerciseMinutes: ex[0]?.value != null ? Number(ex[0].value) : null,
+    steps: steps[0]?.value != null ? Number(steps[0].value) : null,
+    lastSync,
+  };
+}
+```
+
+---
+
+## 5. Copy the route handler
+
+Create `app/api/wristkit-sync/route.ts` in your project:
+
+```ts
+import { timingSafeEqual } from "node:crypto";
+import { NextResponse } from "next/server";
+import { createDb } from "@/lib/wristkit/db";
+import { samples } from "@/lib/wristkit/schema";
+import { IngestPayloadSchema } from "@/lib/wristkit/validation";
+
+const MAX_BODY_BYTES = 256 * 1024;
+const RATE_LIMIT_MAX = 30;
+const RATE_LIMIT_WINDOW_MS = 5 * 60 * 1000;
+
+type Bucket = { count: number; resetAt: number };
+const buckets = new Map<string, Bucket>();
+
+function rateLimit(ip: string): { ok: boolean; retryAfterSec: number } {
+  const now = Date.now();
+  const existing = buckets.get(ip);
+  if (!existing || existing.resetAt <= now) {
+    buckets.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
+    return { ok: true, retryAfterSec: 0 };
+  }
+  if (existing.count >= RATE_LIMIT_MAX) {
+    return { ok: false, retryAfterSec: Math.ceil((existing.resetAt - now) / 1000) };
+  }
+  existing.count += 1;
+  return { ok: true, retryAfterSec: 0 };
+}
+
+function clientIp(req: Request): string {
+  const fwd = req.headers.get("x-forwarded-for");
+  if (fwd) return fwd.split(",")[0]?.trim() || "unknown";
+  return req.headers.get("x-real-ip") ?? "unknown";
+}
+
+function apiKeyMatches(provided: string | null, expected: string | undefined): boolean {
+  if (!provided || !expected) return false;
+  const a = Buffer.from(provided);
+  const b = Buffer.from(expected);
+  if (a.length !== b.length) return false;
+  return timingSafeEqual(a, b);
+}
+
+export async function POST(req: Request) {
+  const ip = clientIp(req);
+  const rl = rateLimit(ip);
+  if (!rl.ok) {
+    return NextResponse.json(
+      { error: "rate_limited" },
+      { status: 429, headers: { "retry-after": String(rl.retryAfterSec) } },
+    );
+  }
+
+  if (!req.headers.get("content-type")?.includes("application/json")) {
+    return NextResponse.json({ error: "expected application/json" }, { status: 415 });
+  }
+
+  const contentLength = Number(req.headers.get("content-length") ?? "0");
+  if (Number.isFinite(contentLength) && contentLength > MAX_BODY_BYTES) {
+    return NextResponse.json({ error: "payload too large" }, { status: 413 });
+  }
+
+  if (!apiKeyMatches(req.headers.get("x-api-key"), process.env.WRISTKIT_API_KEY)) {
+    return NextResponse.json({ error: "unauthorized" }, { status: 401 });
+  }
+
+  const url = process.env.WRISTKIT_DATABASE_URL;
+  if (!url) {
+    return NextResponse.json({ error: "db not configured" }, { status: 500 });
+  }
+
+  const json = await req.json().catch(() => null);
+  const parsed = IngestPayloadSchema.safeParse(json);
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: "invalid payload", issues: parsed.error.issues },
+      { status: 400 },
+    );
+  }
+
+  const recordedAt = new Date();
+  const rows = [
+    { metric: "kcal" as const, value: parsed.data.moveKcal, unit: "kcal" },
+    { metric: "exercise_minutes" as const, value: parsed.data.exerciseMin, unit: "min" },
+    { metric: "steps" as const, value: parsed.data.steps, unit: "count" },
+  ];
+
+  const { db } = createDb(url);
+  try {
+    await db.insert(samples).values(
+      rows.map((r) => ({
+        metric: r.metric,
+        value: r.value.toString(),
+        unit: r.unit,
+        recordedAt,
+        source: "apple_watch",
+      })),
+    );
+  } catch (err) {
+    console.error("[wristkit-sync] ingest failed", err);
+    return NextResponse.json({ error: "ingest failed" }, { status: 500 });
+  }
+
+  return NextResponse.json({ ok: true, inserted: rows.length });
+}
+```
+
+---
+
+## 6. Copy the component
+
+Create a `components/wristkit/today-activity-card/` folder and add these three files.
+
+**`components/wristkit/today-activity-card/load.ts`**
+
+```ts
+import { getTodayActivity } from "@/lib/wristkit/queries";
+
+export type Goals = {
+  kcal: number;
+  exerciseMinutes: number;
+  steps: number;
+};
+
+export const DEFAULT_GOALS: Goals = {
+  kcal: 600,
+  exerciseMinutes: 30,
+  steps: 8000,
+};
+
+export type TodayData = {
+  kcal: number;
+  kcalGoal: number;
+  exerciseMinutes: number;
+  exerciseGoal: number;
+  steps: number;
+  stepsGoal: number;
+  lastSyncIso: string;
+  lastSyncLabel: string;
+  hoursSinceSync: number;
+};
+
+export type TodayState =
+  | { kind: "loading" }
+  | { kind: "empty" }
+  | { kind: "error"; message?: string }
+  | { kind: "stale"; data: TodayData }
+  | { kind: "ok"; data: TodayData };
+
+export type LoadOptions = {
+  tz?: string;
+  goals?: Partial<Goals>;
+};
+
+const STALE_MS = 24 * 60 * 60 * 1000;
+
+function formatHourMinute(d: Date, tz: string): string {
+  return new Intl.DateTimeFormat("en-GB", {
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: false,
+    timeZone: tz,
+  }).format(d);
+}
+
+export async function loadTodayActivity(options: LoadOptions = {}): Promise<TodayState> {
+  const url = process.env.WRISTKIT_DATABASE_URL;
+  if (!url) return { kind: "error", message: "WRISTKIT_DATABASE_URL not set" };
+
+  const tz = options.tz ?? "UTC";
+  const goals: Goals = { ...DEFAULT_GOALS, ...options.goals };
+
+  try {
+    const r = await getTodayActivity(url, tz);
+    if (!r.lastSync) return { kind: "empty" };
+
+    const ageMs = Date.now() - r.lastSync.getTime();
+    const data: TodayData = {
+      kcal: r.kcal ?? 0,
+      kcalGoal: goals.kcal,
+      exerciseMinutes: r.exerciseMinutes ?? 0,
+      exerciseGoal: goals.exerciseMinutes,
+      steps: r.steps ?? 0,
+      stepsGoal: goals.steps,
+      lastSyncIso: r.lastSync.toISOString(),
+      lastSyncLabel: formatHourMinute(r.lastSync, tz),
+      hoursSinceSync: Math.max(1, Math.round(ageMs / (60 * 60 * 1000))),
+    };
+
+    if (ageMs > STALE_MS) return { kind: "stale", data };
+    return { kind: "ok", data };
+  } catch (err) {
+    return {
+      kind: "error",
+      message: err instanceof Error ? err.message : "unknown",
+    };
+  }
+}
+```
+
+**`components/wristkit/today-activity-card/states.tsx`**
+
+```tsx
+import type * as React from "react";
+import type { TodayData } from "./load";
+
+const colors = {
+  bg: "#0b0b0f",
+  panel: "rgba(255,255,255,0.03)",
+  border: "rgba(255,255,255,0.10)",
+  text: "rgba(255,255,255,0.88)",
+  muted: "rgba(255,255,255,0.55)",
+  subtle: "rgba(255,255,255,0.70)",
+  move: "#7c6bff",
+  exercise: "#10b981",
+  steps: "#f59e0b",
+  warn: "#f59e0b",
+  danger: "#f43f5e",
+};
+
+function clamp01(x: number): number {
+  if (Number.isNaN(x) || !Number.isFinite(x)) return 0;
+  return Math.min(1, Math.max(0, x));
+}
+
+function Ring({
+  r, value, max, color, cx, cy,
+}: {
+  r: number; value: number; max: number; color: string; cx: number; cy: number;
+}) {
+  const circ = 2 * Math.PI * r;
+  const p = clamp01(max > 0 ? value / max : 0);
+  return (
+    <>
+      <circle cx={cx} cy={cy} r={r} fill="none" stroke={color} strokeWidth={9} strokeOpacity={0.18} />
+      <circle
+        cx={cx} cy={cy} r={r} fill="none" stroke={color} strokeWidth={9} strokeLinecap="round"
+        strokeDasharray={`${circ * p} ${circ}`}
+        transform={`rotate(-90 ${cx} ${cy})`}
+      />
+    </>
+  );
+}
+
+function Panel({ className, children }: { className?: string; children: React.ReactNode }) {
+  return (
+    <section
+      className={className}
+      style={{
+        background: colors.panel,
+        border: `1px solid ${colors.border}`,
+        borderRadius: 18,
+        padding: 18,
+        color: colors.text,
+        fontFamily: 'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"',
+      }}
+    >
+      {children}
+    </section>
+  );
+}
+
+function Header({ status, statusColor }: { status: string; statusColor: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
+      <span style={{ color: colors.muted, fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+        Today / Activity
+      </span>
+      <span style={{ color: statusColor, fontSize: 11, letterSpacing: "0.12em", textTransform: "uppercase" }}>
+        {status}
+      </span>
+    </div>
+  );
+}
+
+function MetricRow({ dot, label, value, suffix }: { dot: string; label: string; value: React.ReactNode; suffix?: string }) {
+  return (
+    <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
+      <span aria-hidden style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: dot, flexShrink: 0, marginTop: 4, opacity: 0.7 }} />
+      <span style={{ color: colors.muted, fontSize: 10, letterSpacing: "0.12em", minWidth: 78, textTransform: "uppercase" }}>
+        {label}
+      </span>
+      <span style={{ flex: 1, minWidth: 0, textAlign: "right" }}>
+        <span style={{ fontFamily: "ui-serif, Georgia, serif", fontSize: 26, fontWeight: 500 }}>{value}</span>
+        {suffix ? <span style={{ color: colors.muted, marginLeft: 6, fontSize: 11 }}>{suffix}</span> : null}
+      </span>
+    </div>
+  );
+}
+
+function Footer({ left, right }: { left: React.ReactNode; right: React.ReactNode }) {
+  return (
+    <div style={{ marginTop: 14, paddingTop: 12, borderTop: `1px dashed ${colors.border}`, display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12 }}>
+      <span style={{ color: colors.muted, fontSize: 11 }}>{left}</span>
+      <span style={{ color: colors.subtle, fontSize: 11 }}>{right}</span>
+    </div>
+  );
+}
+
+export function TodayActivityCardLoading({ className }: { className?: string }) {
+  const cx = 72, cy = 72;
+  return (
+    <Panel className={className}>
+      <Header status="loading" statusColor={colors.muted} />
+      <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)", gap: 20, alignItems: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <svg width={144} height={144} viewBox="0 0 144 144" role="img" aria-label="Activity rings">
+            <title>Activity rings</title>
+            <Ring r={52} value={1} max={1} color={colors.move} cx={cx} cy={cy} />
+            <Ring r={38} value={1} max={1} color={colors.exercise} cx={cx} cy={cy} />
+            <Ring r={24} value={1} max={1} color={colors.steps} cx={cx} cy={cy} />
+          </svg>
+        </div>
+        <div style={{ opacity: 0.75 }}>
+          <MetricRow dot={colors.move} label="Move" value="—" suffix="kcal" />
+          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
+          <MetricRow dot={colors.exercise} label="Exercise" value="—" suffix="min" />
+          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
+          <MetricRow dot={colors.steps} label="Steps" value="—" />
+        </div>
+      </div>
+      <Footer left="// syncing…" right={<output>waiting for data</output>} />
+    </Panel>
+  );
+}
+
+export function TodayActivityCardEmpty({ className }: { className?: string }) {
+  const cx = 72, cy = 72;
+  return (
+    <Panel className={className}>
+      <Header status="empty" statusColor={colors.muted} />
+      <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)", gap: 20, alignItems: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <svg width={144} height={144} viewBox="0 0 144 144" role="img" aria-label="No activity yet">
+            <title>No activity yet</title>
+            <Ring r={52} value={0} max={1} color={colors.move} cx={cx} cy={cy} />
+            <Ring r={38} value={0} max={1} color={colors.exercise} cx={cx} cy={cy} />
+            <Ring r={24} value={0} max={1} color={colors.steps} cx={cx} cy={cy} />
+          </svg>
+        </div>
+        <div>
+          <MetricRow dot={colors.move} label="Move" value="—" suffix="kcal" />
+          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
+          <MetricRow dot={colors.exercise} label="Exercise" value="—" suffix="min" />
+          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
+          <MetricRow dot={colors.steps} label="Steps" value="—" />
+        </div>
+      </div>
+      <Footer left="// no data yet — run the shortcut on iPhone" right={<span style={{ color: colors.muted }}>install shortcut →</span>} />
+    </Panel>
+  );
+}
+
+export function TodayActivityCardError({ className }: { className?: string }) {
+  return (
+    <Panel className={className}>
+      <Header status="error" statusColor={colors.danger} />
+      <div style={{ marginTop: 12, color: colors.muted, fontSize: 13, lineHeight: 1.5 }}>
+        <div style={{ color: colors.text, marginBottom: 6 }}>Something went wrong.</div>
+        <div>We couldn't load today's activity. Try again later.</div>
+      </div>
+      <Footer left="// showing nothing rather than guessing" right={<span style={{ color: colors.muted }}>see docs</span>} />
+    </Panel>
+  );
+}
+
+export function TodayActivityCardStale({ data, className }: { data: TodayData; className?: string }) {
+  const cx = 72, cy = 72;
+  return (
+    <Panel className={className}>
+      <Header status="stale" statusColor={colors.warn} />
+      <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)", gap: 20, alignItems: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <svg width={144} height={144} viewBox="0 0 144 144" role="img" aria-label="Activity rings">
+            <title>Activity rings</title>
+            <Ring r={52} value={data.kcal} max={data.kcalGoal} color={colors.move} cx={cx} cy={cy} />
+            <Ring r={38} value={data.exerciseMinutes} max={data.exerciseGoal} color={colors.exercise} cx={cx} cy={cy} />
+            <Ring r={24} value={data.steps} max={data.stepsGoal} color={colors.steps} cx={cx} cy={cy} />
+          </svg>
+        </div>
+        <div>
+          <MetricRow dot={colors.move} label="Move" value={Math.round(data.kcal)} suffix="kcal" />
+          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
+          <MetricRow dot={colors.exercise} label="Exercise" value={Math.round(data.exerciseMinutes)} suffix="min" />
+          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
+          <MetricRow dot={colors.steps} label="Steps" value={Math.round(data.steps)} />
+        </div>
+      </div>
+      <Footer left={`// last sync ${data.hoursSinceSync}h ago`} right={<span style={{ color: colors.warn }}>run shortcut</span>} />
+    </Panel>
+  );
+}
+
+export function TodayActivityCardOk({ data, className }: { data: TodayData; className?: string }) {
+  const cx = 72, cy = 72;
+  return (
+    <Panel className={className}>
+      <Header status="synced" statusColor={colors.exercise} />
+      <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)", gap: 20, alignItems: "center" }}>
+        <div style={{ display: "flex", justifyContent: "center" }}>
+          <svg width={144} height={144} viewBox="0 0 144 144" role="img" aria-label="Activity rings">
+            <title>Activity rings</title>
+            <Ring r={52} value={data.kcal} max={data.kcalGoal} color={colors.move} cx={cx} cy={cy} />
+            <Ring r={38} value={data.exerciseMinutes} max={data.exerciseGoal} color={colors.exercise} cx={cx} cy={cy} />
+            <Ring r={24} value={data.steps} max={data.stepsGoal} color={colors.steps} cx={cx} cy={cy} />
+          </svg>
+        </div>
+        <div>
+          <MetricRow dot={colors.move} label="Move" value={Math.round(data.kcal)} suffix="kcal" />
+          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
+          <MetricRow dot={colors.exercise} label="Exercise" value={Math.round(data.exerciseMinutes)} suffix="min" />
+          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
+          <MetricRow dot={colors.steps} label="Steps" value={Math.round(data.steps)} />
+        </div>
+      </div>
+      <Footer left="// up to date" right={`synced ${data.lastSyncLabel}`} />
+    </Panel>
+  );
+}
+```
+
+**`components/wristkit/today-activity-card/index.tsx`**
+
+```tsx
+import type * as React from "react";
+import type { TodayState } from "./load";
+import { loadTodayActivity } from "./load";
+import {
+  TodayActivityCardEmpty,
+  TodayActivityCardError,
+  TodayActivityCardLoading,
+  TodayActivityCardOk,
+  TodayActivityCardStale,
+} from "./states";
+
+export { loadTodayActivity };
+export type { TodayData, TodayState } from "./load";
+
+export function TodayActivityCard({
+  state,
+  className,
+}: {
+  state: TodayState;
+  className?: string;
+}): React.JSX.Element {
+  switch (state.kind) {
+    case "loading":
+      return <TodayActivityCardLoading className={className} />;
+    case "empty":
+      return <TodayActivityCardEmpty className={className} />;
+    case "error":
+      return <TodayActivityCardError className={className} />;
+    case "stale":
+      return <TodayActivityCardStale className={className} data={state.data} />;
+    case "ok":
+      return <TodayActivityCardOk className={className} data={state.data} />;
+  }
+}
+```
+
+---
+
+## 7. Use the component
 
 In any Server Component:
 
@@ -83,11 +705,65 @@ In any Server Component:
 import { TodayActivityCard, loadTodayActivity } from "@/components/wristkit/today-activity-card";
 
 export default async function Page() {
-  const state = await loadTodayActivity();
+  const state = await loadTodayActivity({ tz: "America/Sao_Paulo" });
   return <TodayActivityCard state={state} />;
 }
 ```
 
-## 6. Set up the iOS Shortcut
+`loadTodayActivity` accepts an optional `tz` (IANA timezone, defaults to `"UTC"`) and optional `goals` to override the defaults:
 
-See [iOS Shortcut setup](/docs/shortcut-setup) for the full walkthrough.
+```ts
+loadTodayActivity({
+  tz: "America/Sao_Paulo",
+  goals: {
+    kcal: 500,
+    exerciseMinutes: 45,
+    steps: 10000,
+  },
+});
+```
+
+---
+
+## 8. Set up the iOS Shortcut
+
+Open this link **on your iPhone**:
+
+```
+https://www.icloud.com/shortcuts/da2cb73b3e7d4d5e89cfdfa1e990ff01
+```
+
+Tap **Add Shortcut**.
+
+Then open the Shortcut and edit two fields:
+
+**URL** — your sync endpoint:
+```
+https://your-site.com/api/wristkit-sync
+```
+
+**API Key** — the same value you set in `WRISTKIT_API_KEY`.
+
+Run the Shortcut once by hand to test it. Check your Supabase `wristkit_samples` table — you should see three new rows (one per metric) within a few seconds.
+
+To sync every day automatically, create an iOS Automation:
+
+1. Open the **Shortcuts** app → **Automation** tab
+2. Tap **+** → **Time of Day**
+3. Set the time to **23:59** every day
+4. Add the action **Run Shortcut** → pick **wristkit Sync**
+5. Turn off "Ask Before Running"
+
+That is it. Your Apple Health data will now render on your site every day.
+
+---
+
+## Troubleshooting
+
+**401 Unauthorized** — the API key sent by the Shortcut does not match `WRISTKIT_API_KEY`. Double-check both values.
+
+**429 Too Many Requests** — the handler limits each IP to 30 requests per 5 minutes. Wait the `Retry-After` seconds shown in the response.
+
+**No data in the component** — check that `wristkit_samples` actually has rows for today. `loadTodayActivity` respects the `tz` you pass; without it the default is UTC, which may not match your local midnight.
+
+**Network error from Shortcut** — your site must be reachable from the public internet. `localhost` will not work.

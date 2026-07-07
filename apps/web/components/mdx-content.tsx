@@ -5,11 +5,11 @@ import {
   TodayActivityCardEmpty,
   TodayActivityCardError,
   TodayActivityCardLoading,
-  TodayActivityCardPartial,
   TodayActivityCardRingsOnly,
   TodayActivityCardStale,
 } from "@/components/cards/today-activity-card-demo";
 import { CodeBlock } from "@/components/entrepta/code-block";
+import { MdxErrorBoundary } from "@/components/mdx-error-boundary";
 import { useMemo } from "react";
 import type React from "react";
 import * as runtime from "react/jsx-runtime";
@@ -44,12 +44,14 @@ function MdxPre({ children, ...props }: React.HTMLAttributes<HTMLPreElement>) {
 }
 
 const customComponents = {
+  // Remap MDX `h1` to `h2`. The page header already renders an `<h1>` from the
+  // doc title, so any in-body `#` heading would otherwise produce two H1s.
   h1: (props: React.HTMLAttributes<HTMLHeadingElement>) => (
-    <h1
+    <h2
       {...props}
       style={{
         fontFamily: "var(--font-serif)",
-        fontSize: 36,
+        fontSize: 28,
         fontWeight: 500,
         letterSpacing: "-0.02em",
         margin: "0 0 20px",
@@ -107,7 +109,9 @@ const customComponents = {
       {...props}
       style={{
         color: "var(--fg-brand)",
-        textDecoration: "none",
+        textDecoration: "underline",
+        textUnderlineOffset: "0.2em",
+        textDecorationThickness: "1px",
         transition: "color 150ms",
       }}
     />
@@ -255,12 +259,15 @@ const customComponents = {
   TodayActivityCardLoading,
   TodayActivityCardStale,
   TodayActivityCardError,
-  TodayActivityCardPartial,
   TodayActivityCardRingsOnly,
 };
 
 export function MdxContent({ code }: { code: string }) {
   const Component = useMemo(() => {
+    // Velite compiles each MDX file into a self-contained module body. We
+    // run it once per page render via new Function so the React runtime
+    // can resolve jsx/jsxs. The source is build-time (our own MDX), not
+    // user input — never let untrusted strings reach this call.
     const fn = new Function(code);
     return fn({ ...runtime }).default as React.ComponentType<{
       components?: Record<string, React.ComponentType<unknown>>;
@@ -268,8 +275,10 @@ export function MdxContent({ code }: { code: string }) {
   }, [code]);
 
   return (
-    <Component
-      components={customComponents as unknown as Record<string, React.ComponentType<unknown>>}
-    />
+    <MdxErrorBoundary>
+      <Component
+        components={customComponents as unknown as Record<string, React.ComponentType<unknown>>}
+      />
+    </MdxErrorBoundary>
   );
 }
