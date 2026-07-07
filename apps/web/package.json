@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "pretypecheck": "velite build --clean",
+    "predev": "mkdir -p public && cp ../../packages/registry/shortcuts/wristkit-sync.shortcut public/wristkit-sync.shortcut",
     "dev": "next dev",
     "prebuild": "velite build --clean && mkdir -p public && cp ../../packages/registry/shortcuts/wristkit-sync.shortcut public/wristkit-sync.shortcut",
     "build": "next build",
