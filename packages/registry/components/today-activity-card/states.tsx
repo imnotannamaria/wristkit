@@ -68,13 +68,19 @@ function Ring({
 function Panel({
   className,
   children,
+  role,
+  "aria-label": ariaLabel,
 }: {
   className?: string;
   children: React.ReactNode;
+  role?: string;
+  "aria-label"?: string;
 }) {
   return (
     <section
       className={className}
+      role={role}
+      aria-label={ariaLabel}
       style={{
         background: colors.panel,
         border: `1px solid ${colors.border}`,
@@ -196,7 +202,8 @@ export function TodayActivityCardLoading({ className }: { className?: string }) 
   const cx = 72;
   const cy = 72;
   return (
-    <Panel className={className}>
+    // biome-ignore lint/a11y/useSemanticElements: Panel is a <section>; role="status" is the documented loading contract.
+    <Panel className={className} role="status" aria-label="Loading today's activity">
       <Header status="loading" statusColor={colors.muted} />
       <div
         style={{

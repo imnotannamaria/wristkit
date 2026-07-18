@@ -479,10 +479,12 @@ function Ring({
   );
 }
 
-function Panel({ className, children }: { className?: string; children: React.ReactNode }) {
+function Panel({ className, children, role, "aria-label": ariaLabel }: { className?: string; children: React.ReactNode; role?: string; "aria-label"?: string }) {
   return (
     <section
       className={className}
+      role={role}
+      aria-label={ariaLabel}
       style={{
         background: colors.panel,
         border: `1px solid ${colors.border}`,
@@ -537,7 +539,7 @@ function Footer({ left, right }: { left: React.ReactNode; right: React.ReactNode
 export function TodayActivityCardLoading({ className }: { className?: string }) {
   const cx = 72, cy = 72;
   return (
-    <Panel className={className}>
+    <Panel className={className} role="status" aria-label="Loading today's activity">
       <Header status="loading" statusColor={colors.muted} />
       <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)", gap: 20, alignItems: "center" }}>
         <div style={{ display: "flex", justifyContent: "center" }}>
