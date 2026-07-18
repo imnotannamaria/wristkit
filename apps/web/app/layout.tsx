@@ -1,6 +1,30 @@
 import { ThemeScript } from "@/components/entrepta/theme-switcher";
 import type { Metadata } from "next";
+import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
+
+const newsreader = Newsreader({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-newsreader",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+const inter = Inter({
+  subsets: ["latin"],
+  weight: ["400", "500", "600"],
+  variable: "--font-inter",
+  display: "swap",
+});
 
 const SITE_URL = "https://wristkit-web.vercel.app";
 const SITE_DESCRIPTION =
@@ -32,7 +56,12 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="ivy" suppressHydrationWarning>
+    <html
+      lang="en"
+      data-theme="ivy"
+      suppressHydrationWarning
+      className={`${newsreader.variable} ${jetbrainsMono.variable} ${inter.variable}`}
+    >
       <head>
         <ThemeScript />
       </head>
