@@ -1,35 +1,22 @@
-import { SidebarNav } from "@/components/docs/sidebar-nav";
+import { DocsSidebar } from "@/components/docs/docs-sidebar";
 import { SkipLink } from "@/components/skip-link";
 
 export default function DocsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div
-      style={{
-        display: "grid",
-        gridTemplateColumns: "220px 1fr",
-        minHeight: "100vh",
-        background: "var(--bg-canvas)",
-      }}
+      className="grid grid-cols-1 md:grid-cols-[220px_1fr]"
+      style={{ minHeight: "100vh", background: "var(--bg-canvas)" }}
     >
       <SkipLink href="#docs-content" />
-      <aside
-        style={{
-          borderRight: "1px solid var(--border-subtle)",
-          padding: "32px 20px",
-          background: "var(--bg-surface)",
-          position: "sticky",
-          top: 0,
-          height: "100vh",
-          overflow: "auto",
-          display: "flex",
-          flexDirection: "column",
-        }}
-      >
-        <nav aria-label="Documentation">
-          <SidebarNav />
-        </nav>
+      <aside className="flex flex-col border-b border-[var(--border-subtle)] bg-[var(--bg-surface)] md:sticky md:top-0 md:h-screen md:overflow-auto md:border-r md:border-b-0">
+        <DocsSidebar />
       </aside>
-      <main id="docs-content" tabIndex={-1} style={{ padding: "52px 72px 96px", maxWidth: 800 }}>
+      <main
+        id="docs-content"
+        tabIndex={-1}
+        className="px-5 py-10 md:px-[72px] md:pt-[52px] md:pb-24"
+        style={{ maxWidth: 800 }}
+      >
         {children}
       </main>
     </div>

@@ -14,6 +14,7 @@ import { TopNav, TopNavLink, TopNavMenu } from "@/components/entrepta/top-nav";
 import { HeroIdePreview } from "@/components/home/hero-ide-preview";
 import { WristKitMark } from "@/components/mark";
 import { SkipLink } from "@/components/skip-link";
+import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -99,27 +100,90 @@ function HomeTopNav() {
             </Link>
           }
           right={
-            <TopNavMenu>
-              <TopNavLink active asChild>
-                <Link href="/">home</Link>
-              </TopNavLink>
-              <TopNavLink asChild>
-                <Link href="/docs">docs</Link>
-              </TopNavLink>
-              <TopNavLink asChild>
-                <Link href="/docs/shortcut-setup">shortcut</Link>
-              </TopNavLink>
-              <TopNavLink asChild>
-                <Link href="/docs/components/today-activity-card">components</Link>
-              </TopNavLink>
-              <TopNavLink href="https://github.com/imnotannamaria/wristkit" external>
-                github
-              </TopNavLink>
-            </TopNavMenu>
+            <>
+              <TopNavMenu aria-label="Main">
+                <TopNavLink active asChild>
+                  <Link href="/">home</Link>
+                </TopNavLink>
+                <TopNavLink asChild>
+                  <Link href="/docs">docs</Link>
+                </TopNavLink>
+                <TopNavLink asChild>
+                  <Link href="/docs/shortcut-setup">shortcut</Link>
+                </TopNavLink>
+                <TopNavLink asChild>
+                  <Link href="/docs/components/today-activity-card">components</Link>
+                </TopNavLink>
+                <TopNavLink href="https://github.com/imnotannamaria/wristkit" external>
+                  github
+                </TopNavLink>
+              </TopNavMenu>
+              <MobileNav />
+            </>
           }
         />
       </div>
     </header>
+  );
+}
+
+// ─── Mobile nav ───────────────────────────────────────────────
+const MOBILE_LINKS = [
+  { label: "home", href: "/", active: true },
+  { label: "docs", href: "/docs" },
+  { label: "shortcut", href: "/docs/shortcut-setup" },
+  { label: "components", href: "/docs/components/today-activity-card" },
+];
+
+function MobileNav() {
+  return (
+    <details className="relative md:hidden">
+      <summary
+        aria-label="Toggle navigation menu"
+        className="inline-flex size-9 cursor-pointer list-none items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] text-[var(--fg-secondary)] [&::-webkit-details-marker]:hidden"
+      >
+        <svg
+          width="18"
+          height="18"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+          strokeLinecap="round"
+          aria-hidden="true"
+          role="presentation"
+        >
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </summary>
+      <nav
+        aria-label="Mobile"
+        className="absolute right-0 top-[calc(100%+12px)] z-50 flex min-w-44 flex-col gap-1 rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 font-mono text-[13px] uppercase tracking-[0.06em] shadow-lg"
+      >
+        {MOBILE_LINKS.map((l) => (
+          <Link
+            key={l.href}
+            href={l.href}
+            className={cn(
+              "rounded-[var(--radius-sm)] px-3 py-2 text-[var(--fg-secondary)] hover:bg-[var(--bg-chrome)] hover:text-[var(--fg-primary)]",
+              l.active && "text-[var(--fg-primary)]",
+            )}
+          >
+            {l.label}
+          </Link>
+        ))}
+        <a
+          href="https://github.com/imnotannamaria/wristkit"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="rounded-[var(--radius-sm)] px-3 py-2 text-[var(--fg-secondary)] hover:bg-[var(--bg-chrome)] hover:text-[var(--fg-primary)]"
+        >
+          github ↗
+        </a>
+      </nav>
+    </details>
   );
 }
 
@@ -133,12 +197,10 @@ function HeroSection() {
   ];
   return (
     <section
-      className="container"
+      className="container grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,480px)]"
       style={{
         paddingTop: 80,
         paddingBottom: 64,
-        display: "grid",
-        gridTemplateColumns: "minmax(0, 1fr) minmax(0, 480px)",
         gap: 56,
         alignItems: "start",
       }}
@@ -206,9 +268,8 @@ function HeroSection() {
           </Link>
         </div>
         <dl
+          className="grid grid-cols-2 lg:grid-cols-4"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
             gap: 12,
             margin: 0,
           }}
@@ -258,10 +319,8 @@ function ComponentShowcase() {
   return (
     <section className="container bt-subtle" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div
+        className="flex flex-col md:flex-row md:items-end md:justify-between"
         style={{
-          display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "space-between",
           marginBottom: 40,
           gap: 24,
         }}
@@ -277,7 +336,10 @@ function ComponentShowcase() {
           >
             · components/wristkit
           </div>
-          <h2 className="t-display-md" style={{ margin: 0, fontSize: 52, lineHeight: 1.05 }}>
+          <h2
+            className="t-display-md"
+            style={{ margin: 0, fontSize: "clamp(34px, 5vw, 52px)", lineHeight: 1.05 }}
+          >
             One <em className="t-italic">card</em>.
             <br />
             <span className="t-muted">Your day, at a glance.</span>
@@ -327,15 +389,16 @@ function PackagesSection() {
   return (
     <section className="container bt-subtle" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div
+        className="flex flex-col md:flex-row md:items-end md:justify-between"
         style={{
-          display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "space-between",
           marginBottom: 40,
           gap: 24,
         }}
       >
-        <h2 className="t-display-md" style={{ margin: 0, fontSize: 52, lineHeight: 1.05 }}>
+        <h2
+          className="t-display-md"
+          style={{ margin: 0, fontSize: "clamp(34px, 5vw, 52px)", lineHeight: 1.05 }}
+        >
           <em className="t-italic">Three</em> pieces. <span className="t-muted">One evening.</span>
         </h2>
         <Link
@@ -352,9 +415,8 @@ function PackagesSection() {
         </Link>
       </div>
       <div
+        className="grid grid-cols-1 md:grid-cols-3"
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
           gap: 16,
         }}
       >
@@ -436,7 +498,10 @@ function InstallSection() {
         >
           · getting started
         </div>
-        <h2 className="t-display-md" style={{ margin: "0 0 16px", fontSize: 52, lineHeight: 1.05 }}>
+        <h2
+          className="t-display-md"
+          style={{ margin: "0 0 16px", fontSize: "clamp(34px, 5vw, 52px)", lineHeight: 1.05 }}
+        >
           <em className="t-italic">Four</em> files.
           <br />
           <span className="t-muted">You own the pipeline.</span>
@@ -447,9 +512,8 @@ function InstallSection() {
         </p>
       </div>
       <div
+        className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px]"
         style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) 360px",
           gap: 24,
         }}
       >
@@ -633,9 +697,9 @@ function CtaStrip() {
   return (
     <section className="container bt-subtle" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div
+        className="px-6 py-12 md:px-12 md:py-16"
         style={{
           position: "relative",
-          padding: "64px 48px",
           textAlign: "center",
           background: "radial-gradient(ellipse at top, var(--bg-surface-brand), transparent 60%)",
           border: "1px solid var(--border-subtle)",
@@ -716,11 +780,9 @@ function SiteFooter() {
   return (
     <footer className="bt-subtle" style={{ marginTop: 64, paddingBottom: 64 }}>
       <div
-        className="container"
+        className="container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto]"
         style={{
           paddingTop: 64,
-          display: "grid",
-          gridTemplateColumns: "1fr auto auto auto",
           gap: 48,
         }}
       >

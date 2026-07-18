@@ -25,7 +25,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   if (!doc) return {};
   const title = `${doc.title} · wristkit docs`;
   return {
-    title,
+    // `absolute` opts out of the root title.template so we don't double up
+    // the suffix ("… · wristkit docs · wristkit").
+    title: { absolute: title },
     description: doc.description,
     alternates: { canonical: `/${doc.slug}` },
     openGraph: {

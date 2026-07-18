@@ -202,7 +202,7 @@
 
 .t-display-xl {
   font-family: var(--font-serif);
-  font-size: 80px;
+  font-size: clamp(40px, 8vw, 80px);
   line-height: 0.95;
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -210,7 +210,7 @@
 
 .t-display-lg {
   font-family: var(--font-serif);
-  font-size: 64px;
+  font-size: clamp(36px, 6vw, 64px);
   line-height: 1;
   font-weight: 400;
   letter-spacing: -0.02em;
@@ -477,7 +477,29 @@ button:focus:not(:focus-visible),
 .container {
   max-width: 1280px;
   margin: 0 auto;
-  padding: 0 48px;
+  padding: 0 20px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    padding: 0 48px;
+  }
+}
+
+/* Demo activity card: ring + metrics side by side, stacked on narrow screens */
+.demo-split {
+  display: grid;
+  grid-template-columns: 176px 1fr;
+  gap: 32px;
+  align-items: center;
+}
+
+@media (max-width: 480px) {
+  .demo-split {
+    grid-template-columns: 1fr;
+    justify-items: center;
+    gap: 20px;
+  }
 }
 
 .bt-subtle {
