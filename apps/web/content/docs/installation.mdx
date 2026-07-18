@@ -26,14 +26,14 @@ Or `npm install` / `yarn add` — wristkit does not lock you in to a package man
 Create a `.env.local` at your project root:
 
 ```
-WRISTKIT_DATABASE_URL=postgresql://postgres.PROJECT_REF:SENHA@aws-0-REGION.pooler.supabase.com:6543/postgres
+WRISTKIT_DATABASE_URL=postgresql://postgres.PROJECT_REF:PASSWORD@aws-0-REGION.pooler.supabase.com:6543/postgres
 WRISTKIT_API_KEY=replace-with-32-random-bytes
 ```
 
-`WRISTKIT_DATABASE_URL` is your Supabase connection string. No painel do Supabase vá em **Project Settings → Database**, clique em **Connect** e selecione **Transaction pooler** (não "Direct connection"). O Vercel é serverless — a conexão direta não consegue resolver o hostname e vai falhar. A URI do pooler tem o formato:
+`WRISTKIT_DATABASE_URL` is your Supabase connection string. In the Supabase dashboard, go to **Project Settings → Database**, click **Connect**, and select **Transaction pooler** (not "Direct connection"). Vercel is serverless — the direct connection can't resolve the hostname and will fail. The pooler URI has this format:
 
 ```
-postgresql://postgres.PROJECT_REF:SENHA@aws-0-REGION.pooler.supabase.com:6543/postgres
+postgresql://postgres.PROJECT_REF:PASSWORD@aws-0-REGION.pooler.supabase.com:6543/postgres
 ```
 
 `WRISTKIT_API_KEY` is a secret you pick yourself. The iOS Shortcut sends it in the `x-api-key` header on every POST. Generate one with:

@@ -23,9 +23,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const doc = getDoc(slug);
   if (!doc) return {};
+  const title = `${doc.title} · wristkit docs`;
   return {
-    title: `${doc.title} · wristkit docs`,
+    title,
     description: doc.description,
+    alternates: { canonical: `/${doc.slug}` },
+    openGraph: {
+      title,
+      description: doc.description,
+      url: `/${doc.slug}`,
+      type: "article",
+    },
   };
 }
 
