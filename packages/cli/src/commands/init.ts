@@ -112,7 +112,7 @@ export async function initCommand() {
       "",
       "Next steps:",
       "- Run the SQL migration in Supabase (see packages/registry/schemas/0001_initial.sql)",
-      "- Download the iOS Shortcut: https://www.icloud.com/shortcuts/da2cb73b3e7d4d5e89cfdfa1e990ff01",
+      "- Download the iOS Shortcut: https://www.icloud.com/shortcuts/cb23e99ad6bd45c9b09e45b444ead0f0",
       "- Add the component: npx wristkit add today-activity-card",
     ].join("\n"),
   );
