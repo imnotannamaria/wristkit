@@ -57,7 +57,7 @@ export default async function Dashboard() {
 
 **6. Set up the iOS Shortcut**
 
-Download it from [wristkit.dev/shortcut](https://wristkit-web.vercel.app/shortcut), open it in the Shortcuts app, and fill in your site URL and API key.
+Download it from [wristkit-web.vercel.app/shortcut](https://wristkit-web.vercel.app/shortcut), open it in the Shortcuts app, and fill in your site URL and API key.
 
 ## Requirements
 

@@ -301,7 +301,7 @@ const REGISTRY_ITEMS = [
     label: "components/wristkit",
     num: "01",
     title: "TodayActivityCard",
-    desc: "A React Server Component with all 7 states (loading, empty, stale, partial, error, ok and rings only). Copy it into any /app page.",
+    desc: "A React Server Component with all 5 states (loading, empty, stale, error, ok). Copy it into any /app page.",
     tag: "<TodayActivityCard state={state} />",
     href: "/docs/components/today-activity-card",
   },
@@ -695,7 +695,6 @@ const FOOTER_GROUPS = [
     title: "Resources",
     items: [
       { label: "GitHub ↗", href: "https://github.com/imnotannamaria/wristkit", external: true },
-      { label: "npm ↗", href: "https://www.npmjs.com/package/wristkit", external: true },
       { label: "Docs", href: "/docs" },
     ],
   },
@@ -748,8 +747,8 @@ function SiteFooter() {
               marginTop: 16,
             }}
           >
-            A small CLI for piping Apple Health into the web. Open source, MIT and zero telemetry.
-            You bring the Supabase.
+            A small set of copy-paste React components for piping Apple Health into the web. Open
+            source, MIT and zero telemetry. You bring the Supabase.
           </p>
         </div>
         {FOOTER_GROUPS.map((group) => (

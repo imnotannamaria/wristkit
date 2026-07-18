@@ -397,8 +397,8 @@ export function TodayActivityCardEmpty() {
         </div>
       </div>
       <CardFooter>
-        <CardComment>run shortcut on iPhone · or POST /api/healthkit</CardComment>
-        <a href="/shortcut" style={{ color: "var(--fg-brand)" }}>
+        <CardComment>run shortcut on iPhone · or POST /api/wristkit-sync</CardComment>
+        <a href="/docs/shortcut-setup" style={{ color: "var(--fg-brand)" }}>
           install shortcut →
         </a>
       </CardFooter>
