@@ -13,6 +13,7 @@ import {
 import { TopNav, TopNavLink, TopNavMenu } from "@/components/entrepta/top-nav";
 import { HeroIdePreview } from "@/components/home/hero-ide-preview";
 import { WristKitMark } from "@/components/mark";
+import { MobileNav } from "@/components/mobile-nav";
 import { SkipLink } from "@/components/skip-link";
 import Link from "next/link";
 
@@ -48,7 +49,7 @@ function HomeTopNav() {
         left: 0,
         right: 0,
         zIndex: 40,
-        background: "rgba(9, 9, 11, 0.9)",
+        background: "color-mix(in srgb, var(--bg-canvas) 90%, transparent)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         borderBottom: "1px solid var(--border-subtle)",
@@ -99,23 +100,26 @@ function HomeTopNav() {
             </Link>
           }
           right={
-            <TopNavMenu>
-              <TopNavLink active asChild>
-                <Link href="/">home</Link>
-              </TopNavLink>
-              <TopNavLink asChild>
-                <Link href="/docs">docs</Link>
-              </TopNavLink>
-              <TopNavLink asChild>
-                <Link href="/docs/shortcut-setup">shortcut</Link>
-              </TopNavLink>
-              <TopNavLink asChild>
-                <Link href="/docs/components/today-activity-card">components</Link>
-              </TopNavLink>
-              <TopNavLink href="https://github.com/imnotannamaria/wristkit" external>
-                github
-              </TopNavLink>
-            </TopNavMenu>
+            <>
+              <TopNavMenu aria-label="Main">
+                <TopNavLink active asChild>
+                  <Link href="/">home</Link>
+                </TopNavLink>
+                <TopNavLink asChild>
+                  <Link href="/docs">docs</Link>
+                </TopNavLink>
+                <TopNavLink asChild>
+                  <Link href="/docs/shortcut-setup">shortcut</Link>
+                </TopNavLink>
+                <TopNavLink asChild>
+                  <Link href="/docs/components/today-activity-card">components</Link>
+                </TopNavLink>
+                <TopNavLink href="https://github.com/imnotannamaria/wristkit" external>
+                  github
+                </TopNavLink>
+              </TopNavMenu>
+              <MobileNav />
+            </>
           }
         />
       </div>
@@ -133,12 +137,10 @@ function HeroSection() {
   ];
   return (
     <section
-      className="container"
+      className="container grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_minmax(0,480px)]"
       style={{
         paddingTop: 80,
         paddingBottom: 64,
-        display: "grid",
-        gridTemplateColumns: "minmax(0, 1fr) minmax(0, 480px)",
         gap: 56,
         alignItems: "start",
       }}
@@ -187,12 +189,11 @@ function HeroSection() {
           iOS Shortcut posts straight to your endpoint. No third party cloud, no SDK in the middle.
         </p>
         <div
+          className="flex flex-col sm:flex-row sm:flex-wrap"
           style={{
-            display: "flex",
             gap: 12,
             marginTop: 32,
             marginBottom: 40,
-            flexWrap: "wrap",
           }}
         >
           <Link
@@ -206,9 +207,8 @@ function HeroSection() {
           </Link>
         </div>
         <dl
+          className="grid grid-cols-2 lg:grid-cols-4"
           style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(4, 1fr)",
             gap: 12,
             margin: 0,
           }}
@@ -258,10 +258,8 @@ function ComponentShowcase() {
   return (
     <section className="container bt-subtle" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div
+        className="flex flex-col md:flex-row md:items-end md:justify-between"
         style={{
-          display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "space-between",
           marginBottom: 40,
           gap: 24,
         }}
@@ -277,7 +275,10 @@ function ComponentShowcase() {
           >
             · components/wristkit
           </div>
-          <h2 className="t-display-md" style={{ margin: 0, fontSize: 52, lineHeight: 1.05 }}>
+          <h2
+            className="t-display-md"
+            style={{ margin: 0, fontSize: "clamp(34px, 5vw, 52px)", lineHeight: 1.05 }}
+          >
             One <em className="t-italic">card</em>.
             <br />
             <span className="t-muted">Your day, at a glance.</span>
@@ -301,7 +302,7 @@ const REGISTRY_ITEMS = [
     label: "components/wristkit",
     num: "01",
     title: "TodayActivityCard",
-    desc: "A React Server Component with all 7 states (loading, empty, stale, partial, error, ok and rings only). Copy it into any /app page.",
+    desc: "A React Server Component with all 5 states (loading, empty, stale, error, ok). Copy it into any /app page.",
     tag: "<TodayActivityCard state={state} />",
     href: "/docs/components/today-activity-card",
   },
@@ -327,15 +328,16 @@ function PackagesSection() {
   return (
     <section className="container bt-subtle" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div
+        className="flex flex-col md:flex-row md:items-end md:justify-between"
         style={{
-          display: "flex",
-          alignItems: "flex-end",
-          justifyContent: "space-between",
           marginBottom: 40,
           gap: 24,
         }}
       >
-        <h2 className="t-display-md" style={{ margin: 0, fontSize: 52, lineHeight: 1.05 }}>
+        <h2
+          className="t-display-md"
+          style={{ margin: 0, fontSize: "clamp(34px, 5vw, 52px)", lineHeight: 1.05 }}
+        >
           <em className="t-italic">Three</em> pieces. <span className="t-muted">One evening.</span>
         </h2>
         <Link
@@ -352,9 +354,8 @@ function PackagesSection() {
         </Link>
       </div>
       <div
+        className="grid grid-cols-1 md:grid-cols-3"
         style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, minmax(0, 1fr))",
           gap: 16,
         }}
       >
@@ -362,9 +363,10 @@ function PackagesSection() {
           <Link
             key={p.num}
             href={p.href}
+            className="h-full"
             style={{ display: "block", color: "inherit", textDecoration: "none" }}
           >
-            <Card>
+            <Card className="h-full">
               <CardHeader>
                 <CardLabel>{p.label}</CardLabel>
                 <CardMeta>{p.num}</CardMeta>
@@ -381,7 +383,7 @@ function PackagesSection() {
               >
                 {p.desc}
               </p>
-              <CardFooter>
+              <CardFooter className="mt-auto">
                 <CardComment>{p.tag}</CardComment>
                 <span style={{ color: "var(--fg-brand)" }}>→</span>
               </CardFooter>
@@ -436,7 +438,10 @@ function InstallSection() {
         >
           · getting started
         </div>
-        <h2 className="t-display-md" style={{ margin: "0 0 16px", fontSize: 52, lineHeight: 1.05 }}>
+        <h2
+          className="t-display-md"
+          style={{ margin: "0 0 16px", fontSize: "clamp(34px, 5vw, 52px)", lineHeight: 1.05 }}
+        >
           <em className="t-italic">Four</em> files.
           <br />
           <span className="t-muted">You own the pipeline.</span>
@@ -447,9 +452,8 @@ function InstallSection() {
         </p>
       </div>
       <div
+        className="grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_360px]"
         style={{
-          display: "grid",
-          gridTemplateColumns: "minmax(0, 1fr) 360px",
           gap: 24,
         }}
       >
@@ -633,9 +637,9 @@ function CtaStrip() {
   return (
     <section className="container bt-subtle" style={{ paddingTop: 80, paddingBottom: 80 }}>
       <div
+        className="px-6 py-12 md:px-12 md:py-16"
         style={{
           position: "relative",
-          padding: "64px 48px",
           textAlign: "center",
           background: "radial-gradient(ellipse at top, var(--bg-surface-brand), transparent 60%)",
           border: "1px solid var(--border-subtle)",
@@ -659,11 +663,9 @@ function CtaStrip() {
           telemetry, your own Supabase and MIT.
         </p>
         <div
+          className="flex flex-col sm:flex-row sm:flex-wrap sm:justify-center"
           style={{
-            display: "flex",
             gap: 12,
-            justifyContent: "center",
-            flexWrap: "wrap",
           }}
         >
           <Link
@@ -695,7 +697,6 @@ const FOOTER_GROUPS = [
     title: "Resources",
     items: [
       { label: "GitHub ↗", href: "https://github.com/imnotannamaria/wristkit", external: true },
-      { label: "npm ↗", href: "https://www.npmjs.com/package/wristkit", external: true },
       { label: "Docs", href: "/docs" },
     ],
   },
@@ -717,11 +718,9 @@ function SiteFooter() {
   return (
     <footer className="bt-subtle" style={{ marginTop: 64, paddingBottom: 64 }}>
       <div
-        className="container"
+        className="container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[1fr_auto_auto_auto]"
         style={{
           paddingTop: 64,
-          display: "grid",
-          gridTemplateColumns: "1fr auto auto auto",
           gap: 48,
         }}
       >
@@ -748,8 +747,8 @@ function SiteFooter() {
               marginTop: 16,
             }}
           >
-            A small CLI for piping Apple Health into the web. Open source, MIT and zero telemetry.
-            You bring the Supabase.
+            A small set of copy-paste React components for piping Apple Health into the web. Open
+            source, MIT and zero telemetry. You bring the Supabase.
           </p>
         </div>
         {FOOTER_GROUPS.map((group) => (

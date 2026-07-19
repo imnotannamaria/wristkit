@@ -8,10 +8,20 @@ description: Install the wristkit Shortcut on your iPhone and start syncing your
 Open this link **on your iPhone**:
 
 ```
-https://www.icloud.com/shortcuts/da2cb73b3e7d4d5e89cfdfa1e990ff01
+https://www.icloud.com/shortcuts/cb23e99ad6bd45c9b09e45b444ead0f0
 ```
 
 Tap **Add Shortcut** when the prompt shows up.
+
+<Screenshots
+  items={[
+    {
+      src: "/screenshots/shortcut-1.jpeg",
+      alt: "iCloud import screen for the wristkit shortcut with the Add Shortcut button",
+      caption: "Tap Add Shortcut to import it",
+    },
+  ]}
+/>
 
 ## Configure the Shortcut
 
@@ -43,6 +53,31 @@ To sync every day on its own, create an iOS Automation:
 3. Set the time to **23:59** every day
 4. Add the action **Run Shortcut** and pick **wristkit Sync**
 5. Turn off "Ask Before Running"
+
+<Screenshots
+  items={[
+    {
+      src: "/screenshots/shortcut-2.jpeg",
+      alt: "Shortcuts app Automation tab with the plus button highlighted",
+      caption: "Automation tab, tap +",
+    },
+    {
+      src: "/screenshots/shortcut-3.jpeg",
+      alt: "New personal automation trigger list",
+      caption: "Choose Time of Day",
+    },
+    {
+      src: "/screenshots/shortcut-4.jpeg",
+      alt: "Time of Day picker set to repeat daily",
+      caption: "Set the time, repeat daily",
+    },
+    {
+      src: "/screenshots/shortcut-5.jpeg",
+      alt: "Action picker choosing the wristkit shortcut to run",
+      caption: "Run Shortcut, pick wristkit Sync",
+    },
+  ]}
+/>
 
 ## Payload format
 

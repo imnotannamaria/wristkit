@@ -2,6 +2,10 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { NextResponse } from "next/server";
 
+// The shortcut file has no request-specific input, so prerender this at build
+// time and serve it as a static asset rather than reading fs on every request.
+export const dynamic = "force-static";
+
 /**
  * Serves the iOS Shortcut file with the correct MIME so Safari hands it
  * straight to the Shortcuts app on iPhone. The file is copied into

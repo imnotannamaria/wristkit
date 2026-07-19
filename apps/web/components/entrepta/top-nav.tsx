@@ -10,9 +10,12 @@ interface TopNavProps extends React.HTMLAttributes<HTMLElement> {
   right?: React.ReactNode;
 }
 
-const TopNav = React.forwardRef<HTMLElement, TopNavProps>(
+const TopNav = React.forwardRef<HTMLDivElement, TopNavProps>(
   ({ className, left, center, right, children, ...props }, ref) => (
-    <nav
+    // Plain <div>, not <nav>: the actual navigation landmark is the labeled
+    // menu rendered inside (right), so this outer bar should not add a second
+    // unlabeled nav landmark.
+    <div
       ref={ref}
       className={cn(
         "relative flex items-center justify-between gap-4",
@@ -29,7 +32,7 @@ const TopNav = React.forwardRef<HTMLElement, TopNavProps>(
         </div>
       )}
       <div className="flex items-center gap-3 shrink-0">{right}</div>
-    </nav>
+    </div>
   ),
 );
 TopNav.displayName = "TopNav";

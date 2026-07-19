@@ -63,9 +63,9 @@ export function SidebarNav() {
           <div
             style={{
               fontFamily: "var(--font-mono)",
-              fontSize: 9,
-              color: "var(--fg-muted)",
-              letterSpacing: "0.16em",
+              fontSize: 11,
+              color: "var(--fg-secondary)",
+              letterSpacing: "0.14em",
               textTransform: "uppercase",
               marginBottom: 6,
               paddingLeft: 10,
@@ -111,8 +111,8 @@ export function SidebarNav() {
         <div
           style={{
             fontFamily: "var(--font-mono)",
-            fontSize: 10,
-            color: "var(--fg-muted)",
+            fontSize: 11,
+            color: "var(--fg-secondary)",
             letterSpacing: "0.04em",
           }}
         >

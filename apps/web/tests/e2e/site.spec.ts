@@ -36,3 +36,20 @@ test.describe("shortcut endpoint", () => {
     expect(contentType).toContain("apple-shortcut");
   });
 });
+
+test.describe("responsive layout (390px)", () => {
+  test.use({ viewport: { width: 390, height: 844 } });
+
+  for (const path of ["/", "/docs/installation"]) {
+    test(`no horizontal overflow on ${path}`, async ({ page }) => {
+      await page.goto(path);
+      // documentElement.scrollWidth must not exceed its clientWidth, otherwise
+      // something is bleeding past the viewport and the page scrolls sideways.
+      const overflow = await page.evaluate(() => {
+        const el = document.documentElement;
+        return el.scrollWidth - el.clientWidth;
+      });
+      expect(overflow).toBeLessThanOrEqual(1);
+    });
+  }
+});

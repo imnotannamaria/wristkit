@@ -16,9 +16,9 @@ const securityHeaders = [
       // Next.js needs unsafe-inline + unsafe-eval for hydration and dev tooling.
       "script-src 'self' 'unsafe-inline' 'unsafe-eval'",
       // Tailwind and inline styles in components.
-      "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+      "style-src 'self' 'unsafe-inline'",
       "img-src 'self' data: blob:",
-      "font-src 'self' data: https://fonts.gstatic.com",
+      "font-src 'self' data:",
       "connect-src 'self'",
       "frame-ancestors 'none'",
       "base-uri 'self'",

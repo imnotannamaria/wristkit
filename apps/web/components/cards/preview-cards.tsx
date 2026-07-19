@@ -446,7 +446,7 @@ export function SnapshotLog() {
   ] as const;
   return (
     <Panel>
-      <PanelHeader icon="≡" eyebrow="POST /api/healthkit" status="6 recent" />
+      <PanelHeader icon="≡" eyebrow="POST /api/wristkit-sync" status="6 recent" />
       <div
         style={{
           display: "grid",

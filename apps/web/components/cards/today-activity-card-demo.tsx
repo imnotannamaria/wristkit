@@ -303,13 +303,6 @@ function CardHeadline({
   );
 }
 
-const splitGrid = {
-  display: "grid",
-  gridTemplateColumns: "176px 1fr",
-  gap: 32,
-  alignItems: "center",
-} as const;
-
 const italicBrand = { fontStyle: "italic", color: "var(--fg-brand)" } as const;
 
 // ─── A · default ─────────────────────────────────────────────
@@ -338,7 +331,7 @@ export function TodayActivityCardDemo({
           synced
         </Badge>
       </CardHeader>
-      <div style={splitGrid}>
+      <div className="demo-split">
         <RingViz
           rings={[
             { value: moveKcal, max: moveGoal, color: MOVE, state: "on" },
@@ -378,7 +371,7 @@ export function TodayActivityCardEmpty() {
           <CardMeta>0 snapshots</CardMeta>
         </span>
       </CardHeader>
-      <div style={splitGrid}>
+      <div className="demo-split">
         <RingViz
           rings={[
             { color: MOVE, state: "off" },
@@ -397,8 +390,8 @@ export function TodayActivityCardEmpty() {
         </div>
       </div>
       <CardFooter>
-        <CardComment>run shortcut on iPhone · or POST /api/healthkit</CardComment>
-        <a href="/shortcut" style={{ color: "var(--fg-brand)" }}>
+        <CardComment>run shortcut on iPhone · or POST /api/wristkit-sync</CardComment>
+        <a href="/docs/shortcut-setup" style={{ color: "var(--fg-brand)" }}>
           install shortcut →
         </a>
       </CardFooter>
@@ -420,7 +413,7 @@ export function TodayActivityCardLoading() {
           <CardMeta>00:01</CardMeta>
         </span>
       </CardHeader>
-      <div style={splitGrid}>
+      <div className="demo-split">
         <RingViz
           rings={[
             { color: MOVE, state: "pulse" },
@@ -468,7 +461,7 @@ export function TodayActivityCardStale({
           <CardMeta>cached</CardMeta>
         </span>
       </CardHeader>
-      <div style={splitGrid}>
+      <div className="demo-split">
         <RingViz
           rings={[
             { value: moveKcal, max: moveGoal, color: MOVE, state: "mute" },
@@ -525,7 +518,7 @@ export function TodayActivityCardError() {
           error
         </Badge>
       </CardHeader>
-      <div style={splitGrid}>
+      <div className="demo-split">
         <RingViz
           rings={[
             { color: "var(--status-error)", state: "err" },
@@ -579,10 +572,11 @@ export function TodayActivityCardRingsOnly() {
     <div
       style={{
         display: "flex",
+        flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "center",
-        gap: 48,
-        padding: "48px 24px",
+        gap: 32,
+        padding: "40px 24px",
       }}
     >
       <div style={{ position: "relative", width: 220, height: 220 }}>

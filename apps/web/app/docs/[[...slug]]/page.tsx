@@ -9,6 +9,10 @@ import {
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+// Only slugs from generateStaticParams exist; anything else is a hard 404
+// instead of an on-demand render that would touch the filesystem at runtime.
+export const dynamicParams = false;
+
 interface Props {
   params: Promise<{ slug?: string[] }>;
 }
@@ -23,9 +27,19 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
   const doc = getDoc(slug);
   if (!doc) return {};
+  const title = `${doc.title} · wristkit docs`;
   return {
-    title: `${doc.title} · wristkit docs`,
+    // `absolute` opts out of the root title.template so we don't double up
+    // the suffix ("… · wristkit docs · wristkit").
+    title: { absolute: title },
     description: doc.description,
+    alternates: { canonical: `/${doc.slug}` },
+    openGraph: {
+      title,
+      description: doc.description,
+      url: `/${doc.slug}`,
+      type: "article",
+    },
   };
 }
 

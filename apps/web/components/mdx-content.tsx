@@ -8,6 +8,7 @@ import {
   TodayActivityCardRingsOnly,
   TodayActivityCardStale,
 } from "@/components/cards/today-activity-card-demo";
+import { Screenshots } from "@/components/docs/screenshots";
 import { CodeBlock } from "@/components/entrepta/code-block";
 import { MdxErrorBoundary } from "@/components/mdx-error-boundary";
 import { useMemo } from "react";
@@ -260,6 +261,7 @@ const customComponents = {
   TodayActivityCardStale,
   TodayActivityCardError,
   TodayActivityCardRingsOnly,
+  Screenshots,
 };
 
 export function MdxContent({ code }: { code: string }) {

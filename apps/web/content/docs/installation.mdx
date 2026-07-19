@@ -26,14 +26,14 @@ Or `npm install` / `yarn add` — wristkit does not lock you in to a package man
 Create a `.env.local` at your project root:
 
 ```
-WRISTKIT_DATABASE_URL=postgresql://postgres.PROJECT_REF:SENHA@aws-0-REGION.pooler.supabase.com:6543/postgres
+WRISTKIT_DATABASE_URL=postgresql://postgres.PROJECT_REF:PASSWORD@aws-0-REGION.pooler.supabase.com:6543/postgres
 WRISTKIT_API_KEY=replace-with-32-random-bytes
 ```
 
-`WRISTKIT_DATABASE_URL` is your Supabase connection string. No painel do Supabase vá em **Project Settings → Database**, clique em **Connect** e selecione **Transaction pooler** (não "Direct connection"). O Vercel é serverless — a conexão direta não consegue resolver o hostname e vai falhar. A URI do pooler tem o formato:
+`WRISTKIT_DATABASE_URL` is your Supabase connection string. In the Supabase dashboard, go to **Project Settings → Database**, click **Connect**, and select **Transaction pooler** (not "Direct connection"). Vercel is serverless — the direct connection can't resolve the hostname and will fail. The pooler URI has this format:
 
 ```
-postgresql://postgres.PROJECT_REF:SENHA@aws-0-REGION.pooler.supabase.com:6543/postgres
+postgresql://postgres.PROJECT_REF:PASSWORD@aws-0-REGION.pooler.supabase.com:6543/postgres
 ```
 
 `WRISTKIT_API_KEY` is a secret you pick yourself. The iOS Shortcut sends it in the `x-api-key` header on every POST. Generate one with:
@@ -252,6 +252,14 @@ const buckets = new Map<string, Bucket>();
 
 function rateLimit(ip: string): { ok: boolean; retryAfterSec: number } {
   const now = Date.now();
+  // Bound memory on long-lived servers (`next start`, self-host): once the map
+  // grows large, drop buckets whose window already elapsed, so spoofed
+  // x-forwarded-for IPs can't accumulate forever. No-op on serverless.
+  if (buckets.size > 1000) {
+    for (const [key, b] of buckets) {
+      if (b.resetAt <= now) buckets.delete(key);
+    }
+  }
   const existing = buckets.get(ip);
   if (!existing || existing.resetAt <= now) {
     buckets.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
@@ -479,10 +487,12 @@ function Ring({
   );
 }
 
-function Panel({ className, children }: { className?: string; children: React.ReactNode }) {
+function Panel({ className, children, role, "aria-label": ariaLabel }: { className?: string; children: React.ReactNode; role?: string; "aria-label"?: string }) {
   return (
     <section
       className={className}
+      role={role}
+      aria-label={ariaLabel}
       style={{
         background: colors.panel,
         border: `1px solid ${colors.border}`,
@@ -537,7 +547,7 @@ function Footer({ left, right }: { left: React.ReactNode; right: React.ReactNode
 export function TodayActivityCardLoading({ className }: { className?: string }) {
   const cx = 72, cy = 72;
   return (
-    <Panel className={className}>
+    <Panel className={className} role="status" aria-label="Loading today's activity">
       <Header status="loading" statusColor={colors.muted} />
       <div style={{ marginTop: 12, display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)", gap: 20, alignItems: "center" }}>
         <div style={{ display: "flex", justifyContent: "center" }}>
@@ -730,7 +740,7 @@ loadTodayActivity({
 Open this link **on your iPhone**:
 
 ```
-https://www.icloud.com/shortcuts/da2cb73b3e7d4d5e89cfdfa1e990ff01
+https://www.icloud.com/shortcuts/cb23e99ad6bd45c9b09e45b444ead0f0
 ```
 
 Tap **Add Shortcut**.
