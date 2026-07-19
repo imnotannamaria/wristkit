@@ -64,6 +64,9 @@ const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
     return (
       <div
         ref={ref}
+        // Code is IDE chrome: keep it on a dark surface regardless of page
+        // mode, so the (dark-tuned) syntax theme stays legible in light mode.
+        data-surface="dark"
         className={cn(
           "relative rounded-[var(--radius-md)] border border-[var(--border-subtle)]",
           "bg-[var(--bg-surface)] overflow-hidden",

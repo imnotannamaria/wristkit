@@ -49,7 +49,7 @@ function HomeTopNav() {
         left: 0,
         right: 0,
         zIndex: 40,
-        background: "rgba(9, 9, 11, 0.9)",
+        background: "color-mix(in srgb, var(--bg-canvas) 90%, transparent)",
         backdropFilter: "blur(12px)",
         WebkitBackdropFilter: "blur(12px)",
         borderBottom: "1px solid var(--border-subtle)",

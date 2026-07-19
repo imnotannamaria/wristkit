@@ -90,6 +90,7 @@ const ThemeSwitcher = React.forwardRef<HTMLDivElement, ThemeSwitcherProps>(
 
         {open && (
           <div
+            id="theme-switcher-popup"
             aria-label="Theme settings"
             className="absolute bottom-[calc(100%+8px)] right-0 flex flex-col gap-1 p-2 rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] shadow-[0_8px_24px_rgba(0,0,0,0.4)] min-w-[180px]"
           >
@@ -171,7 +172,8 @@ const ThemeSwitcher = React.forwardRef<HTMLDivElement, ThemeSwitcherProps>(
               : `Theme: ${current.label}. Click to change.`
           }
           aria-expanded={open}
-          aria-haspopup="menu"
+          aria-haspopup="true"
+          aria-controls={open ? "theme-switcher-popup" : undefined}
           onClick={() => setOpen((v) => !v)}
           className="flex items-center gap-2 px-2.5 py-2 rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] hover:border-[var(--border-strong)] focus-visible:outline-none focus-visible:border-[var(--fg-brand)] focus-visible:shadow-[0_0_0_3px_var(--bg-surface-brand)] transition-colors shadow-[0_4px_12px_rgba(0,0,0,0.3)]"
         >
