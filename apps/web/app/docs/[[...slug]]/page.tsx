@@ -9,6 +9,10 @@ import {
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
+// Only slugs from generateStaticParams exist; anything else is a hard 404
+// instead of an on-demand render that would touch the filesystem at runtime.
+export const dynamicParams = false;
+
 interface Props {
   params: Promise<{ slug?: string[] }>;
 }

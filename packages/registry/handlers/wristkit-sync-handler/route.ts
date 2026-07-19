@@ -18,6 +18,14 @@ const buckets = new Map<string, Bucket>();
 
 function rateLimit(ip: string): { ok: boolean; retryAfterSec: number } {
   const now = Date.now();
+  // Bound memory on long-lived servers (`next start`, self-host): once the map
+  // grows large, drop buckets whose window already elapsed, so spoofed
+  // x-forwarded-for IPs can't accumulate forever. No-op on serverless.
+  if (buckets.size > 1000) {
+    for (const [key, b] of buckets) {
+      if (b.resetAt <= now) buckets.delete(key);
+    }
+  }
   const existing = buckets.get(ip);
   if (!existing || existing.resetAt <= now) {
     buckets.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW_MS });
