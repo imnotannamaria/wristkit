@@ -1,4 +1,5 @@
 import { ThemeScript, ThemeSwitcher } from "@/components/entrepta/theme-switcher";
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
@@ -71,6 +72,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         {children}
         <ThemeSwitcher themes={SITE_THEMES} defaultTheme="ivy" />
+        <Analytics />
       </body>
     </html>
   );
