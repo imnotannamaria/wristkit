@@ -175,12 +175,16 @@ export function HeroIdePreview() {
       >
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
           <span>{current.lang}</span>
-          <span style={{ opacity: 0.6 }}>·</span>
-          <span>UTF-8</span>
-          <span style={{ opacity: 0.6 }}>·</span>
-          <span>{current.cursor}</span>
+          <span className="hidden sm:inline" style={{ opacity: 0.6 }}>
+            ·
+          </span>
+          <span className="hidden sm:inline">UTF-8</span>
+          <span className="hidden sm:inline" style={{ opacity: 0.6 }}>
+            ·
+          </span>
+          <span className="hidden sm:inline">{current.cursor}</span>
         </div>
-        <span>wristkit · POST /api/wristkit-sync</span>
+        <span className="hidden sm:inline">wristkit · POST /api/wristkit-sync</span>
       </div>
     </aside>
   );

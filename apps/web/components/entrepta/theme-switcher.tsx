@@ -75,6 +75,8 @@ const ThemeSwitcher = React.forwardRef<HTMLDivElement, ThemeSwitcherProps>(
 
     const currentColor = mode === "light" ? (current.lightColor ?? current.color) : current.color;
     const showModeToggle = !hideModeToggle && !disableMode;
+    // A one-theme site has nothing to pick — show only the dark/light toggle.
+    const showThemeList = themes.length > 1;
 
     return (
       <div
@@ -122,45 +124,51 @@ const ThemeSwitcher = React.forwardRef<HTMLDivElement, ThemeSwitcherProps>(
                     {mode === "dark" ? "→ light" : "→ dark"}
                   </span>
                 </button>
-
+              </>
+            )}
+            {showThemeList && (
+              <>
                 <div className="px-2 py-1 text-[10px] uppercase tracking-[0.08em] text-[var(--fg-muted)] border-b border-[var(--border-subtle)] mt-2 mb-1">
                   theme
                 </div>
+                {themes.map((t: ThemeOption) => {
+                  const isActive = t.id === theme;
+                  const dotColor = mode === "light" ? (t.lightColor ?? t.color) : t.color;
+                  return (
+                    <button
+                      type="button"
+                      aria-pressed={isActive}
+                      key={t.id}
+                      onClick={() => handleSelectTheme(t.id)}
+                      className="group flex items-center gap-2.5 px-2 py-1.5 rounded-[var(--radius-sm)] hover:bg-[var(--bg-hover-soft)] focus-visible:outline-none focus-visible:bg-[var(--bg-hover-soft)] transition-colors text-left"
+                    >
+                      <span
+                        aria-hidden
+                        className="inline-block w-4 h-4 rounded-full border border-[var(--border-subtle)] shrink-0"
+                        style={{ background: dotColor }}
+                      />
+                      <span
+                        className={
+                          isActive
+                            ? "text-[var(--fg-primary)] flex-1"
+                            : "text-[var(--fg-secondary)] flex-1 group-hover:text-[var(--fg-primary)] transition-colors"
+                        }
+                      >
+                        {t.label}
+                      </span>
+                      {isActive && (
+                        <span
+                          aria-hidden
+                          className="text-[var(--fg-brand)] text-[10px] leading-none"
+                        >
+                          ◆
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </>
             )}
-            {themes.map((t: ThemeOption) => {
-              const isActive = t.id === theme;
-              const dotColor = mode === "light" ? (t.lightColor ?? t.color) : t.color;
-              return (
-                <button
-                  type="button"
-                  aria-pressed={isActive}
-                  key={t.id}
-                  onClick={() => handleSelectTheme(t.id)}
-                  className="group flex items-center gap-2.5 px-2 py-1.5 rounded-[var(--radius-sm)] hover:bg-[var(--bg-hover-soft)] focus-visible:outline-none focus-visible:bg-[var(--bg-hover-soft)] transition-colors text-left"
-                >
-                  <span
-                    aria-hidden
-                    className="inline-block w-4 h-4 rounded-full border border-[var(--border-subtle)] shrink-0"
-                    style={{ background: dotColor }}
-                  />
-                  <span
-                    className={
-                      isActive
-                        ? "text-[var(--fg-primary)] flex-1"
-                        : "text-[var(--fg-secondary)] flex-1 group-hover:text-[var(--fg-primary)] transition-colors"
-                    }
-                  >
-                    {t.label}
-                  </span>
-                  {isActive && (
-                    <span aria-hidden className="text-[var(--fg-brand)] text-[10px] leading-none">
-                      ◆
-                    </span>
-                  )}
-                </button>
-              );
-            })}
           </div>
         )}
 

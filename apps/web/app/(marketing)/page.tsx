@@ -13,8 +13,8 @@ import {
 import { TopNav, TopNavLink, TopNavMenu } from "@/components/entrepta/top-nav";
 import { HeroIdePreview } from "@/components/home/hero-ide-preview";
 import { WristKitMark } from "@/components/mark";
+import { MobileNav } from "@/components/mobile-nav";
 import { SkipLink } from "@/components/skip-link";
-import { cn } from "@/lib/utils";
 import Link from "next/link";
 
 export default function HomePage() {
@@ -127,66 +127,6 @@ function HomeTopNav() {
   );
 }
 
-// ─── Mobile nav ───────────────────────────────────────────────
-const MOBILE_LINKS = [
-  { label: "home", href: "/", active: true },
-  { label: "docs", href: "/docs" },
-  { label: "shortcut", href: "/docs/shortcut-setup" },
-  { label: "components", href: "/docs/components/today-activity-card" },
-];
-
-function MobileNav() {
-  return (
-    <details className="relative md:hidden">
-      <summary
-        aria-label="Toggle navigation menu"
-        className="inline-flex size-9 cursor-pointer list-none items-center justify-center rounded-[var(--radius-sm)] border border-[var(--border-subtle)] text-[var(--fg-secondary)] [&::-webkit-details-marker]:hidden"
-      >
-        <svg
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          aria-hidden="true"
-          role="presentation"
-        >
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <line x1="3" y1="12" x2="21" y2="12" />
-          <line x1="3" y1="18" x2="21" y2="18" />
-        </svg>
-      </summary>
-      <nav
-        aria-label="Mobile"
-        className="absolute right-0 top-[calc(100%+12px)] z-50 flex min-w-44 flex-col gap-1 rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 font-mono text-[13px] uppercase tracking-[0.06em] shadow-lg"
-      >
-        {MOBILE_LINKS.map((l) => (
-          <Link
-            key={l.href}
-            href={l.href}
-            className={cn(
-              "rounded-[var(--radius-sm)] px-3 py-2 text-[var(--fg-secondary)] hover:bg-[var(--bg-chrome)] hover:text-[var(--fg-primary)]",
-              l.active && "text-[var(--fg-primary)]",
-            )}
-          >
-            {l.label}
-          </Link>
-        ))}
-        <a
-          href="https://github.com/imnotannamaria/wristkit"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="rounded-[var(--radius-sm)] px-3 py-2 text-[var(--fg-secondary)] hover:bg-[var(--bg-chrome)] hover:text-[var(--fg-primary)]"
-        >
-          github ↗
-        </a>
-      </nav>
-    </details>
-  );
-}
-
 // ─── Hero ─────────────────────────────────────────────────────
 function HeroSection() {
   const stats = [
@@ -249,12 +189,11 @@ function HeroSection() {
           iOS Shortcut posts straight to your endpoint. No third party cloud, no SDK in the middle.
         </p>
         <div
+          className="flex flex-col sm:flex-row sm:flex-wrap"
           style={{
-            display: "flex",
             gap: 12,
             marginTop: 32,
             marginBottom: 40,
-            flexWrap: "wrap",
           }}
         >
           <Link
@@ -424,9 +363,10 @@ function PackagesSection() {
           <Link
             key={p.num}
             href={p.href}
+            className="h-full"
             style={{ display: "block", color: "inherit", textDecoration: "none" }}
           >
-            <Card>
+            <Card className="h-full">
               <CardHeader>
                 <CardLabel>{p.label}</CardLabel>
                 <CardMeta>{p.num}</CardMeta>
@@ -443,7 +383,7 @@ function PackagesSection() {
               >
                 {p.desc}
               </p>
-              <CardFooter>
+              <CardFooter className="mt-auto">
                 <CardComment>{p.tag}</CardComment>
                 <span style={{ color: "var(--fg-brand)" }}>→</span>
               </CardFooter>
@@ -723,11 +663,9 @@ function CtaStrip() {
           telemetry, your own Supabase and MIT.
         </p>
         <div
+          className="flex flex-col sm:flex-row sm:flex-wrap sm:justify-center"
           style={{
-            display: "flex",
             gap: 12,
-            justifyContent: "center",
-            flexWrap: "wrap",
           }}
         >
           <Link

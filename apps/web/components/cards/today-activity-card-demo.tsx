@@ -572,10 +572,11 @@ export function TodayActivityCardRingsOnly() {
     <div
       style={{
         display: "flex",
+        flexWrap: "wrap",
         alignItems: "center",
         justifyContent: "center",
-        gap: 48,
-        padding: "48px 24px",
+        gap: 32,
+        padding: "40px 24px",
       }}
     >
       <div style={{ position: "relative", width: 220, height: 220 }}>
