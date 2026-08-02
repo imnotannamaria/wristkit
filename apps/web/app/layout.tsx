@@ -1,4 +1,4 @@
-import { ThemeScript, ThemeSwitcher } from "@/components/entrepta/theme-switcher";
+import { ModeScript, ModeToggle } from "@/components/entrepta/mode-toggle";
 import { Analytics } from "@vercel/analytics/next";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
@@ -26,9 +26,6 @@ const inter = Inter({
   variable: "--font-inter",
   display: "swap",
 });
-
-// Single brand theme; the switcher is here mainly for the dark/light toggle.
-const SITE_THEMES = [{ id: "ivy", label: "Ivy", color: "#35a365", lightColor: "#1e8350" }] as const;
 
 const SITE_URL = "https://wristkit-web.vercel.app";
 const SITE_DESCRIPTION =
@@ -67,11 +64,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       className={`${newsreader.variable} ${jetbrainsMono.variable} ${inter.variable}`}
     >
       <head>
-        <ThemeScript />
+        <ModeScript />
       </head>
       <body>
         {children}
-        <ThemeSwitcher themes={SITE_THEMES} defaultTheme="ivy" />
+        <ModeToggle position="bottom-right" />
         <Analytics />
       </body>
     </html>
