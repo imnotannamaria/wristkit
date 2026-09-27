@@ -44,14 +44,12 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: "wristkit",
-    images: ["/opengraph-image"],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "wristkit — Apple Health on the web",
     description: SITE_DESCRIPTION,
-    images: ["/opengraph-image"],
   },
 };
 
@@ -63,6 +61,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
       className={`${newsreader.variable} ${jetbrainsMono.variable} ${inter.variable}`}
     >
+      <head>
+        <ThemeScript storageKey="wristkit" />
         <noscript>
           <style>{`
             [data-reveal], [data-type-in] > span {
@@ -71,8 +71,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }
           `}</style>
         </noscript>
-      <head>
-        <ThemeScript storageKey="wristkit" />
       </head>
       <body>
         {children}

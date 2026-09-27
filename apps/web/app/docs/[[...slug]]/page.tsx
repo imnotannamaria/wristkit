@@ -8,7 +8,7 @@ import {
   TODAY_ACTIVITY_CARD_FILES,
   loadRegistryFiles,
 } from "@/lib/registry-files";
-import type { Metadata } from "next";
+import type { Metadata, ResolvingMetadata } from "next";
 import { notFound } from "next/navigation";
 
 // Only slugs from generateStaticParams exist; anything else is a hard 404
@@ -25,7 +25,10 @@ function getDoc(slug: string[] | undefined): Doc | undefined {
   return docs.find((doc) => doc.slug === target);
 }
 
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+export async function generateMetadata(
+  { params }: Props,
+  parent: ResolvingMetadata,
+): Promise<Metadata> {
   const { slug } = await params;
   const doc = getDoc(slug);
   if (!doc) return {};
@@ -41,6 +44,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description: doc.description,
       url: `/${doc.slug}`,
       type: "article",
+      // A page-level openGraph replaces the root one whole, so carry the
+      // root's opengraph-image.png over or docs pages share without a picture.
+      images: (await parent).openGraph?.images,
     },
   };
 }
