@@ -41,7 +41,7 @@ export default function Icon() {
           strokeOpacity="0.55"
           mask="url(#m)"
         />
-        <path d="M 46 12 L 22 52" stroke="#35a365" strokeWidth="5" strokeLinecap="round" />
+        <path d="M 46 12 L 22 52" stroke="#7c6bff" strokeWidth="5" strokeLinecap="round" />
       </svg>
     </div>,
     { ...size },

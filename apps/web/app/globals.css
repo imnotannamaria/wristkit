@@ -1260,7 +1260,7 @@ main:focus {
   gap: 30px;
   text-align: center;
   padding: 64px 24px;
-  border-radius: 24px;
+  border-radius: var(--radius-xl);
   border: 1px solid var(--border-brand);
   background: radial-gradient(ellipse at center top, var(--bg-surface-brand), transparent 70%),
     var(--bg-card);
@@ -1453,7 +1453,7 @@ main:focus {
   padding: 10px 12px;
   border-radius: var(--radius-md);
   color: var(--fg-secondary);
-  transition: background 150ms, color 150ms;
+  transition: background 150ms var(--ease-out), color 150ms var(--ease-out);
 }
 .docs-nav-link:hover {
   color: var(--fg-primary);
@@ -1519,7 +1519,7 @@ main:focus {
   border: 1px solid var(--border-subtle);
   border-radius: 20px;
   background: var(--bg-card);
-  transition: border-color 150ms, background 150ms;
+  transition: border-color 150ms var(--ease-out), background 150ms var(--ease-out);
 }
 .docs-guide-link:hover {
   border-color: var(--border-brand);

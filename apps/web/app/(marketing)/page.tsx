@@ -108,7 +108,7 @@ export default function HomePage() {
         </section>
 
         <section id="activity" className="container section-space" aria-labelledby="activity-title">
-          <SectHead cmd="the activity card" meta="01 / component" />
+          <SectHead as="span" cmd="the activity card" meta="01 / component" />
           <div className="section-heading">
             <Reveal>
               <h2 id="activity-title" className="font-serif text-display-md md:text-display-lg">
@@ -162,7 +162,7 @@ export default function HomePage() {
                     Choose a theme from the switcher in the corner. The whole site follows along,
                     including the card. Your preference stays with you.
                   </p>
-                  <div className="theme-palette" aria-label="Six themes">
+                  <div className="theme-palette" role="img" aria-label="Six color themes">
                     <span data-swatch="entrepta" />
                     <span data-swatch="blossom" />
                     <span data-swatch="marmalade" />
@@ -184,7 +184,7 @@ export default function HomePage() {
           className="container section-space install-section"
           aria-labelledby="setup-title"
         >
-          <SectHead cmd="from wrist to web" meta="02 / how it works" />
+          <SectHead as="span" cmd="from wrist to web" meta="02 / how it works" />
           <div className="section-heading">
             <Reveal>
               <h2 id="setup-title" className="font-serif text-display-md md:text-display-lg">

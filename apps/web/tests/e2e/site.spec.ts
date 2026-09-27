@@ -228,3 +228,31 @@ test("copying an installation block preserves its line breaks", async ({ page })
     "WRISTKIT_DATABASE_URL=your-supabase-transaction-pooler-url\nWRISTKIT_API_KEY=your-random-secret",
   );
 });
+
+test("installation files and docs navigation work without JavaScript", async ({
+  browser,
+  baseURL,
+}) => {
+  const context = await browser.newContext({
+    javaScriptEnabled: false,
+    baseURL,
+    viewport: { width: 390, height: 800 },
+  });
+  try {
+    const page = await context.newPage();
+    await page.goto("/docs/installation");
+    // The second file of each bundle, which sits behind a tab when JS runs.
+    await expect(page.getByText("uq_sample_dedupe").first()).toBeVisible();
+    await expect(page.getByText("export async function loadTodayActivity").first()).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Documentation" })).toBeVisible();
+  } finally {
+    await context.close();
+  }
+});
+
+test("unknown routes render the site's 404 page", async ({ page }) => {
+  const response = await page.goto("/docs/does-not-exist");
+  expect(response?.status()).toBe(404);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Nothing to see here.");
+  await expect(page.getByRole("link", { name: "Read the docs" })).toBeVisible();
+});

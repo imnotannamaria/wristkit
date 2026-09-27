@@ -69,6 +69,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               opacity: 1 !important;
               transform: none !important;
             }
+            .docs-file-bundle [role="tablist"],
+            [aria-controls="docs-sidebar-nav"] {
+              display: none !important;
+            }
+            .docs-file-bundle [role="tabpanel"] {
+              display: block !important;
+            }
+            #docs-sidebar-nav {
+              display: flex !important;
+            }
           `}</style>
         </noscript>
       </head>
