@@ -13,10 +13,10 @@ type FileTab = {
 
 const muted = { color: "var(--fg-muted)" } as const;
 const sec = { color: "var(--fg-secondary)" } as const;
-const brand = { color: "var(--fg-brand)" } as const;
+const brand = { color: "var(--fg-brand-text)" } as const;
 const ok = { color: "var(--status-success-fg)" } as const;
-const info = { color: "var(--status-info)" } as const;
-const warn = { color: "var(--status-warning)" } as const;
+const info = { color: "var(--status-info-fg)" } as const;
+const warn = { color: "var(--status-warning-fg)" } as const;
 const fg = { color: "var(--fg-primary)" } as const;
 
 const FILES: FileTab[] = [
@@ -85,32 +85,21 @@ const FILES: FileTab[] = [
     ),
   },
   {
-    id: "route",
-    name: "route.ts",
-    lang: "TypeScript",
-    cursor: "Ln 3, Col 14",
+    id: "environment",
+    name: ".env.local",
+    lang: "Environment",
+    cursor: "Ln 3, Col 1",
     body: (
       <>
-        <span style={info}>import</span>
-        <span style={sec}>{" { "}</span>
-        <span style={fg}>POST</span>
-        <span style={sec}>{" } "}</span>
-        <span style={info}>from</span>{" "}
-        <span style={warn}>"@/components/wristkit/wristkit-sync-handler"</span>
-        {"\n\n"}
-        <span style={info}>export</span> <span style={sec}>{"{ "}</span>
-        <span style={fg}>POST</span>
-        <span style={sec}>{" }"}</span>
-        {"\n\n"}
-        <span style={muted}>{"// .env.local"}</span>
+        <span style={muted}># Server environment · replace these placeholders</span>
         {"\n"}
         <span style={brand}>WRISTKIT_DATABASE_URL</span>
         <span style={sec}>=</span>
-        <span style={warn}>postgres://...</span>
+        <span style={warn}>your-supabase-transaction-pooler-url</span>
         {"\n"}
         <span style={brand}>WRISTKIT_API_KEY</span>
         <span style={sec}>=</span>
-        <span style={warn}>"$(openssl rand -hex 32)"</span>
+        <span style={warn}>your-generated-secret</span>
       </>
     ),
   },
@@ -130,9 +119,8 @@ export function HeroIdePreview() {
         borderRadius: "var(--radius-lg)",
         border: "1px solid var(--border-strong)",
         background: "var(--bg-canvas)",
-        boxShadow: "0 24px 48px rgba(0,0,0,0.4)",
+        boxShadow: "var(--shadow-overlay)",
       }}
-      data-surface="dark"
     >
       <Tabs value={active} onValueChange={setActive}>
         <TabsList>
@@ -149,7 +137,7 @@ export function HeroIdePreview() {
                 padding: "16px 20px",
                 margin: 0,
                 fontFamily: "var(--font-mono)",
-                fontSize: 12,
+                fontSize: "var(--text-mono-sm)",
                 lineHeight: 1.6,
                 overflowX: "auto",
                 whiteSpace: "pre",
@@ -168,9 +156,9 @@ export function HeroIdePreview() {
           justifyContent: "space-between",
           padding: "6px 16px",
           background: "var(--fg-brand)",
-          color: "var(--zinc-50)",
+          color: "var(--fg-on-brand)",
           fontFamily: "var(--font-mono)",
-          fontSize: 11,
+          fontSize: "var(--text-mono-sm)",
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 16 }}>

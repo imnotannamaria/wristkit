@@ -1,7 +1,6 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { Slot } from "@radix-ui/react-slot";
 import * as React from "react";
 
 interface TopNavProps extends React.HTMLAttributes<HTMLElement> {
@@ -10,12 +9,9 @@ interface TopNavProps extends React.HTMLAttributes<HTMLElement> {
   right?: React.ReactNode;
 }
 
-const TopNav = React.forwardRef<HTMLDivElement, TopNavProps>(
+const TopNav = React.forwardRef<HTMLElement, TopNavProps>(
   ({ className, left, center, right, children, ...props }, ref) => (
-    // Plain <div>, not <nav>: the actual navigation landmark is the labeled
-    // menu rendered inside (right), so this outer bar should not add a second
-    // unlabeled nav landmark.
-    <div
+    <nav
       ref={ref}
       className={cn(
         "relative flex items-center justify-between gap-4",
@@ -32,7 +28,7 @@ const TopNav = React.forwardRef<HTMLDivElement, TopNavProps>(
         </div>
       )}
       <div className="flex items-center gap-3 shrink-0">{right}</div>
-    </div>
+    </nav>
   ),
 );
 TopNav.displayName = "TopNav";
@@ -44,7 +40,7 @@ const TopNavLogo = React.forwardRef<HTMLDivElement, TopNavLogoProps>(
     <div
       ref={ref}
       className={cn(
-        "inline-flex items-center gap-2 font-mono text-[13px] text-[var(--fg-primary)]",
+        "inline-flex items-center gap-2 font-mono text-mono-md text-[var(--fg-primary)]",
         className,
       )}
       {...props}
@@ -65,8 +61,8 @@ const TopNavLogoMark = React.forwardRef<HTMLSpanElement, TopNavLogoMarkProps>(
       className={cn(
         "inline-grid place-items-center shrink-0",
         "size-6 rounded-[var(--radius-sm)]",
-        "bg-[var(--fg-brand)] text-[var(--bg-canvas)]",
-        "font-serif italic text-sm leading-none",
+        "bg-[var(--fg-brand)] text-[var(--fg-on-brand)]",
+        "font-serif italic text-body-md leading-none",
         className,
       )}
       {...props}
@@ -85,7 +81,7 @@ const TopNavBreadcrumb = React.forwardRef<HTMLDivElement, TopNavBreadcrumbProps>
       ref={ref}
       className={cn(
         "hidden sm:flex items-center gap-1.5",
-        "font-mono text-[13px] text-[var(--fg-muted)]",
+        "font-mono text-mono-md text-[var(--fg-muted)]",
         "[&_.here]:text-[var(--fg-primary)]",
         className,
       )}
@@ -112,7 +108,7 @@ const TopNavMenu = React.forwardRef<HTMLElement, TopNavMenuProps>(
       ref={ref}
       className={cn(
         "hidden md:flex items-center gap-6",
-        "font-mono text-[12px] uppercase tracking-[0.06em]",
+        "font-mono text-mono-sm uppercase tracking-[0.06em]",
         className,
       )}
       {...props}
@@ -126,47 +122,31 @@ TopNavMenu.displayName = "TopNavMenu";
 interface TopNavLinkProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
   active?: boolean;
   external?: boolean;
-  /** Render as the immediate child element (e.g. next/link) instead of a plain <a>. */
-  asChild?: boolean;
 }
 
 const TopNavLink = React.forwardRef<HTMLAnchorElement, TopNavLinkProps>(
-  ({ className, children, active, external, asChild, ...props }, ref) => {
-    const Comp = asChild ? Slot : "a";
-    // Slot requires exactly one child element; when asChild is used we drop the
-    // external arrow (asChild is for internal client-routed links anyway).
-    return (
-      <Comp
-        ref={ref}
-        data-state={active ? "active" : undefined}
-        className={cn(
-          "inline-flex items-center gap-1",
-          "text-[var(--fg-secondary)] hover:text-[var(--fg-primary)]",
-          "transition-colors duration-150",
-          active && "text-[var(--fg-primary)] font-medium",
-          className,
-        )}
-        {...(external && !asChild ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-        {...props}
-      >
-        {asChild ? (
-          children
-        ) : (
-          <>
-            {children}
-            {external && (
-              <>
-                <span aria-hidden className="text-[var(--fg-muted)]">
-                  ↗
-                </span>
-                <span className="sr-only"> (opens in new tab)</span>
-              </>
-            )}
-          </>
-        )}
-      </Comp>
-    );
-  },
+  ({ className, children, active, external, ...props }, ref) => (
+    <a
+      ref={ref}
+      data-state={active ? "active" : undefined}
+      className={cn(
+        "inline-flex items-center gap-1",
+        "text-[var(--fg-secondary)] hover:text-[var(--fg-primary)]",
+        "transition-colors duration-150",
+        active && "text-[var(--fg-primary)] font-medium",
+        className,
+      )}
+      {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+      {...props}
+    >
+      {children}
+      {external && (
+        <span aria-hidden className="text-[var(--fg-muted)]">
+          ↗
+        </span>
+      )}
+    </a>
+  ),
 );
 TopNavLink.displayName = "TopNavLink";
 

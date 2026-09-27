@@ -20,24 +20,25 @@ This is not optional. The state contract is what makes wristkit feel polished in
 
 ## Design principles
 
-**No new vocabulary.** Every state uses the same Panel grammar: dotted rules, mono labels, `//` footer notes, status pill. The card does not break character when data is missing.
+**One layout for every state.** Each state keeps the same pieces in the same places: a status pill in the header, the rings, the three metrics and a note in the footer. The card does not change shape when data is missing.
 
 **Generic error copy.** The error card shows a short, generic message. It never echoes the underlying error or status code — that would leak details about your auth or database to whoever is looking at the page.
 
-**Numbers or nothing.** The stale state washes out the existing numbers to say "old", instead of hiding them. The empty and error states use `—` rather than `0` or a blank, because a zero would suggest the user burned zero calories, which is not true.
+**Numbers or nothing.** The stale state keeps the last numbers and dims the arcs to say "old", instead of hiding them. The empty and error states use `—` rather than `0` or a blank, because a zero would suggest the user burned zero calories, which is not true.
 
-**Actions in the footer.** Recovery copy lives in the footer, where users already look for context. The empty state offers "install shortcut →". The stale state offers "retry →". No modals, no full screen takeovers.
+**Next steps in the footer.** Recovery copy lives in the footer, where users already look for context. The empty state asks you to run the Shortcut on your iPhone. The stale state says how long ago the last sync was. No modals, no full screen takeovers.
 
 ## State resolution
 
 `loadTodayActivity()` (and every `load` function we ship) figures out the state for you:
 
 ```ts
-export async function loadTodayActivity(options: { tz?: string } = {}): Promise<TodayState> {
+export async function loadTodayActivity(options: LoadOptions = {}): Promise<TodayState> {
   const url = process.env.WRISTKIT_DATABASE_URL;
   if (!url) return { kind: "error", message: "WRISTKIT_DATABASE_URL not set" };
 
   const tz = options.tz ?? "UTC";
+  const goals = { ...DEFAULT_GOALS, ...options.goals }; // 600 kcal, 30 min, 8000 steps
 
   try {
     const r = await getTodayActivity(url, tz);
@@ -45,11 +46,11 @@ export async function loadTodayActivity(options: { tz?: string } = {}): Promise<
 
     const data = {
       kcal: r.kcal ?? 0,
-      kcalGoal: 600,
+      kcalGoal: goals.kcal,
       exerciseMinutes: r.exerciseMinutes ?? 0,
-      exerciseGoal: 30,
+      exerciseGoal: goals.exerciseMinutes,
       steps: r.steps ?? 0,
-      stepsGoal: 8000,
+      stepsGoal: goals.steps,
       lastSyncIso: r.lastSync.toISOString(),
       lastSyncLabel: new Intl.DateTimeFormat("en-GB", {
         hour: "2-digit",

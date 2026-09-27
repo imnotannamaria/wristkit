@@ -47,6 +47,11 @@ export const TODAY_ACTIVITY_CARD_FILES: RegistryFileSpec[] = [
     language: "tsx",
   },
   {
+    source: "packages/registry/components/today-activity-card/styles.css",
+    dest: "components/wristkit/today-activity-card/styles.css",
+    language: "css",
+  },
+  {
     source: "packages/registry/components/today-activity-card/load.ts",
     dest: "components/wristkit/today-activity-card/load.ts",
     language: "ts",
@@ -81,5 +86,14 @@ export const HANDLER_FILES: RegistryFileSpec[] = [
     source: "packages/registry/handlers/wristkit-sync-handler/route.ts",
     dest: "app/api/wristkit-sync/route.ts",
     language: "ts",
+    transform: (c) => c.replaceAll('"../../lib/', '"@/lib/wristkit/'),
   },
 ];
+
+export const SQL_FILES: RegistryFileSpec[] = ["0001_initial.sql", "0002_dedupe.sql"].map(
+  (name) => ({
+    source: `packages/registry/schemas/${name}`,
+    dest: name,
+    language: "sql",
+  }),
+);

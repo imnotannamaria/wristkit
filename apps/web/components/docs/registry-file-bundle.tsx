@@ -17,6 +17,11 @@ function basename(p: string): string {
   return last ?? p;
 }
 
+/** A trailing newline ends the last line; it doesn't start another. */
+function lineCount(content: string): number {
+  return content.replace(/\n$/, "").split("\n").length;
+}
+
 /**
  * Tabs and destinations both want to display the file name (e.g. 0001_initial.sql)
  * but the dest can repeat across files (two SQLs that go to the same "Supabase SQL
@@ -29,35 +34,11 @@ export function RegistryFileBundle({ title, description, files }: Props) {
   if (!first) return null;
 
   return (
-    <section style={{ margin: "32px 0 48px" }}>
-      <h3
-        style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: 10,
-          fontWeight: 600,
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-          color: "var(--fg-brand)",
-          margin: "0 0 8px",
-        }}
-      >
-        · {title}
-      </h3>
-      {description && (
-        <p
-          style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: 14,
-            lineHeight: 1.7,
-            color: "var(--fg-secondary)",
-            margin: "0 0 18px",
-          }}
-        >
-          {description}
-        </p>
-      )}
+    <section className="docs-file-bundle">
+      <h3>{title}</h3>
+      {description && <p>{description}</p>}
       <Tabs defaultValue={first.source}>
-        <TabsList>
+        <TabsList className="rounded-[var(--radius-lg)] border border-[var(--border-subtle)]">
           {files.map((f) => (
             <TabsTrigger key={f.source} value={f.source}>
               {basename(f.source)}
@@ -65,12 +46,20 @@ export function RegistryFileBundle({ title, description, files }: Props) {
           ))}
         </TabsList>
         {files.map((f) => (
-          <TabsContent key={f.source} value={f.source} style={{ marginTop: 12 }}>
+          // forceMount keeps every file in the server HTML, so the page reads in
+          // full without JavaScript; the layout's <noscript> style reveals them.
+          <TabsContent
+            key={f.source}
+            value={f.source}
+            forceMount
+            className="data-[state=inactive]:hidden"
+            style={{ marginTop: 12 }}
+          >
             <CodeBlock
               code={f.content}
               filename={f.dest}
               language={f.language}
-              meta={`${f.content.split("\n").length} lines`}
+              meta={`${lineCount(f.content)} lines`}
             />
           </TabsContent>
         ))}

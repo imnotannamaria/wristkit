@@ -1,43 +1,28 @@
 ---
-title: Introduction
-description: What wristkit is, who it is for, and how it works.
+title: From your wrist to your website.
+description: A little daily movement, right alongside the things you make. Bring the Activity Card to your own Next.js site.
 ---
 
-## What is wristkit?
+<ActivityPreview />
 
-wristkit is a small open source library of React components. You copy the files from this site into your Next.js project so you can show your Apple Health data on the web. No backend to write, no third party SaaS, and no data leaving the infrastructure you already own.
+<DocsNextSteps />
 
-Copy the component, point it at your own Supabase, import the iOS Shortcut on your iPhone, and a few minutes later your Apple Watch data is showing up in your Next.js app.
+## A small connection. All yours.
 
-**Zero telemetry. MIT license. Single user in v1.**
+Wristkit is an open source kit of React components for Apple Health data. Copy the files into your Next.js project, connect your own Supabase database and sync from your iPhone with an iOS Shortcut.
 
-## Who is it for?
+Move, exercise and steps arrive in a card that follows your palette. Every state is considered: loading, empty, stale, error and synced. The preview above uses sample data; switch tabs to explore each one.
 
-- Developers who want a personal health dashboard on their own site
-- Athletes who want to share training data without handing it to a third party
-- Anyone who wants to keep their health data end to end on their own stack
+## From wrist to web
 
-## How it works
+1. The Shortcut reads activity from Apple Health and sends it to your site's sync route.
+2. The route validates the request and stores samples in your Supabase database.
+3. A server-side loader reads those samples and passes them to the Activity Card.
 
-```
-iOS Shortcut → POST /api/wristkit-sync → Supabase → React components
-```
+Your activity travels directly to infrastructure you control. Wristkit never receives your health data. No telemetry, with source code under the MIT license.
 
-1. The iOS Shortcut reads your Apple Health data and posts it to your Next.js app
-2. A route handler checks the payload and writes it to your Supabase Postgres database
-3. React components read from your database and render the data
+## Before you begin
 
-wristkit never touches your data. The site is a catalog of files. You copy them and run them on your own stack.
+You'll need a Next.js 15 or newer project with App Router, a Supabase project and an iPhone with Apple Health data. This version is a kit for developers to install in their own site, with a single-user setup.
 
-## What ships in v1
-
-- `TodayActivityCard` with Move, Exercise and Steps rings and every state
-- A route handler at `app/api/wristkit-sync/route.ts`
-- Two SQL migrations for Supabase
-- An iOS Shortcut file you install on your iPhone
-
-## Stack requirements
-
-- Next.js 15 with App Router
-- A Supabase project (the free tier works)
-- An iPhone with the Shortcuts app
+Start with [Installation](/docs/installation), then follow [iOS Shortcut setup](/docs/shortcut-setup) for your first sync.

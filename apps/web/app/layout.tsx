@@ -1,5 +1,5 @@
-import { ModeScript, ModeToggle } from "@/components/entrepta/mode-toggle";
-import { Analytics } from "@vercel/analytics/next";
+import { ThemeScript, ThemeSwitcher } from "@/components/entrepta/theme-switcher";
+import { THEMES } from "@/lib/themes";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
@@ -44,14 +44,12 @@ export const metadata: Metadata = {
     description: SITE_DESCRIPTION,
     url: SITE_URL,
     siteName: "wristkit",
-    images: ["/opengraph-image"],
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
     title: "wristkit — Apple Health on the web",
     description: SITE_DESCRIPTION,
-    images: ["/opengraph-image"],
   },
 };
 
@@ -59,17 +57,39 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      data-theme="ivy"
+      data-theme="entrepta"
       suppressHydrationWarning
       className={`${newsreader.variable} ${jetbrainsMono.variable} ${inter.variable}`}
     >
       <head>
-        <ModeScript />
+        <ThemeScript storageKey="wristkit" />
+        <noscript>
+          <style>{`
+            [data-reveal], [data-type-in] > span {
+              opacity: 1 !important;
+              transform: none !important;
+            }
+            .docs-file-bundle [role="tablist"],
+            [aria-controls="docs-sidebar-nav"] {
+              display: none !important;
+            }
+            .docs-file-bundle [role="tabpanel"] {
+              display: block !important;
+            }
+            #docs-sidebar-nav {
+              display: flex !important;
+            }
+          `}</style>
+        </noscript>
       </head>
       <body>
         {children}
-        <ModeToggle position="bottom-right" />
-        <Analytics />
+        <ThemeSwitcher
+          themes={THEMES}
+          defaultTheme="entrepta"
+          storageKey="wristkit"
+          position="bottom-right"
+        />
       </body>
     </html>
   );

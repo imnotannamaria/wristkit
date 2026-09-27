@@ -1,6 +1,7 @@
 {
   "$schema": "https://entrepta.vercel.app/schema.json",
-  "theme": "ivy",
+  "theme": "entrepta",
+  "themes": "all",
   "tsx": true,
   "rsc": true,
   "tailwind": {
