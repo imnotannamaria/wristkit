@@ -89,15 +89,22 @@ const ThemeSwitcher = React.forwardRef<HTMLDivElement, ThemeSwitcherProps>(
 
     const [open, setOpen] = React.useState(false);
     const containerRef = React.useRef<HTMLDivElement>(null);
+    const triggerRef = React.useRef<HTMLButtonElement>(null);
+    const panelRef = React.useRef<HTMLElement>(null);
+    const panelId = React.useId();
     React.useImperativeHandle(ref, () => containerRef.current as HTMLDivElement);
 
     React.useEffect(() => {
       if (!open) return;
+      panelRef.current?.querySelector<HTMLButtonElement>("button")?.focus();
       function onPointerDown(event: PointerEvent) {
         if (!containerRef.current?.contains(event.target as Node)) setOpen(false);
       }
       function onKey(event: KeyboardEvent) {
-        if (event.key === "Escape") setOpen(false);
+        if (event.key === "Escape") {
+          setOpen(false);
+          triggerRef.current?.focus();
+        }
       }
       window.addEventListener("pointerdown", onPointerDown);
       window.addEventListener("keydown", onKey);
@@ -110,6 +117,7 @@ const ThemeSwitcher = React.forwardRef<HTMLDivElement, ThemeSwitcherProps>(
     function handleSelectTheme(id: string) {
       setTheme(id);
       setOpen(false);
+      triggerRef.current?.focus();
     }
 
     const currentColor = mode === "light" ? (current.lightColor ?? current.color) : current.color;
@@ -133,7 +141,9 @@ const ThemeSwitcher = React.forwardRef<HTMLDivElement, ThemeSwitcherProps>(
         </span>
 
         {open && (
-          <div
+          <section
+            ref={panelRef}
+            id={panelId}
             aria-label="Theme settings"
             data-state="open"
             className={cn(
@@ -207,10 +217,11 @@ const ThemeSwitcher = React.forwardRef<HTMLDivElement, ThemeSwitcherProps>(
                 </button>
               );
             })}
-          </div>
+          </section>
         )}
 
         <button
+          ref={triggerRef}
           type="button"
           aria-label={
             showModeToggle
@@ -218,7 +229,7 @@ const ThemeSwitcher = React.forwardRef<HTMLDivElement, ThemeSwitcherProps>(
               : `Theme: ${current.label}. Click to change.`
           }
           aria-expanded={open}
-          aria-haspopup="menu"
+          aria-controls={open ? panelId : undefined}
           onClick={() => setOpen((v) => !v)}
           className="flex items-center gap-2 px-2.5 py-2 rounded-[var(--radius-md)] border border-[var(--border-strong)] bg-[var(--bg-overlay)] hover:border-[var(--fg-muted)] focus-visible:outline-none focus-visible:border-[var(--fg-brand)] focus-visible:shadow-[0_0_0_3px_var(--bg-surface-brand)] transition-colors shadow-[var(--shadow-card-hover)]"
         >

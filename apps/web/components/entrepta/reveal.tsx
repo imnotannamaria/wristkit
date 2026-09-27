@@ -51,7 +51,7 @@ interface RevealProps {
 function Reveal({ children, index = 0, delay = 0, step = 0.06, className, style }: RevealProps) {
   const reveal = useReveal(delay + Math.min(index, STAGGER_LIMIT) * step);
   return (
-    <motion.div className={className} style={style} {...reveal}>
+    <motion.div data-reveal className={className} style={style} {...reveal}>
       {children}
     </motion.div>
   );

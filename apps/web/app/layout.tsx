@@ -63,6 +63,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       suppressHydrationWarning
       className={`${newsreader.variable} ${jetbrainsMono.variable} ${inter.variable}`}
     >
+        <noscript>
+          <style>{`
+            [data-reveal], [data-type-in] > span {
+              opacity: 1 !important;
+              transform: none !important;
+            }
+          `}</style>
+        </noscript>
       <head>
         <ThemeScript storageKey="wristkit" />
       </head>
