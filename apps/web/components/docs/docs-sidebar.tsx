@@ -20,7 +20,7 @@ export function DocsSidebar() {
         aria-expanded={open}
         aria-controls="docs-sidebar-nav"
         onClick={() => setOpen((v) => !v)}
-        className="flex w-full items-center justify-between gap-2 px-5 py-4 font-mono text-[12px] uppercase tracking-[0.08em] text-[var(--fg-secondary)] md:hidden"
+        className="focus-ring flex w-full items-center justify-between gap-2 px-5 py-4 font-mono text-mono-sm uppercase tracking-[0.08em] text-[var(--fg-secondary)] md:hidden"
       >
         <span>Documentation</span>
         <span aria-hidden className={cn("transition-transform", open && "rotate-180")}>

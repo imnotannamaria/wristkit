@@ -52,7 +52,7 @@ const customComponents = {
       {...props}
       style={{
         fontFamily: "var(--font-serif)",
-        fontSize: 28,
+        fontSize: "var(--text-display-md)",
         fontWeight: 500,
         letterSpacing: "-0.02em",
         margin: "0 0 20px",
@@ -66,7 +66,7 @@ const customComponents = {
       {...props}
       style={{
         fontFamily: "var(--font-serif)",
-        fontSize: 24,
+        fontSize: "var(--text-heading-lg)",
         fontWeight: 500,
         letterSpacing: "-0.02em",
         margin: "48px 0 16px",
@@ -82,11 +82,11 @@ const customComponents = {
       {...props}
       style={{
         fontFamily: "var(--font-mono)",
-        fontSize: 10,
+        fontSize: "var(--text-mono-xs)",
         fontWeight: 600,
         letterSpacing: "0.12em",
         textTransform: "uppercase" as const,
-        color: "var(--fg-brand)",
+        color: "var(--fg-brand-text)",
         margin: "32px 0 10px",
       }}
     />
@@ -97,7 +97,7 @@ const customComponents = {
       {...props}
       style={{
         fontFamily: "var(--font-sans)",
-        fontSize: 14,
+        fontSize: "var(--text-body-md)",
         lineHeight: 1.7,
         color: "var(--fg-secondary)",
         margin: "0 0 18px",
@@ -109,7 +109,7 @@ const customComponents = {
     <a
       {...props}
       style={{
-        color: "var(--fg-brand)",
+        color: "var(--fg-brand-text)",
         textDecoration: "underline",
         textUnderlineOffset: "0.2em",
         textDecorationThickness: "1px",
@@ -123,7 +123,7 @@ const customComponents = {
   ),
 
   em: (props: React.HTMLAttributes<HTMLElement>) => (
-    <em {...props} style={{ color: "var(--fg-brand)", fontStyle: "italic" }} />
+    <em {...props} style={{ color: "var(--fg-brand-text)", fontStyle: "italic" }} />
   ),
 
   code: (props: React.HTMLAttributes<HTMLElement>) => {
@@ -139,7 +139,7 @@ const customComponents = {
           border: "1px solid var(--border-subtle)",
           borderRadius: "var(--radius-sm)",
           padding: "2px 7px",
-          color: "var(--fg-brand)",
+          color: "var(--fg-brand-text)",
         }}
       />
     );
@@ -152,7 +152,7 @@ const customComponents = {
       {...props}
       style={{
         fontFamily: "var(--font-sans)",
-        fontSize: 14,
+        fontSize: "var(--text-body-md)",
         color: "var(--fg-secondary)",
         lineHeight: 1.8,
         paddingLeft: 22,
@@ -166,7 +166,7 @@ const customComponents = {
       {...props}
       style={{
         fontFamily: "var(--font-sans)",
-        fontSize: 14,
+        fontSize: "var(--text-body-md)",
         color: "var(--fg-secondary)",
         lineHeight: 1.8,
         paddingLeft: 22,
@@ -187,7 +187,7 @@ const customComponents = {
         color: "var(--fg-secondary)",
         fontStyle: "italic" as const,
         fontFamily: "var(--font-serif)",
-        fontSize: 15,
+        fontSize: "var(--text-body-lg)",
         lineHeight: 1.7,
       }}
     />
@@ -220,7 +220,7 @@ const customComponents = {
           width: "100%",
           borderCollapse: "collapse" as const,
           fontFamily: "var(--font-mono)",
-          fontSize: 12,
+          fontSize: "var(--text-mono-sm)",
         }}
       />
     </div>
@@ -234,7 +234,7 @@ const customComponents = {
         padding: "10px 14px",
         textAlign: "left" as const,
         color: "var(--fg-muted)",
-        fontSize: 10,
+        fontSize: "var(--text-mono-xs)",
         letterSpacing: "0.1em",
         textTransform: "uppercase" as const,
         fontWeight: 500,
@@ -250,7 +250,7 @@ const customComponents = {
         borderBottom: "1px solid var(--border-subtle)",
         padding: "9px 14px",
         color: "var(--fg-secondary)",
-        fontSize: 12,
+        fontSize: "var(--text-mono-sm)",
       }}
     />
   ),

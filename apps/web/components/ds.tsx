@@ -49,7 +49,7 @@ export function PanelHeader({
         alignItems: "center",
         justifyContent: "space-between",
         marginBottom: 18,
-        fontSize: 11,
+        fontSize: "var(--text-mono-sm)",
         letterSpacing: "0.06em",
       }}
     >
@@ -62,7 +62,10 @@ export function PanelHeader({
           color: "var(--fg-muted)",
         }}
       >
-        <span aria-hidden style={{ fontSize: 13, color: "var(--fg-brand)" }}>
+        <span
+          aria-hidden
+          style={{ fontSize: "var(--text-body-md)", color: "var(--fg-brand-text)" }}
+        >
           {icon}
         </span>
         {eyebrow}
@@ -74,7 +77,7 @@ export function PanelHeader({
             display: "flex",
             alignItems: "center",
             gap: 6,
-            fontSize: 11,
+            fontSize: "var(--text-mono-sm)",
           }}
         >
           <span style={{ fontSize: 8, lineHeight: 1 }}>●</span>
@@ -144,7 +147,7 @@ export function PanelFooter({
           justifyContent: "space-between",
           alignItems: "baseline",
           gap: 12,
-          fontSize: 11,
+          fontSize: "var(--text-mono-sm)",
           color: "var(--fg-muted)",
         }}
       >
@@ -193,7 +196,7 @@ export function BigNumber({
         <span
           style={{
             fontFamily: "var(--font-mono)",
-            fontSize: 11,
+            fontSize: "var(--text-mono-sm)",
             color: suffixColor ?? "var(--fg-muted)",
             marginLeft: 6,
           }}

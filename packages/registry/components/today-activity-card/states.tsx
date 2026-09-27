@@ -1,449 +1,129 @@
 import type * as React from "react";
 import type { TodayData } from "./load";
+import "./styles.css";
 
-// Entrepta palette. Kept as literal hex so the component is portable
-// (no CSS variables required in the host project).
-const colors = {
-  bg: "#0b0b0f",
-  panel: "rgba(255,255,255,0.03)",
-  border: "rgba(255,255,255,0.10)",
-  text: "rgba(255,255,255,0.88)",
-  muted: "rgba(255,255,255,0.55)",
-  subtle: "rgba(255,255,255,0.70)",
-  move: "#7c6bff", // violet
-  exercise: "#10b981", // emerald
-  steps: "#f59e0b", // amber
-  warn: "#f59e0b",
-  danger: "#f43f5e",
-};
+const METRICS = [
+  { id: "move", label: "Move", value: "kcal", goal: "kcalGoal", unit: "kcal" },
+  {
+    id: "exercise",
+    label: "Exercise",
+    value: "exerciseMinutes",
+    goal: "exerciseGoal",
+    unit: "min",
+  },
+  { id: "steps", label: "Steps", value: "steps", goal: "stepsGoal", unit: "steps" },
+] as const;
 
-function clamp01(x: number): number {
-  if (Number.isNaN(x) || !Number.isFinite(x)) return 0;
-  return Math.min(1, Math.max(0, x));
-}
+type DisplayKind = "loading" | "empty" | "error" | "stale" | "ok";
 
-function Ring({
-  r,
-  value,
-  max,
-  color,
-  cx,
-  cy,
-}: {
-  r: number;
-  value: number;
-  max: number;
-  color: string;
-  cx: number;
-  cy: number;
-}) {
-  const circ = 2 * Math.PI * r;
-  const p = clamp01(max > 0 ? value / max : 0);
+export function ActivityRings({ data, kind = "ok" }: { data?: TodayData; kind?: DisplayKind }) {
   return (
-    <>
-      <circle
-        cx={cx}
-        cy={cy}
-        r={r}
-        fill="none"
-        stroke={color}
-        strokeWidth={9}
-        strokeOpacity={0.18}
-      />
-      <circle
-        cx={cx}
-        cy={cy}
-        r={r}
-        fill="none"
-        stroke={color}
-        strokeWidth={9}
-        strokeLinecap="round"
-        strokeDasharray={`${circ * p} ${circ}`}
-        transform={`rotate(-90 ${cx} ${cy})`}
-      />
-    </>
+    <svg className="wk-rings" viewBox="0 0 200 200" role="img" aria-label="Activity rings">
+      <title>Activity rings</title>
+      {METRICS.map((metric, index) => {
+        const radius = 84 - index * 23;
+        const value = data?.[metric.value] ?? 0;
+        const goal = data?.[metric.goal] ?? 0;
+        const progress =
+          goal > 0 && Number.isFinite(value) ? Math.max(0, Math.min(value / goal, 1)) : 0;
+        return (
+          <g key={metric.id} className={`wk-ring wk-ring--${metric.id}`}>
+            <circle className="wk-ring-track" cx="100" cy="100" r={radius} />
+            <circle
+              className="wk-ring-value"
+              cx="100"
+              cy="100"
+              r={radius}
+              pathLength="100"
+              strokeDasharray={`${kind === "loading" ? 18 : progress * 100} 100`}
+              transform="rotate(-90 100 100)"
+            />
+          </g>
+        );
+      })}
+      <path className="wk-ring-center" d="M94 99h12m-5-5 5 5-5 5" />
+    </svg>
   );
 }
 
-function Panel({
+function ActivityPanel({
+  kind,
+  data,
   className,
-  children,
-  role,
-  "aria-label": ariaLabel,
-}: {
-  className?: string;
-  children: React.ReactNode;
-  role?: string;
-  "aria-label"?: string;
-}) {
+}: { kind: DisplayKind; data?: TodayData; className?: string }) {
+  const status = kind === "ok" ? "synced" : kind;
+  const notes: Record<DisplayKind, React.ReactNode> = {
+    ok: "Up to date",
+    loading: "Syncing your activity…",
+    empty: "No data yet. Run the Shortcut on your iPhone.",
+    error: "Something went wrong. We couldn't load today's activity.",
+    stale: `Last sync ${data?.hoursSinceSync ?? 0}h ago. Run Shortcut to update.`,
+  };
   return (
     <section
-      className={className}
-      role={role}
-      aria-label={ariaLabel}
-      style={{
-        background: colors.panel,
-        border: `1px solid ${colors.border}`,
-        borderRadius: 18,
-        padding: 18,
-        color: colors.text,
-        fontFamily:
-          'ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji"',
-      }}
+      className={`wk-activity ${className ?? ""}`}
+      data-state={kind}
+      aria-label="Today's activity"
+      aria-busy={kind === "loading"}
     >
-      {children}
+      <header className="wk-activity-header">
+        <span className="wk-activity-label">
+          <span aria-hidden>↗</span> Today / Activity
+        </span>
+        <span className="wk-activity-status">
+          <span aria-hidden className="wk-status-dot" />
+          {status}
+        </span>
+      </header>
+      <div className="wk-activity-body">
+        <ActivityRings kind={kind} data={data} />
+        <dl className="wk-metrics">
+          {METRICS.map((metric) => (
+            <div key={metric.id} className={`wk-metric wk-ring--${metric.id}`}>
+              <dt>
+                <span className="wk-metric-dot" aria-hidden />
+                {metric.label}
+              </dt>
+              <dd>
+                <span className="wk-metric-value">
+                  {data ? Math.round(data[metric.value]).toLocaleString("en-US") : "—"}
+                </span>
+                <span className="wk-metric-goal">
+                  {data ? `/ ${data[metric.goal].toLocaleString("en-US")} ` : ""}
+                  {metric.unit}
+                </span>
+              </dd>
+            </div>
+          ))}
+        </dl>
+      </div>
+      <footer className="wk-activity-footer">
+        <span aria-live="polite">{notes[kind]}</span>
+        {kind === "ok" && data ? (
+          <time dateTime={data.lastSyncIso}>Synced {data.lastSyncLabel}</time>
+        ) : null}
+        {kind === "empty" ? <span>Install Shortcut to connect.</span> : null}
+        {kind === "error" ? <span>Please try again later.</span> : null}
+      </footer>
     </section>
   );
 }
 
-function Header({
-  status,
-  statusColor,
-}: {
-  status: string;
-  statusColor: string;
-}) {
-  return (
-    <div style={{ display: "flex", alignItems: "baseline", justifyContent: "space-between" }}>
-      <div style={{ display: "flex", gap: 10, alignItems: "baseline" }}>
-        <span
-          style={{
-            color: colors.muted,
-            fontSize: 11,
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-          }}
-        >
-          Today / Activity
-        </span>
-      </div>
-      <span
-        style={{
-          color: statusColor,
-          fontSize: 11,
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-        }}
-      >
-        {status}
-      </span>
-    </div>
-  );
-}
-
-function MetricRow({
-  dot,
-  label,
-  value,
-  suffix,
-}: {
-  dot: string;
-  label: string;
-  value: React.ReactNode;
-  suffix?: string;
-}) {
-  return (
-    <div style={{ display: "flex", alignItems: "baseline", gap: 10 }}>
-      <span
-        aria-hidden
-        style={{
-          width: 6,
-          height: 6,
-          borderRadius: "50%",
-          backgroundColor: dot,
-          flexShrink: 0,
-          marginTop: 4,
-          opacity: 0.7,
-        }}
-      />
-      <span
-        style={{
-          color: colors.muted,
-          fontSize: 10,
-          letterSpacing: "0.12em",
-          minWidth: 78,
-          textTransform: "uppercase",
-        }}
-      >
-        {label}
-      </span>
-      <span style={{ flex: 1, minWidth: 0, textAlign: "right" }}>
-        <span style={{ fontFamily: "ui-serif, Georgia, serif", fontSize: 26, fontWeight: 500 }}>
-          {value}
-        </span>
-        {suffix ? (
-          <span style={{ color: colors.muted, marginLeft: 6, fontSize: 11 }}>{suffix}</span>
-        ) : null}
-      </span>
-    </div>
-  );
-}
-
-function Footer({ left, right }: { left: React.ReactNode; right: React.ReactNode }) {
-  return (
-    <div
-      style={{
-        marginTop: 14,
-        paddingTop: 12,
-        borderTop: `1px dashed ${colors.border}`,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        gap: 12,
-      }}
-    >
-      <span style={{ color: colors.muted, fontSize: 11 }}>{left}</span>
-      <span style={{ color: colors.subtle, fontSize: 11 }}>{right}</span>
-    </div>
-  );
-}
-
 export function TodayActivityCardLoading({ className }: { className?: string }) {
-  const cx = 72;
-  const cy = 72;
-  return (
-    // biome-ignore lint/a11y/useSemanticElements: Panel is a <section>; role="status" is the documented loading contract.
-    <Panel className={className} role="status" aria-label="Loading today's activity">
-      <Header status="loading" statusColor={colors.muted} />
-      <div
-        style={{
-          marginTop: 12,
-          display: "grid",
-          gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)",
-          gap: 20,
-          alignItems: "center",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <svg
-            width={144}
-            height={144}
-            viewBox="0 0 144 144"
-            role="img"
-            aria-label="Activity rings"
-          >
-            <title>Activity rings</title>
-            <Ring r={52} value={1} max={1} color={colors.move} cx={cx} cy={cy} />
-            <Ring r={38} value={1} max={1} color={colors.exercise} cx={cx} cy={cy} />
-            <Ring r={24} value={1} max={1} color={colors.steps} cx={cx} cy={cy} />
-          </svg>
-        </div>
-        <div style={{ opacity: 0.75 }}>
-          <MetricRow dot={colors.move} label="Move" value="—" suffix="kcal" />
-          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
-          <MetricRow dot={colors.exercise} label="Exercise" value="—" suffix="min" />
-          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
-          <MetricRow dot={colors.steps} label="Steps" value="—" />
-        </div>
-      </div>
-      <Footer left="// syncing…" right={<output>waiting for data</output>} />
-    </Panel>
-  );
+  return <ActivityPanel kind="loading" className={className} />;
 }
-
 export function TodayActivityCardEmpty({ className }: { className?: string }) {
-  const cx = 72;
-  const cy = 72;
-  return (
-    <Panel className={className}>
-      <Header status="empty" statusColor={colors.muted} />
-      <div
-        style={{
-          marginTop: 12,
-          display: "grid",
-          gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)",
-          gap: 20,
-          alignItems: "center",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <svg
-            width={144}
-            height={144}
-            viewBox="0 0 144 144"
-            role="img"
-            aria-label="No activity yet"
-          >
-            <title>No activity yet</title>
-            <Ring r={52} value={0} max={1} color={colors.move} cx={cx} cy={cy} />
-            <Ring r={38} value={0} max={1} color={colors.exercise} cx={cx} cy={cy} />
-            <Ring r={24} value={0} max={1} color={colors.steps} cx={cx} cy={cy} />
-          </svg>
-        </div>
-        <div>
-          <MetricRow dot={colors.move} label="Move" value="—" suffix="kcal" />
-          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
-          <MetricRow dot={colors.exercise} label="Exercise" value="—" suffix="min" />
-          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
-          <MetricRow dot={colors.steps} label="Steps" value="—" />
-        </div>
-      </div>
-      <Footer
-        left="// no data yet — run the shortcut on iPhone"
-        right={<span style={{ color: colors.muted }}>install shortcut →</span>}
-      />
-    </Panel>
-  );
+  return <ActivityPanel kind="empty" className={className} />;
 }
-
 export function TodayActivityCardError({ className }: { className?: string }) {
-  return (
-    <Panel className={className}>
-      <Header status="error" statusColor={colors.danger} />
-      <div style={{ marginTop: 12, color: colors.muted, fontSize: 13, lineHeight: 1.5 }}>
-        <div style={{ color: colors.text, marginBottom: 6 }}>Something went wrong.</div>
-        <div>We couldn't load today's activity. Try again later.</div>
-      </div>
-      <Footer
-        left="// showing nothing rather than guessing"
-        right={<span style={{ color: colors.muted }}>see docs</span>}
-      />
-    </Panel>
-  );
+  return <ActivityPanel kind="error" className={className} />;
 }
-
 export function TodayActivityCardStale({
   data,
   className,
-}: {
-  data: TodayData;
-  className?: string;
-}) {
-  const cx = 72;
-  const cy = 72;
-  const hoursAgo = data.hoursSinceSync;
-  return (
-    <Panel className={className}>
-      <Header status="stale" statusColor={colors.warn} />
-      <div
-        style={{
-          marginTop: 12,
-          display: "grid",
-          gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)",
-          gap: 20,
-          alignItems: "center",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <svg
-            width={144}
-            height={144}
-            viewBox="0 0 144 144"
-            role="img"
-            aria-label="Activity rings"
-          >
-            <title>Activity rings</title>
-            <Ring
-              r={52}
-              value={data.kcal}
-              max={data.kcalGoal}
-              color={colors.move}
-              cx={cx}
-              cy={cy}
-            />
-            <Ring
-              r={38}
-              value={data.exerciseMinutes}
-              max={data.exerciseGoal}
-              color={colors.exercise}
-              cx={cx}
-              cy={cy}
-            />
-            <Ring
-              r={24}
-              value={data.steps}
-              max={data.stepsGoal}
-              color={colors.steps}
-              cx={cx}
-              cy={cy}
-            />
-          </svg>
-        </div>
-        <div>
-          <MetricRow dot={colors.move} label="Move" value={Math.round(data.kcal)} suffix="kcal" />
-          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
-          <MetricRow
-            dot={colors.exercise}
-            label="Exercise"
-            value={Math.round(data.exerciseMinutes)}
-            suffix="min"
-          />
-          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
-          <MetricRow dot={colors.steps} label="Steps" value={Math.round(data.steps)} />
-        </div>
-      </div>
-      <Footer
-        left={`// last sync ${hoursAgo}h ago`}
-        right={<span style={{ color: colors.warn }}>run shortcut</span>}
-      />
-    </Panel>
-  );
+}: { data: TodayData; className?: string }) {
+  return <ActivityPanel kind="stale" data={data} className={className} />;
 }
-
 export function TodayActivityCardOk({ data, className }: { data: TodayData; className?: string }) {
-  const cx = 72;
-  const cy = 72;
-  return (
-    <Panel className={className}>
-      <Header status="synced" statusColor={colors.exercise} />
-      <div
-        style={{
-          marginTop: 12,
-          display: "grid",
-          gridTemplateColumns: "minmax(0,1fr) minmax(0,1.15fr)",
-          gap: 20,
-          alignItems: "center",
-        }}
-      >
-        <div style={{ display: "flex", justifyContent: "center" }}>
-          <svg
-            width={144}
-            height={144}
-            viewBox="0 0 144 144"
-            role="img"
-            aria-label="Activity rings"
-          >
-            <title>Activity rings</title>
-            <Ring
-              r={52}
-              value={data.kcal}
-              max={data.kcalGoal}
-              color={colors.move}
-              cx={cx}
-              cy={cy}
-            />
-            <Ring
-              r={38}
-              value={data.exerciseMinutes}
-              max={data.exerciseGoal}
-              color={colors.exercise}
-              cx={cx}
-              cy={cy}
-            />
-            <Ring
-              r={24}
-              value={data.steps}
-              max={data.stepsGoal}
-              color={colors.steps}
-              cx={cx}
-              cy={cy}
-            />
-          </svg>
-        </div>
-        <div>
-          <MetricRow dot={colors.move} label="Move" value={Math.round(data.kcal)} suffix="kcal" />
-          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
-          <MetricRow
-            dot={colors.exercise}
-            label="Exercise"
-            value={Math.round(data.exerciseMinutes)}
-            suffix="min"
-          />
-          <div style={{ margin: "10px 0", borderTop: `1px dotted ${colors.border}` }} />
-          <MetricRow dot={colors.steps} label="Steps" value={Math.round(data.steps)} />
-        </div>
-      </div>
-      <Footer left="// up to date" right={`synced ${data.lastSyncLabel}`} />
-    </Panel>
-  );
+  return <ActivityPanel kind="ok" data={data} className={className} />;
 }

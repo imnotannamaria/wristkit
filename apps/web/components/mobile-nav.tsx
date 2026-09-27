@@ -43,7 +43,7 @@ export function MobileNav() {
       </summary>
       <nav
         aria-label="Mobile"
-        className="absolute right-0 top-[calc(100%+12px)] z-50 flex min-w-44 flex-col gap-1 rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 font-mono text-[13px] uppercase tracking-[0.06em] shadow-lg"
+        className="absolute right-0 top-[calc(100%+12px)] z-50 flex min-w-44 flex-col gap-1 rounded-[var(--radius-md)] border border-[var(--border-subtle)] bg-[var(--bg-surface)] p-2 font-mono text-body-md uppercase tracking-[0.06em] shadow-lg"
       >
         {LINKS.map((l) => (
           <Link

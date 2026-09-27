@@ -49,7 +49,7 @@ export function SidebarNav() {
         <span
           style={{
             fontFamily: "var(--font-mono)",
-            fontSize: 12,
+            fontSize: "var(--text-mono-sm)",
             color: "var(--fg-primary)",
             letterSpacing: "0.04em",
           }}
@@ -63,7 +63,7 @@ export function SidebarNav() {
           <div
             style={{
               fontFamily: "var(--font-mono)",
-              fontSize: 11,
+              fontSize: "var(--text-mono-sm)",
               color: "var(--fg-secondary)",
               letterSpacing: "0.14em",
               textTransform: "uppercase",
@@ -83,7 +83,7 @@ export function SidebarNav() {
                 style={{
                   display: "block",
                   fontFamily: "var(--font-mono)",
-                  fontSize: 12,
+                  fontSize: "var(--text-mono-sm)",
                   color: active ? "var(--fg-primary)" : "var(--fg-secondary)",
                   padding: "6px 10px 6px 12px",
                   borderRadius: "var(--radius-sm)",
@@ -111,7 +111,7 @@ export function SidebarNav() {
         <div
           style={{
             fontFamily: "var(--font-mono)",
-            fontSize: 11,
+            fontSize: "var(--text-mono-sm)",
             color: "var(--fg-secondary)",
             letterSpacing: "0.04em",
           }}

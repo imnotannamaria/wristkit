@@ -11,7 +11,7 @@ description: Shows today's Move, Exercise and Steps rings, with every state cove
 
 There is no CLI. You copy the files below into your project:
 
-- The seven files in the bundle further down this page go into `components/wristkit/today-activity-card/` and `lib/wristkit/` (paths are shown on each tab)
+- The eight files in the bundle further down this page go into `components/wristkit/today-activity-card/` and `lib/wristkit/` (paths are shown on each tab)
 - The route handler at [Installation](/docs/installation) goes into `app/api/wristkit-sync/route.ts`
 - The SQL migrations from the same page go into Supabase
 
@@ -88,10 +88,12 @@ Something went wrong during sync. The card shows a short, generic message — it
 
 ### Rings only
 
-A compact variant with no card chrome. Handy for a hero block or a small status corner.
+A rendering example using the `ActivityRings` export from `states.tsx`, with sample data and no card chrome.
 
 <TodayActivityCardRingsOnly />
 
 ## Customization
 
-The component file uses literal hex colors (entrepta violet, emerald, amber) so nothing breaks if you do not have wristkit's CSS variables in your project. To match a different palette, edit `colors` at the top of `states.tsx`.
+The component imports `styles.css`, included in the file bundle. It follows Entrepta color and typography tokens when available, with standalone defaults for other projects. Customize the `--wk-*` variables in that stylesheet to match your site.
+
+The examples use sample data and configured goals. Goals in this version are not imported from Apple Health.

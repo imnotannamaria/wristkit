@@ -54,7 +54,7 @@ export function Screenshots({ items }: { items: Shot[] }) {
             <figcaption
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: 11,
+                fontSize: "var(--text-mono-sm)",
                 lineHeight: 1.5,
                 color: "var(--fg-muted)",
                 textAlign: "center",

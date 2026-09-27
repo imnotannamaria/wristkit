@@ -44,7 +44,9 @@ export function SleepCard() {
           suffix={`/ ${goal}h`}
           suffixColor={over ? C.sleep : C.muted}
         />
-        <span style={{ marginLeft: "auto", color: C.muted, fontSize: 11 }}>23:42 → 07:04</span>
+        <span style={{ marginLeft: "auto", color: C.muted, fontSize: "var(--text-mono-sm)" }}>
+          23:42 → 07:04
+        </span>
       </div>
       <div
         style={{
@@ -83,7 +85,7 @@ export function SleepCard() {
             <span
               style={{
                 fontFamily: "var(--font-mono)",
-                fontSize: 12,
+                fontSize: "var(--text-mono-sm)",
                 color: C.text,
                 paddingLeft: 14,
               }}
@@ -124,7 +126,7 @@ export function HrvCard() {
         <span
           style={{
             fontFamily: "var(--font-mono)",
-            fontSize: 11,
+            fontSize: "var(--text-mono-sm)",
             color: delta >= 0 ? C.exercise : C.hrv,
           }}
         >
@@ -274,7 +276,7 @@ export function HistoryCard({ metric = "move" }: { metric?: "move" | "exercise" 
               flex: 1,
               textAlign: "center",
               fontFamily: "var(--font-mono)",
-              fontSize: 10,
+              fontSize: "var(--text-mono-xs)",
               color: d.today ? C.text : C.muted,
               fontWeight: d.today ? 600 : 400,
             }}
@@ -298,7 +300,15 @@ export function StreakCard({ days = 23, best = 41 }: { days?: number; best?: num
       <PanelHeader icon="⚑" eyebrow="Streak" />
       <div style={{ display: "flex", alignItems: "baseline", gap: 8 }}>
         <BigNumber value={days} size={56} color={C.exercise} />
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: 12, color: C.muted }}>days</span>
+        <span
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "var(--text-mono-sm)",
+            color: C.muted,
+          }}
+        >
+          days
+        </span>
       </div>
       <div style={{ marginTop: 12, display: "flex", gap: 4, flexWrap: "wrap" }}>
         {Array.from({ length: 28 }, (_, i) => {
@@ -386,7 +396,13 @@ export function ShortcutStatus() {
       <PanelHeader icon="◐" eyebrow="iOS Shortcut" status="armed" statusColor={C.exercise} />
       <div style={{ display: "flex", alignItems: "baseline", gap: 10, marginBottom: 14 }}>
         <BigNumber value="23:00" size={34} color={C.text} />
-        <span style={{ fontFamily: "var(--font-mono)", fontSize: 11, color: C.muted }}>
+        <span
+          style={{
+            fontFamily: "var(--font-mono)",
+            fontSize: "var(--text-mono-sm)",
+            color: C.muted,
+          }}
+        >
           next run
         </span>
       </div>
@@ -454,7 +470,7 @@ export function SnapshotLog() {
           rowGap: 8,
           columnGap: 12,
           fontFamily: "var(--font-mono)",
-          fontSize: 11,
+          fontSize: "var(--text-mono-sm)",
           alignItems: "center",
         }}
       >
@@ -494,7 +510,7 @@ export function SnapshotLog() {
                 </>
               )}
             </div>
-            <div style={{ color: C.muted, fontSize: 10 }}>{e.via}</div>
+            <div style={{ color: C.muted, fontSize: "var(--text-mono-xs)" }}>{e.via}</div>
           </div>
         ))}
       </div>

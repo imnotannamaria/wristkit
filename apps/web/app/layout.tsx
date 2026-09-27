@@ -1,5 +1,5 @@
-import { ModeScript, ModeToggle } from "@/components/entrepta/mode-toggle";
-import { Analytics } from "@vercel/analytics/next";
+import { ThemeScript, ThemeSwitcher } from "@/components/entrepta/theme-switcher";
+import { THEMES } from "@/lib/themes";
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono, Newsreader } from "next/font/google";
 import "./globals.css";
@@ -59,17 +59,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="en"
-      data-theme="ivy"
+      data-theme="entrepta"
       suppressHydrationWarning
       className={`${newsreader.variable} ${jetbrainsMono.variable} ${inter.variable}`}
     >
       <head>
-        <ModeScript />
+        <ThemeScript storageKey="wristkit" />
       </head>
       <body>
         {children}
-        <ModeToggle position="bottom-right" />
-        <Analytics />
+        <ThemeSwitcher
+          themes={THEMES}
+          defaultTheme="entrepta"
+          storageKey="wristkit"
+          position="bottom-right"
+        />
       </body>
     </html>
   );

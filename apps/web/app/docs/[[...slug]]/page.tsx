@@ -2,7 +2,9 @@ import { RegistryFileBundle } from "@/components/docs/registry-file-bundle";
 import { MdxContent } from "@/components/mdx-content";
 import { type Doc, docs } from "@/lib/docs";
 import {
+  HANDLER_FILES,
   type RegistryFile,
+  SQL_FILES,
   TODAY_ACTIVITY_CARD_FILES,
   loadRegistryFiles,
 } from "@/lib/registry-files";
@@ -62,6 +64,30 @@ async function loadBundlesForSlug(slug: string): Promise<Bundle[]> {
       },
     ];
   }
+  if (slug === "docs/installation") {
+    const [sql, handler, card] = await Promise.all([
+      loadRegistryFiles(SQL_FILES),
+      loadRegistryFiles(HANDLER_FILES),
+      loadRegistryFiles(TODAY_ACTIVITY_CARD_FILES),
+    ]);
+    return [
+      {
+        title: "SQL migrations",
+        description: "Run these files in order in the Supabase SQL editor.",
+        files: sql,
+      },
+      {
+        title: "Sync route",
+        description: "Add this server route to your application.",
+        files: handler,
+      },
+      {
+        title: "Activity Card and data helpers",
+        description: "Copy every file, including the stylesheet, to its destination.",
+        files: card,
+      },
+    ];
+  }
   return [];
 }
 
@@ -76,7 +102,7 @@ export default async function DocPage({ params }: Props) {
     <article>
       <header style={{ marginBottom: 48 }}>
         <div
-          className="t-mono-xs t-brand"
+          className="font-mono text-mono-xs text-[var(--fg-brand-text)]"
           style={{
             letterSpacing: "0.12em",
             textTransform: "uppercase",
@@ -85,12 +111,15 @@ export default async function DocPage({ params }: Props) {
         >
           · docs
         </div>
-        <h1 className="t-display-lg" style={{ margin: "0 0 14px" }}>
+        <h1
+          className="font-serif text-display-md md:text-display-lg"
+          style={{ margin: "0 0 14px" }}
+        >
           {doc.title}
         </h1>
         {doc.description && (
           <p
-            className="t-body-md t-secondary"
+            className="font-sans text-body-md text-[var(--fg-secondary)]"
             style={{ lineHeight: 1.7, margin: 0, maxWidth: 560 }}
           >
             {doc.description}

@@ -32,7 +32,7 @@ export class MdxErrorBoundary extends Component<Props, State> {
             background: "var(--status-error-soft)",
             color: "var(--fg-primary)",
             fontFamily: "var(--font-mono)",
-            fontSize: 13,
+            fontSize: "var(--text-body-md)",
             lineHeight: 1.6,
           }}
         >

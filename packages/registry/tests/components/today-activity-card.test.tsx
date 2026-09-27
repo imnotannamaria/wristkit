@@ -51,7 +51,7 @@ describe("TodayActivityCard", () => {
     expect(screen.getAllByText(/synced/i).length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText(/480/)).toBeInTheDocument();
     expect(screen.getByText(/35/)).toBeInTheDocument();
-    expect(screen.getByText(/9200/)).toBeInTheDocument();
+    expect(screen.getByText(/9,200/)).toBeInTheDocument();
     expect(screen.getByText(/up to date/i)).toBeInTheDocument();
   });
 

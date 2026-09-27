@@ -33,11 +33,11 @@ export function RegistryFileBundle({ title, description, files }: Props) {
       <h3
         style={{
           fontFamily: "var(--font-mono)",
-          fontSize: 10,
+          fontSize: "var(--text-mono-xs)",
           fontWeight: 600,
           letterSpacing: "0.12em",
           textTransform: "uppercase",
-          color: "var(--fg-brand)",
+          color: "var(--fg-brand-text)",
           margin: "0 0 8px",
         }}
       >
@@ -47,7 +47,7 @@ export function RegistryFileBundle({ title, description, files }: Props) {
         <p
           style={{
             fontFamily: "var(--font-sans)",
-            fontSize: 14,
+            fontSize: "var(--text-body-md)",
             lineHeight: 1.7,
             color: "var(--fg-secondary)",
             margin: "0 0 18px",

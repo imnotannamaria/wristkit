@@ -21,15 +21,19 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
         <Link href="/" className="inline-flex items-center gap-2">
           <WristKitMark size={20} />
           <span
-            style={{ fontFamily: "var(--font-serif)", fontSize: 16, color: "var(--fg-primary)" }}
+            style={{
+              fontFamily: "var(--font-serif)",
+              fontSize: "var(--text-body-lg)",
+              color: "var(--fg-primary)",
+            }}
           >
-            wristkit<span style={{ color: "var(--fg-brand)" }}>.</span>
+            wristkit<span style={{ color: "var(--fg-brand-text)" }}>.</span>
           </span>
         </Link>
         <MobileNav />
       </header>
       <div
-        className="grid grid-cols-1 md:grid-cols-[220px_1fr]"
+        className="grid grid-cols-1 md:grid-cols-[220px_minmax(0,1fr)]"
         style={{ minHeight: "100vh", background: "var(--bg-canvas)" }}
       >
         <aside className="flex flex-col border-b border-[var(--border-subtle)] bg-[var(--bg-surface)] md:sticky md:top-0 md:h-screen md:overflow-auto md:border-r md:border-b-0">
@@ -38,7 +42,7 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
         <main
           id="docs-content"
           tabIndex={-1}
-          className="px-5 py-10 md:px-[72px] md:pt-[52px] md:pb-24"
+          className="min-w-0 px-5 py-10 md:px-[72px] md:pt-[52px] md:pb-24"
           style={{ maxWidth: 800 }}
         >
           {children}

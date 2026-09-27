@@ -1,15 +1,14 @@
 "use client";
 
-import { buttonVariants } from "@/components/entrepta/button-variants";
 import { cn } from "@/lib/utils";
+import { CircleNotchIcon } from "@phosphor-icons/react";
 import { Slot } from "@radix-ui/react-slot";
-import type { VariantProps } from "class-variance-authority";
-import { Loader2 } from "lucide-react";
 import * as React from "react";
+import { type ButtonVariantProps, buttonVariants } from "./button-variants";
 
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {
+    ButtonVariantProps {
   asChild?: boolean;
   loading?: boolean;
 }
@@ -37,7 +36,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             aria-hidden
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 inline-flex"
           >
-            <Loader2 className="animate-spin" style={{ width: 14, height: 14, strokeWidth: 1.5 }} />
+            <CircleNotchIcon className="animate-spin" size={14} />
           </span>
         )}
       </Comp>
@@ -46,4 +45,5 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
-export { Button, buttonVariants };
+export { Button };
+export { buttonVariants } from "./button-variants";

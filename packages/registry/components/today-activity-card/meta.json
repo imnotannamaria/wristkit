@@ -10,17 +10,22 @@
   "metrics": ["kcal", "exercise_minutes", "steps"],
   "files": [
     {
-      "path": "components/wristkit/today-activity-card.tsx",
+      "path": "components/wristkit/today-activity-card/index.tsx",
       "source": "./index.tsx",
       "overwrite": false
     },
     {
-      "path": "components/wristkit/today-activity-card.states.tsx",
+      "path": "components/wristkit/today-activity-card/states.tsx",
       "source": "./states.tsx",
       "overwrite": false
     },
     {
-      "path": "lib/wristkit/today-activity-card.load.ts",
+      "path": "components/wristkit/today-activity-card/styles.css",
+      "source": "./styles.css",
+      "overwrite": false
+    },
+    {
+      "path": "components/wristkit/today-activity-card/load.ts",
       "source": "./load.ts",
       "overwrite": false
     },
