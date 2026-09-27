@@ -29,35 +29,11 @@ export function RegistryFileBundle({ title, description, files }: Props) {
   if (!first) return null;
 
   return (
-    <section style={{ margin: "32px 0 48px" }}>
-      <h3
-        style={{
-          fontFamily: "var(--font-mono)",
-          fontSize: "var(--text-mono-xs)",
-          fontWeight: 600,
-          letterSpacing: "0.12em",
-          textTransform: "uppercase",
-          color: "var(--fg-brand-text)",
-          margin: "0 0 8px",
-        }}
-      >
-        · {title}
-      </h3>
-      {description && (
-        <p
-          style={{
-            fontFamily: "var(--font-sans)",
-            fontSize: "var(--text-body-md)",
-            lineHeight: 1.7,
-            color: "var(--fg-secondary)",
-            margin: "0 0 18px",
-          }}
-        >
-          {description}
-        </p>
-      )}
+    <section className="docs-file-bundle">
+      <h3>{title}</h3>
+      {description && <p>{description}</p>}
       <Tabs defaultValue={first.source}>
-        <TabsList>
+        <TabsList className="rounded-[var(--radius-lg)] border border-[var(--border-subtle)]">
           {files.map((f) => (
             <TabsTrigger key={f.source} value={f.source}>
               {basename(f.source)}

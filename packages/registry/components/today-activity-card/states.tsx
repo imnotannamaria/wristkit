@@ -35,7 +35,7 @@ export function ActivityRings({ data, kind = "ok" }: { data?: TodayData; kind?: 
               cy="100"
               r={radius}
               pathLength="100"
-              strokeDasharray={`${kind === "loading" ? 18 : progress * 100} 100`}
+              strokeDasharray={kind === "loading" ? "18 82" : `${progress * 100} 100`}
               transform="rotate(-90 100 100)"
             />
           </g>

@@ -1,6 +1,5 @@
 "use client";
 
-import { WristKitMark } from "@/components/mark";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -15,7 +14,7 @@ const nav = [
   },
   {
     section: "Components",
-    links: [{ href: "/docs/components/today-activity-card", label: "TodayActivityCard" }],
+    links: [{ href: "/docs/components/today-activity-card", label: "Activity Card" }],
   },
   {
     section: "Concepts",
@@ -31,94 +30,32 @@ const nav = [
   },
 ];
 
-export function SidebarNav() {
+export function SidebarNav({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
   return (
     <>
-      <Link
-        href="/"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          marginBottom: 36,
-        }}
-      >
-        <WristKitMark size={20} />
-        <span
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: "var(--text-mono-sm)",
-            color: "var(--fg-primary)",
-            letterSpacing: "0.04em",
-          }}
-        >
-          wristkit
-        </span>
-      </Link>
-
+      <p className="docs-nav-title">The field guide</p>
       {nav.map((group) => (
-        <div key={group.section} style={{ marginBottom: 28 }}>
-          <div
-            style={{
-              fontFamily: "var(--font-mono)",
-              fontSize: "var(--text-mono-sm)",
-              color: "var(--fg-secondary)",
-              letterSpacing: "0.14em",
-              textTransform: "uppercase",
-              marginBottom: 6,
-              paddingLeft: 10,
-            }}
-          >
-            {group.section}
-          </div>
-          {group.links.map((link) => {
-            const active = pathname === link.href;
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                aria-current={active ? "page" : undefined}
-                style={{
-                  display: "block",
-                  fontFamily: "var(--font-mono)",
-                  fontSize: "var(--text-mono-sm)",
-                  color: active ? "var(--fg-primary)" : "var(--fg-secondary)",
-                  padding: "6px 10px 6px 12px",
-                  borderRadius: "var(--radius-sm)",
-                  marginBottom: 1,
-                  position: "relative",
-                  background: active ? "var(--bg-hover-soft)" : "transparent",
-                  borderLeft: active ? "2px solid var(--fg-brand)" : "2px solid transparent",
-                  transition: "color 150ms, background 150ms",
-                }}
-              >
-                {link.label}
-              </Link>
-            );
-          })}
+        <div key={group.section} className="docs-nav-group">
+          <p className="docs-nav-label">{group.section}</p>
+          {group.links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={onNavigate}
+              aria-current={pathname === link.href ? "page" : undefined}
+              className="docs-nav-link focus-ring"
+            >
+              <span aria-hidden className="docs-nav-marker">
+                ◆
+              </span>
+              {link.label}
+            </Link>
+          ))}
         </div>
       ))}
-
-      <div
-        style={{
-          marginTop: "auto",
-          paddingTop: 32,
-          borderTop: "1px dashed var(--border-subtle)",
-        }}
-      >
-        <div
-          style={{
-            fontFamily: "var(--font-mono)",
-            fontSize: "var(--text-mono-sm)",
-            color: "var(--fg-secondary)",
-            letterSpacing: "0.04em",
-          }}
-        >
-          v0.1.0 · MIT
-        </div>
-      </div>
+      <div className="docs-nav-note">Open source · Yours to shape.</div>
     </>
   );
 }

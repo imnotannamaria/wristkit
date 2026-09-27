@@ -1,7 +1,9 @@
 ---
-title: TodayActivityCard
+title: Activity Card
 description: Shows today's Move, Exercise and Steps rings, with every state covered.
 ---
+
+<ActivityPreview />
 
 ## Overview
 
@@ -58,13 +60,13 @@ The component covers every state below. For the reasoning behind the contract, s
 
 ### `ok`
 
-All three metrics arrived for today. Full rings, real numbers and a `synced` status.
+Activity is available for today. The rings show progress toward configured goals, with real numbers and a `synced` status.
 
 <TodayActivityCardDemo />
 
 ### `loading`
 
-First fetch is in flight. The rings pulse and the metric values show as shimmering skeletons. The footer shows that the request is in progress.
+Activity is being loaded. Short arcs travel around fixed ring tracks and the values show pulsing placeholders. Motion stops when reduced motion is enabled.
 
 <TodayActivityCardLoading />
 
@@ -76,7 +78,7 @@ Nothing has been synced yet. The ring tracks are dotted. Values show as `—`. T
 
 ### `stale`
 
-Data exists but it is older than 24 hours. Numbers are a bit washed out and the status pill shows `stale · Nh`.
+Data exists but it is older than 24 hours. The arcs are dimmed, the status shows `stale`, and the footer reports the time since the last sync.
 
 <TodayActivityCardStale />
 

@@ -41,7 +41,12 @@ for (const width of [390, 820]) {
   test.describe(`responsive layout (${width}px)`, () => {
     test.use({ viewport: { width, height: 844 } });
 
-    for (const path of ["/", "/docs/installation"]) {
+    for (const path of [
+      "/",
+      "/docs",
+      "/docs/installation",
+      "/docs/components/today-activity-card",
+    ]) {
       test(`no horizontal overflow on ${path}`, async ({ page }) => {
         await page.goto(path);
         // documentElement.scrollWidth must not exceed its clientWidth, otherwise
@@ -130,5 +135,39 @@ test.describe("small screens and reduced motion", () => {
       await page.evaluate(() => window.scrollTo(0, 0));
       await page.screenshot({ path: testInfo.outputPath(`mobile-${mode}.png`), fullPage: true });
     });
+  }
+});
+
+test("loading arcs stay on their tracks throughout the animation", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  await page.getByRole("tab", { name: "Loading", exact: true }).click();
+  const rings = page.locator(".wk-ring");
+  await expect(rings).toHaveCount(3);
+  for (const time of [0, 500, 1000, 1500]) {
+    const offsets = await rings.evaluateAll(
+      (elements, currentTime) =>
+        elements.map((ring) => {
+          const arc = ring.querySelector(".wk-ring-value");
+          const trackElement = ring.querySelector(".wk-ring-track");
+          if (!arc || !trackElement || arc.getAnimations().length === 0) {
+            throw new Error("Expected an animated arc and a fixed track");
+          }
+          for (const animation of arc.getAnimations()) {
+            animation.pause();
+            animation.currentTime = currentTime;
+          }
+          const track = trackElement.getBoundingClientRect();
+          const value = arc.getBoundingClientRect();
+          return Math.max(
+            Math.abs(track.x - value.x),
+            Math.abs(track.y - value.y),
+            Math.abs(track.width - value.width),
+            Math.abs(track.height - value.height),
+          );
+        }),
+      time,
+    );
+    for (const offset of offsets) expect(offset).toBeLessThan(1);
   }
 });

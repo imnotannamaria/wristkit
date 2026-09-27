@@ -99,41 +99,13 @@ export default async function DocPage({ params }: Props) {
   const bundles = await loadBundlesForSlug(doc.slug);
 
   return (
-    <article>
-      <header style={{ marginBottom: 48 }}>
-        <div
-          className="font-mono text-mono-xs text-[var(--fg-brand-text)]"
-          style={{
-            letterSpacing: "0.12em",
-            textTransform: "uppercase",
-            marginBottom: 14,
-          }}
-        >
-          · docs
-        </div>
-        <h1
-          className="font-serif text-display-md md:text-display-lg"
-          style={{ margin: "0 0 14px" }}
-        >
-          {doc.title}
-        </h1>
-        {doc.description && (
-          <p
-            className="font-sans text-body-md text-[var(--fg-secondary)]"
-            style={{ lineHeight: 1.7, margin: 0, maxWidth: 560 }}
-          >
-            {doc.description}
-          </p>
-        )}
-        <div
-          style={{
-            marginTop: 28,
-            height: 1,
-            backgroundImage: "linear-gradient(to right, var(--border-subtle) 50%, transparent 50%)",
-            backgroundSize: "6px 1px",
-            backgroundRepeat: "repeat-x",
-          }}
-        />
+    <article className="docs-article">
+      <header className="docs-heading">
+        <p className="eyebrow">
+          <span className="live-dot" aria-hidden /> Wristkit / Documentation
+        </p>
+        <h1 className="font-serif text-display-md md:text-display-lg">{doc.title}</h1>
+        {doc.description && <p className="docs-description">{doc.description}</p>}
       </header>
       <MdxContent code={doc.body} />
       {bundles.map((b) => (

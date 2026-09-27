@@ -67,7 +67,7 @@ function useFadeMask(ref: React.RefObject<HTMLElement | null>, deps: unknown[]) 
 type RowVariant = "strip" | "window";
 
 const rowClass = cn(
-  "flex min-h-10 min-w-0 items-stretch select-none",
+  "flex min-h-10 min-w-0 items-stretch overflow-hidden select-none",
   "border-b border-[var(--border-subtle)] bg-[var(--bg-canvas)]",
 );
 

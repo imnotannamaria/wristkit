@@ -175,7 +175,6 @@
   background: var(--bg-surface, #18181b);
 }
 .wk-activity[data-state="loading"] .wk-ring-value {
-  transform-origin: 100px 100px;
   animation: wk-orbit 2s linear infinite;
 }
 .wk-activity[data-state="loading"] .wk-metric-value {
@@ -186,7 +185,7 @@
 }
 @keyframes wk-orbit {
   to {
-    transform: rotate(270deg);
+    stroke-dashoffset: -100;
   }
 }
 @keyframes wk-pulse {

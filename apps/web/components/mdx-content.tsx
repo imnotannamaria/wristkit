@@ -8,8 +8,10 @@ import {
   TodayActivityCardRingsOnly,
   TodayActivityCardStale,
 } from "@/components/cards/today-activity-card-demo";
+import { DocsNextSteps } from "@/components/docs/next-steps";
 import { Screenshots } from "@/components/docs/screenshots";
 import { CodeBlock } from "@/components/entrepta/code-block";
+import { ActivityPreview } from "@/components/home/activity-preview";
 import { MdxErrorBoundary } from "@/components/mdx-error-boundary";
 import { useMemo } from "react";
 import type React from "react";
@@ -71,8 +73,6 @@ const customComponents = {
         letterSpacing: "-0.02em",
         margin: "48px 0 16px",
         color: "var(--fg-primary)",
-        paddingTop: 24,
-        borderTop: "1px dashed var(--border-subtle)",
       }}
     />
   ),
@@ -97,7 +97,7 @@ const customComponents = {
       {...props}
       style={{
         fontFamily: "var(--font-sans)",
-        fontSize: "var(--text-body-md)",
+        fontSize: "var(--text-body-lg)",
         lineHeight: 1.7,
         color: "var(--fg-secondary)",
         margin: "0 0 18px",
@@ -127,8 +127,7 @@ const customComponents = {
   ),
 
   code: (props: React.HTMLAttributes<HTMLElement>) => {
-    const hasClass = "className" in props && props.className;
-    if (hasClass) return <code {...props} />;
+    if (props.className || "data-language" in props) return <code {...props} />;
     return (
       <code
         {...props}
@@ -152,7 +151,7 @@ const customComponents = {
       {...props}
       style={{
         fontFamily: "var(--font-sans)",
-        fontSize: "var(--text-body-md)",
+        fontSize: "var(--text-body-lg)",
         color: "var(--fg-secondary)",
         lineHeight: 1.8,
         paddingLeft: 22,
@@ -166,7 +165,7 @@ const customComponents = {
       {...props}
       style={{
         fontFamily: "var(--font-sans)",
-        fontSize: "var(--text-body-md)",
+        fontSize: "var(--text-body-lg)",
         color: "var(--fg-secondary)",
         lineHeight: 1.8,
         paddingLeft: 22,
@@ -255,6 +254,8 @@ const customComponents = {
     />
   ),
 
+  ActivityPreview,
+  DocsNextSteps,
   TodayActivityCardDemo,
   TodayActivityCardEmpty,
   TodayActivityCardLoading,

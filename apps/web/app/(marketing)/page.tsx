@@ -3,17 +3,16 @@ import { buttonVariants } from "@/components/entrepta/button-variants";
 import { Card, CardContent, CardHeader, CardLabel, CardTitle } from "@/components/entrepta/card";
 import { Reveal } from "@/components/entrepta/reveal";
 import { SectHead } from "@/components/entrepta/sect-head";
-import { TopNav, TopNavLink, TopNavMenu } from "@/components/entrepta/top-nav";
 import { TypeIn } from "@/components/entrepta/type-in";
 import { ActivityPreview } from "@/components/home/activity-preview";
 import { HeroIdePreview } from "@/components/home/hero-ide-preview";
 import { WristKitMark } from "@/components/mark";
-import { MobileNav } from "@/components/mobile-nav";
+import { SiteFooter } from "@/components/site-footer";
+import { SiteHeader } from "@/components/site-header";
 import { SkipLink } from "@/components/skip-link";
 import {
   ArrowRightIcon,
   ArrowUpRightIcon,
-  GithubLogoIcon,
   HeartbeatIcon,
   ShieldCheckIcon,
   SlidersHorizontalIcon,
@@ -46,33 +45,7 @@ export default function HomePage() {
   return (
     <>
       <SkipLink />
-      <header className="site-header">
-        <div className="container">
-          <TopNav
-            className="border-0 bg-transparent px-0"
-            left={
-              <Link href="/" className="wordmark">
-                <WristKitMark size={26} />
-                <span>
-                  wristkit<span className="text-[var(--fg-brand-text)]">.</span>
-                </span>
-              </Link>
-            }
-            right={
-              <>
-                <TopNavMenu aria-label="Main">
-                  <TopNavLink href="#activity">the card</TopNavLink>
-                  <TopNavLink href="/docs">docs</TopNavLink>
-                  <TopNavLink href="https://github.com/imnotannamaria/wristkit" external>
-                    <GithubLogoIcon size={16} aria-hidden /> source
-                  </TopNavLink>
-                </TopNavMenu>
-                <MobileNav />
-              </>
-            }
-          />
-        </div>
-      </header>
+      <SiteHeader />
       <main id="main-content" tabIndex={-1}>
         <section className="hero container" aria-labelledby="hero-title">
           <div className="hero-copy">
@@ -283,29 +256,7 @@ export default function HomePage() {
           </Reveal>
         </section>
       </main>
-      <footer className="site-footer container">
-        <Link href="/" className="wordmark">
-          <WristKitMark size={22} />
-          wristkit.
-        </Link>
-        <p>
-          Made by{" "}
-          <a href="https://annamaria.app" target="_blank" rel="noreferrer">
-            Anna Maria
-          </a>{" "}
-          · Built with{" "}
-          <a href="https://entrepta.vercel.app" target="_blank" rel="noreferrer">
-            Entrepta
-          </a>
-        </p>
-        <div>
-          <Link href="/docs">Documentation</Link>
-          <a href="https://github.com/imnotannamaria/wristkit">
-            GitHub <ArrowUpRightIcon size={12} aria-hidden />
-          </a>
-          <span>MIT</span>
-        </div>
-      </footer>
+      <SiteFooter />
     </>
   );
 }
