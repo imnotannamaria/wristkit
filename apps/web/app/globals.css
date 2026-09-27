@@ -1033,7 +1033,10 @@ main:focus {
 .hero-title {
   font-weight: 400;
   margin: 0;
-  letter-spacing: -0.04em;
+  /* Newsreader's long ascenders and descenders touch across lines at the
+     display steps' 0.95-1 leading, so the three-line headline gets more air.
+     Tracking stays the display token's -0.02em. */
+  line-height: 1.08;
 }
 .hero-description {
   max-width: 410px;
