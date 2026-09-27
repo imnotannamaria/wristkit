@@ -29,15 +29,19 @@ export function ActivityRings({ data, kind = "ok" }: { data?: TodayData; kind?: 
         return (
           <g key={metric.id} className={`wk-ring wk-ring--${metric.id}`}>
             <circle className="wk-ring-track" cx="100" cy="100" r={radius} />
-            <circle
-              className="wk-ring-value"
-              cx="100"
-              cy="100"
-              r={radius}
-              pathLength="100"
-              strokeDasharray={kind === "loading" ? "18 82" : `${progress * 100} 100`}
-              transform="rotate(-90 100 100)"
-            />
+            {/* A zero-length dash with round caps still paints a dot, so an
+                empty ring draws no value arc at all. */}
+            {kind === "loading" || progress > 0 ? (
+              <circle
+                className="wk-ring-value"
+                cx="100"
+                cy="100"
+                r={radius}
+                pathLength="100"
+                strokeDasharray={kind === "loading" ? "18 82" : `${progress * 100} 100`}
+                transform="rotate(-90 100 100)"
+              />
+            ) : null}
           </g>
         );
       })}
@@ -57,7 +61,7 @@ function ActivityPanel({
     loading: "Syncing your activity…",
     empty: "No data yet. Run the Shortcut on your iPhone.",
     error: "Something went wrong. We couldn't load today's activity.",
-    stale: `Last sync ${data?.hoursSinceSync ?? 0}h ago. Run Shortcut to update.`,
+    stale: `Last sync ${data?.hoursSinceSync ?? 0}h ago. Run the Shortcut to update.`,
   };
   return (
     <section

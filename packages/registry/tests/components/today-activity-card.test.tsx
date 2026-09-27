@@ -42,7 +42,7 @@ describe("TodayActivityCard", () => {
     expect(screen.getByText(/stale/i)).toBeInTheDocument();
     expect(screen.getByText(/480/)).toBeInTheDocument();
     expect(screen.getByText(/35/)).toBeInTheDocument();
-    expect(screen.getByText(/run shortcut/i)).toBeInTheDocument();
+    expect(screen.getByText(/run the shortcut/i)).toBeInTheDocument();
   });
 
   it("ok state: shows 'synced' status and all three metric values", () => {
@@ -53,6 +53,15 @@ describe("TodayActivityCard", () => {
     expect(screen.getByText(/35/)).toBeInTheDocument();
     expect(screen.getByText(/9,200/)).toBeInTheDocument();
     expect(screen.getByText(/up to date/i)).toBeInTheDocument();
+  });
+
+  it("draws no value arc for a ring with no progress", () => {
+    const { container: empty } = render(<TodayActivityCard state={{ kind: "empty" }} />);
+    expect(empty.querySelectorAll(".wk-ring-value")).toHaveLength(0);
+    const { container: ok } = render(
+      <TodayActivityCard state={{ kind: "ok", data: { ...okData, exerciseMinutes: 0 } }} />,
+    );
+    expect(ok.querySelectorAll(".wk-ring-value")).toHaveLength(2);
   });
 
   it("all states render activity rings SVG", () => {
