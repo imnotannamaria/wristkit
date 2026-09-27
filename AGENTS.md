@@ -91,6 +91,7 @@ apps/web/                    the public site
     shortcut/route.ts        serves the .shortcut file, force-static
     globals.css              entrepta's part on top, the site's CSS below
     layout.tsx               fonts, metadata, ThemeScript, the <noscript> fallback
+    not-found.tsx            the 404, built on entrepta's ChromeMessage
     opengraph-image.png      the share image, also the README's hero
   content/docs/              MDX docs, compiled by Velite
   components/
@@ -99,7 +100,7 @@ apps/web/                    the public site
     docs/                    sidebar, next steps, file bundles, screenshots
     cards/                   demo wrappers around the registry's states
     mdx-content.tsx          the MDX component map
-  hooks/                     entrepta's: use-theme, use-mode, use-command-palette
+  hooks/                     entrepta's: use-theme, use-mode
   lib/
     registry-files.ts        reads registry files so the docs show real code
     themes.ts                the six swatches for the ThemeSwitcher
@@ -146,7 +147,7 @@ component test asserts it.
 else. No entrepta, no Motion, no Tailwind classes, no `@/` alias: users paste it into projects that
 have none of those. Its styles are the `wk-*` classes in `styles.css`, and every token it reads
 carries a fallback, `var(--fg-brand, #7c6bff)`, so it follows entrepta's theme when present and
-still looks right without it. That is why `RollingNumber` is not on the card's numbers.
+still looks right without it. That is why the card's numbers don't animate with Motion.
 
 **Storage is time series, not daily snapshots.** One row per metric per sample in
 `wristkit_samples`. `user_id` exists but is nullable and unused in v1, so multi user can land later
@@ -196,6 +197,10 @@ Some entrepta files carry local edits today: `reveal.tsx` (the `data-reveal` att
 `theme-switcher.tsx` (focus moves into the panel and back to the trigger) and `tabs.tsx`
 (`overflow-hidden` on the row). Before overwriting any of them, check whether entrepta has the
 change. If it doesn't, send it upstream first or reapply it after.
+
+Only the components the site uses are installed. Add one with
+`npx @entrepta/cli@latest add <name>` when a page needs it, and delete it when nothing imports it
+anymore.
 
 **Never run `entrepta init --overwrite` here.** It rewrites `globals.css` whole, which also holds
 the site's ~640 lines of CSS, and brings a Google Fonts `@import` that fights `next/font`. The
@@ -349,6 +354,12 @@ add `openGraph.images` back to `layout.tsx`: the file wins anyway, and a hardcod
   the home page was blank. The `<noscript>` style in `app/layout.tsx` forces `[data-reveal]` and
   `[data-type-in] > span` visible. A new entrance component carries one of those attributes or adds
   its selector there. The e2e test loads the home with JavaScript off.
+- **Radix renders only the active tab.** The installation page showed one file per bundle without
+  JavaScript. The file bundles use `forceMount` with `data-[state=inactive]:hidden`, and the same
+  `<noscript>` style shows every panel and the mobile docs nav. Content people need to read goes in
+  the server HTML, not behind a tab.
+- **A zero-length dash with round caps is a dot.** An empty ring drew a colored dot at 12 o'clock.
+  The card renders no value arc when progress is zero, and a Vitest test holds that.
 - **`cn()` only knows what's registered.** See the type scale above: a custom `@theme` class next
   to a color class can vanish from the merge with no error.
 - **Text on a brand fill is `--fg-on-brand`, small brand text is `--fg-brand-text`.** A fixed white
